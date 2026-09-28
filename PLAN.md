@@ -256,3 +256,21 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
 - Siguiente paso: Con las 4 páginas de Fase 2 completas y verificadas (Home, Tienda, Finca,
   Coffee Shops — 1440px y 375px), Nicolle revisa el conjunto en Figma → si aprueba, GATE 2
   superado y se pasa a Fase 3 (código HTML/CSS/JS), no antes.
+
+### [2026-09-28 19:41] GATE 2 — superada
+
+- Agente: design
+- Prompt (resumen fiel del pedido de Nicolle): "lets close gate 2" — cierre formal de GATE 2 tras
+  revisar las 4 páginas hi-fi completas (Home, Tienda, Finca, Coffee Shops; 1440px + 375px) en
+  Figma.
+- Qué hizo la IA: Verificó que no había cambios locales pendientes sin registrar en el repo
+  (`git status` limpio) antes de registrar el cierre de la puerta.
+- Decisiones de Nicolle / cambios manuales: Aprobó el conjunto completo de Fase 2 sin pedir más
+  cambios en este paso.
+- Problemas encontrados y corrección: Ninguno en este paso.
+- Verificación: N/A (paso de aprobación, no de construcción).
+- Commit: (este mismo commit)
+- Siguiente paso: Iniciar Fase 3 — Código (HTML/CSS/JS), en orden: `variables.css` (tokens reales
+  desde Figma vía `get_variable_defs`) → `base.css` → `layout.css` → `components.css` →
+  `index.html` → `tienda.html` → `finca.html` → `coffee-shops.html` → `js/main.js`. Nada de código
+  se escribe hasta que Nicolle confirme que puede empezar.
