@@ -197,3 +197,62 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
 - Siguiente paso: Con Home aprobada, construir las 3 páginas restantes de Fase 2 (Tienda con Tabs
   Café/Merch, Finca con Historia + Procesos, Coffee Shops con las 4 sucursales reales) a 1440px y
   375px, hasta alcanzar GATE 2.
+
+### [2026-09-28 18:38] Fase 2 (partes 2/4, 3/4, 4/4) — Tienda, Finca y Coffee Shops hi-fi construidas (Desktop 1440px + Mobile 375px)
+
+- Agente: design
+- Prompt (resumen fiel del pedido de Nicolle): Continuación directa de Fase 2 tras aprobar Home;
+  sin instrucciones adicionales durante la construcción de estas tres páginas.
+- Qué hizo la IA:
+  - Tienda: construyó Desktop (Café activo) + Desktop (Merch activo, segunda frame para mostrar
+    los dos estados de la interacción JS requerida de Category Tabs) + Mobile (Café activo),
+    reutilizando el componente Tab (variantes State=Default `308:1955` y State=Selected
+    `308:1959`, no el set completo) y Product Card (variantes Café `308:1964` y Merch `308:1982`)
+    con los 4 productos de café ya definidos en Home y 4 productos de merch reales: Gorra El
+    Injerto (Q184.00), Filtros Hario V60 (Q99.00), Hario V60 Suiren (Q379.00), Hario V60 Buono
+    (Q2,900.00).
+  - Finca: construyó Desktop + Mobile con Hero (bloque de foto pine + ellipse), sección "Nuestra
+    historia" (fundada en 1874 por Jesús Aguirre Panamá, familia Aguirre desde 1956, múltiples
+    primeros lugares en Cup of Excellence Guatemala) y timeline "De la semilla a la taza" con 4
+    Proceso Step (`308:2004`) conectados por Proceso Connector (`308:2008`): Cultivo, Cosecha,
+    Beneficio, Tueste, cada uno con una leyenda descriptiva corta. En Mobile los 4 pasos se
+    reorganizaron en 2 filas de 2 (en vez de una fila de 4) para caber en 375px.
+  - Coffee Shops: construyó Desktop + Mobile con un bloque de mapa placeholder (variable
+    `color/ink-tint-16`) + lista de las 4 sucursales reales investigadas en
+    elinjertocafe.com.gt/pages/ubicaciones: Sucursal Z13, Plaza Cemaco, Periroosevelt, Zona
+    Express 1 — cada una con dirección, teléfono y horario, y un chip de color rotando entre
+    cherry/pine/terracotta para variedad visual.
+  - Antes de construir Tienda, corrigió un supuesto (Tab set `308:1963`) inspeccionando el
+    componente real con una llamada dedicada: las variantes correctas son State=Default
+    (`308:1955`) y State=Selected (`308:1959`); evitó repetir el error de IDs adivinados de la
+    Fase 1.
+- Decisiones de Nicolle / cambios manuales:
+  - Caveat de datos en Coffee Shops: el texto scrapeado para "Periroosevelt" en el sitio real
+    ("Calle Principal #123, Zona 10, Ciudad") tiene forma de dato de plantilla sin editar, no de
+    dirección real. Se le presentó la disyuntiva a Nicolle y ella decidió mantener la sustitución
+    propuesta por la IA ("Calzada Roosevelt, Zona 11, Ciudad de Guatemala" — la vía real a la que
+    alude el nombre del local) en vez de usar el texto literal del sitio o dejarlo pendiente.
+- Problemas encontrados y corrección:
+  - Bug de altura colapsada en las filas de la lista de sucursales (Coffee Shops, Desktop y
+    Mobile): se llamó `textCol.resize(280, 60)` DESPUÉS de fijar
+    `textCol.primaryAxisSizingMode = 'AUTO'`, y `resize()` resetea los modos de tamaño a FIXED
+    (gotcha ya documentado en la guía figma-use, esta vez ignorado por error) — la columna de
+    texto quedó con una altura fija de 60px, insuficiente para 3 líneas (nombre + dirección +
+    teléfono/horario), cortando o solapando la línea de teléfono/horario con el divisor inferior.
+    Afectó ambos breakpoints; en Desktop el texto cabía casi entero y pasó desapercibido en la
+    primera revisión visual, en Mobile (dirección envuelta a 2 líneas) resultó evidente. Corregido
+    re-aplicando `primaryAxisSizingMode = 'AUTO'` en cada columna de texto DESPUÉS de toda llamada
+    a `resize()`, sin volver a llamar `resize()` después — la altura se recalculó correctamente y
+    el bug se confirmó corregido también en Desktop tras la revisión cruzada.
+  - Relleno blanco por defecto en los frames "Timeline" y "Captions" de Finca Desktop (mismo bug
+    recurrente de Fase 1/Home) — corregido vaciando `fills` explícitamente; en los scripts
+    posteriores (Finca Mobile) se vació `fills` de forma preventiva en cada frame nuevo desde el
+    inicio.
+- Verificación: `get_screenshot` de cada página tras construirla (7 frames en total: Tienda ×3,
+  Finca ×2, Coffee Shops ×2); revisión cruzada de Desktop tras detectar el bug en Mobile, que
+  reveló el mismo problema ya presente pero menos visible; capturas finales sin solapes, recortes
+  ni fills blancos incorrectos.
+- Commit: (este mismo commit)
+- Siguiente paso: Con las 4 páginas de Fase 2 completas y verificadas (Home, Tienda, Finca,
+  Coffee Shops — 1440px y 375px), Nicolle revisa el conjunto en Figma → si aprueba, GATE 2
+  superado y se pasa a Fase 3 (código HTML/CSS/JS), no antes.
