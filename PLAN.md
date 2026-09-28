@@ -142,3 +142,58 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
 - Siguiente paso: Con GATE 1 superado, iniciar Fase 2 — construir las 4 páginas hi-fi completas
   (Home, Tienda, Finca, Coffee Shops) a 1440px y 375px, usando solo componentes/variables de la
   Fase 1, copy real en español (sin lorem ipsum) y el logo real ya integrado.
+
+### [2026-09-28 18:30] Fase 2 (parte 1/4) — Home hi-fi construida (Desktop 1440px + Mobile 375px)
+
+- Agente: design
+- Prompt (resumen fiel del pedido de Nicolle): "move forward" — avanzar a Fase 2 tras GATE 1
+  superado. Confirmó además la fuente de contenido real: "its this site
+  https://elinjertocafe.com.gt/" (el sitio de marca real ya usado como referencia).
+- Qué hizo la IA:
+  - Construyó la página Home — Desktop (1440px, altura final 2203px) reutilizando únicamente
+    componentes/variables de Fase 1: instancia de Header Desktop, sección Hero (H1 + body +
+    Button primario + bloque de fotos geométrico de 3 colores: cherry/terracotta/pine con
+    ellipse crema), sección "Encuentra tu sabor" (4 pasos con dot terracotta), "Cafés de
+    temporada" (grid de 4 Product Card con colores alternados cherry/pine/terracotta/cherry),
+    "Arma tu suscripción" (panel teaser con chips de tamaño 250g/500g/1kg + placeholders de
+    frecuencia y precio), instancia de Footer.
+  - Investigó contenido real en elinjertocafe.com.gt para copy y precios en vez de lorem ipsum.
+  - Creó un componente nuevo "Footer Mobile" (375px) ya que Fase 1 solo había construido un set
+    de breakpoints para Header, no para Footer.
+  - Construyó Home — Mobile (375px, altura final 3394px) reutilizando la misma estructura,
+    simplificada: Header Mobile-Closed, un solo colorblock cherry en vez del split de 3 colores,
+    pasos en 2 filas de 2, product cards en columna única centrada, subscription builder apilado
+    verticalmente, instancia de Footer Mobile.
+- Decisiones de Nicolle / cambios manuales: Ninguna instrucción adicional durante la construcción
+  (aprobación implícita del plan de Fase 2 ya dado antes de "move forward").
+- Desviación señalada al presentar el resultado: el plan original incluía "Maragogype" como uno
+  de los 4 cafés de temporada; no se pudo confirmar un precio real para ese producto en el
+  catálogo de la tienda, así que se sustituyó por "Cold Brew" (Q26.00, precio confirmado).
+  Pendiente de que Nicolle decida si prefiere que se busque el precio real de Maragogype antes de
+  llevar esta lista de productos a la página Tienda.
+- Problemas encontrados y corrección:
+  - H1 y Hero body colapsaron a altura=10 y se solapaban con el contenido siguiente: causado por
+    asignar `characters` ANTES de fijar `textAutoResize='HEIGHT'` y el ancho fijo vía `resize()`.
+    Corregido reordenando: `textAutoResize` + `resize()` primero, `characters` al final; se
+    adoptó un helper `makeText()` reutilizado en todos los scripts posteriores que fuerza ese
+    orden correcto desde el inicio.
+  - El frame `Hero` tenía `counterAxisSizingMode='FIXED'` sin un `resize()` de altura real,
+    dejando una altura por defecto insuficiente; combinado con `counterAxisAlignItems='CENTER'`
+    esto hacía que los bloques de foto (420px de alto) sobresalieran con offset negativo.
+    Corregido cambiando a `counterAxisSizingMode='AUTO'` (se ajusta al hijo más alto).
+  - Cálculo geométrico inicial del ancho del Hero (460 + 80 + 740 = 1280px) excedía el ancho de
+    contenido disponible (1200px = 1440 − 2×120 de padding) por 80px — detectado en revisión del
+    script antes de ejecutarlo, corregido a 420 + 60 + 720 = 1200px exactos.
+  - La columna de navegación del nuevo componente "Footer Mobile" se creó con el fill blanco por
+    defecto de Figma, tapando el fondo `ink` oscuro — corregido vaciando `fills` explícitamente.
+  - Errores menores de IDs de variables adivinados incorrectamente (`color/block-pine` y
+    `color/text-secondary`) detectados y corregidos antes de ejecutar, mediante una llamada de
+    inspección previa que listó todas las variables reales del archivo.
+- Verificación: `get_screenshot` de Home Desktop y Home Mobile completas tras cada fase de
+  construcción (incluida verificación post-fix de los bugs de texto colapsado, altura del Hero y
+  fill blanco del Footer Mobile) — capturas finales sin solapes, recortes ni fills incorrectos,
+  enviadas a Nicolle para revisión.
+- Commit: (este mismo commit)
+- Siguiente paso: Con Home aprobada, construir las 3 páginas restantes de Fase 2 (Tienda con Tabs
+  Café/Merch, Finca con Historia + Procesos, Coffee Shops con las 4 sucursales reales) a 1440px y
+  375px, hasta alcanzar GATE 2.
