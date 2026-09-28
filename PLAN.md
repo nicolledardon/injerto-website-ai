@@ -93,5 +93,52 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
   - `resize()` reseteó el modo de tamaño de `Footer row` a FIXED con altura 1px, colapsando el contenido — corregido restaurando `counterAxisSizingMode='AUTO'` + `layoutSizingVertical='HUG'` después del resize, y lo mismo en el frame `Footer` padre.
   - Posicionamiento inicial de las secciones se solapaba (Footer en y=756 caía encima de Button; Proceso Step en y=1450 caía encima de Product Card) — corregido recalculando un stack vertical limpio sin solapes (Fundamentos → Botones → Tabs → Product Card → Proceso → Header → Footer).
 - Verificación: `get_screenshot` en cada componente tras crearlo (incluida verificación post-fix); `get_metadata` para confirmar posiciones/tamaños reales antes y después del reposicionamiento; captura de página completa final sin solapes, enviada a Nicolle.
-- Commit: pendiente de aprobación (solo actualiza PLAN.md — el trabajo en sí vive en Figma, no en este repo)
+- Commit: e5fe121 — "docs: registra fundamentos y componentes de El Injerto en Figma (Fase 1)"
 - Siguiente paso: Nicolle revisa el resultado en Figma/las capturas → si aprueba, GATE 1 superado y se pasa a Fase 2 (páginas hi-fi completas, 1440px + 375px).
+
+### [2026-09-28 20:10] Fase 1.5 — GATE 1 superada + logo real insertado en Header/Footer
+
+- Agente: design
+- Prompt (resumen fiel del pedido de Nicolle): Confirmó que añadió el logo real de El Injerto
+  (`assets/img/logo.svg`) a la carpeta del repo. Tras preguntarle si prefería insertarlo ya en
+  los componentes de la Fase 1 o dejarlo para la Fase 2, eligió insertarlo ahora. En la misma
+  pregunta, aprobó explícitamente GATE 1 (Fundamentos + Componentes).
+- Qué hizo la IA:
+  - Inspeccionó `assets/img/logo.svg`: no es un SVG vectorial real, es un PNG rasterizado
+    (800×319px) envuelto en un `<svg>` con relleno de patrón — se lo señaló a Nicolle antes de
+    continuar.
+  - Extrajo por matemática del `patternTransform` la región exacta del PNG que corresponde al
+    icono (el grano de café), descartando el resto del lockup original (que incluye texto en
+    blanco invisible sobre fondo blanco + "HISTORICAL COFFEE", no usado aquí).
+  - Recortó el icono a su bounding box real y lo redujo a un tamaño pequeño apto para un icono
+    de cabecera, verificando visualmente con Playwright que se ve limpio tanto sobre `surface`
+    (crema) como sobre `ink` (oscuro).
+  - Insertó el icono junto al texto "EL INJERTO" en las 4 ubicaciones (Header Desktop, Header
+    Mobile-Closed, Header Mobile-Open, Footer), envolviendo icono + texto en un nuevo grupo
+    auto-layout "Logo" (icono a la izquierda, texto a la derecha, alineado al centro), insertado
+    en el mismo slot que ocupaba el texto dentro de cada fila auto-layout `SPACE_BETWEEN` — el
+    layout existente absorbió el ancho extra sin romper nada.
+- Decisiones de Nicolle / cambios manuales: Aprobó insertar el logo ahora (no esperar a la Fase 2)
+  y aprobó GATE 1 sin cambios.
+- Problemas encontrados y corrección:
+  - Subir el asset directamente a Figma vía `upload_assets` falló: el proxy de salida del
+    contenedor en la nube bloquea `mcp.figma.com` (igual que bloqueaba `www.figma.com`
+    anteriormente) — probado también desde la Mac de Nicolle vía `device_bash`, mismo bloqueo.
+    Solución: se generó el PNG del icono como bytes embebidos en base64 dentro del propio script
+    `use_figma` (que corre dentro de la app de Figma, sin pasar por ese proxy) y se creó la
+    imagen con `figma.createImage(bytes)`.
+  - Dos intentos de embeber el base64 completo (~14 000 y ~6 600 caracteres) fallaron por
+    corrupción silenciosa de 1–2 caracteres durante la transcripción al script (`atob` inválido
+    la primera vez; suma de verificación desajustada por 4 la segunda) — no reproducible de forma
+    determinista, probablemente un artefacto de manejar cadenas literales tan largas. Solución:
+    icono reducido a 2002 bytes, base64 dividido en 14 fragmentos de 200 caracteres, cada uno con
+    su propia suma de verificación más una suma total — el script revienta con un mensaje claro
+    señalando qué fragmento falló en vez de un error opaco. La tercera versión pasó todas las
+    verificaciones a la primera.
+- Verificación: sumas de verificación por fragmento + suma total de bytes validadas dentro del
+  propio script antes de crear la imagen; `get_screenshot` de Header y Footer tras la inserción,
+  confirmando el icono legible sobre fondo crema y sobre fondo oscuro, sin solapes ni recortes.
+- Commit: (pendiente de aprobación de Nicolle)
+- Siguiente paso: Con GATE 1 superado, iniciar Fase 2 — construir las 4 páginas hi-fi completas
+  (Home, Tienda, Finca, Coffee Shops) a 1440px y 375px, usando solo componentes/variables de la
+  Fase 1, copy real en español (sin lorem ipsum) y el logo real ya integrado.
