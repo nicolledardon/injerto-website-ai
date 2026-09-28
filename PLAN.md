@@ -274,3 +274,67 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
   desde Figma vía `get_variable_defs`) → `base.css` → `layout.css` → `components.css` →
   `index.html` → `tienda.html` → `finca.html` → `coffee-shops.html` → `js/main.js`. Nada de código
   se escribe hasta que Nicolle confirme que puede empezar.
+
+### [2026-09-28 19:45] Fase 3 (previo a variables.css) — Auditoría de contraste WCAG + corrección de bug real
+
+- Agente: design
+- Prompt (resumen fiel del pedido de Nicolle): "lets start" — inicio de Fase 3. Antes de escribir
+  `variables.css`, la skill del proyecto `design-tokens` exige calcular y registrar el ratio de
+  contraste de cada par color-de-texto/color-de-fondo usado, así que se ejecutó esa auditoría
+  primero.
+- Qué hizo la IA:
+  - Calculó (fórmula de luminancia relativa WCAG 2.1) el ratio de contraste de 13 combinaciones
+    de tokens usadas en el diseño: texto sobre fondo claro/oscuro, texto secundario, números
+    sobre bloques de color, etiquetas de botón sobre terracotta (3 estados), texto deshabilitado.
+  - Detectó dos ratios por debajo de 4.5:1 (texto normal): `surface` sobre `block-terracotta`
+    (2.32:1) y `disabled-text` sobre `disabled-fill` (2.25:1, mismo par usado también en
+    hover/active del chip deshabilitado).
+  - Presentó el hallazgo a Nicolle asumiendo INICIALMENTE que afectaba a la etiqueta del botón
+    Primary en general (ya que ese es el patrón típico texto-claro-sobre-color-saturado) y
+    propuso corregirlo en Figma antes de tokenizar. Nicolle aprobó corregir en Figma primero.
+  - Al ir a aplicar la corrección, inspeccionó el nodo real del componente Button
+    (`308:1954`, variantes Primary) y confirmó que su etiqueta YA estaba correctamente vinculada
+    a `color/ink` (`VariableID:308:4`) en las 5 variantes de estado — es decir, el botón nunca
+    tuvo el bug; la suposición inicial era incorrecta y se lo señaló a Nicolle explícitamente en
+    vez de dejar la corrección sin verificar.
+  - Verificó instancias reales ya construidas (botón hero de Home Desktop, chip seleccionado del
+    Coffee Subscription Builder) inspeccionando su `fills[0].boundVariables` directamente: el
+    botón confirmó `color/ink` (correcto); el chip seleccionado ("250g") confirmó
+    `color/surface` (`VariableID:308:5`) — ahí sí estaba el bug real, acotado únicamente a esa
+    pastilla, no a los botones.
+  - Corrigió la etiqueta del chip seleccionado en Home — Desktop (`326:51`) y Home — Mobile
+    (`329:111`), reasignando su fill a `color/ink`. Verificado con `get_screenshot` en ambos:
+    texto oscuro legible sobre el fondo terracotta.
+- Decisiones de Nicolle / cambios manuales: Aprobó corregir en Figma antes de tokenizar en CSS
+  (opción "Fix in Figma first, then code").
+- Problemas encontrados y corrección: Ver arriba — bug real acotado a un solo patrón (chip de
+  tamaño seleccionado del Coffee Subscription Builder en Home, ambos breakpoints), no al sistema
+  de botones. `disabled-text` sobre `disabled-fill` (2.25:1) queda documentado como excepción
+  válida: WCAG 1.4.3 excluye explícitamente los componentes de UI inactivos/deshabilitados del
+  requisito de contraste, así que no se corrige.
+- Tabla de mapeo Figma ↔ CSS y ratios de contraste (requerido por skills/design-tokens/SKILL.md):
+
+  | Token Figma | Variable CSS | Hex | Uso | Contraste (par crítico) | AA |
+  |---|---|---|---|---|---|
+  | color/ink | --color-ink | #1e1611 | texto principal, fondos oscuros (footer) | ink/surface = 16.41:1 | PASS |
+  | color/surface | --color-surface | #faf5ec | fondo claro, texto sobre ink | surface/ink = 16.41:1 | PASS |
+  | color/block-cherry | --color-block-cherry | #e8422c | bloque decorativo (sin texto encima) | N/A — solo decorativo | N/A |
+  | color/block-terracotta | --color-block-terracotta | #ef8a24 | fondo de botón Primary, chip seleccionado | ink/terracotta = 7.07:1 | PASS |
+  | color/block-terracotta-hover | --color-block-terracotta-hover | #ce771f | botón Primary hover | ink/terracotta-hover = 5.33:1 | PASS |
+  | color/block-terracotta-active | --color-block-terracotta-active | #bf6e1d | botón Primary active | ink/terracotta-active = 4.64:1 | PASS |
+  | color/block-pine | --color-block-pine | #16794c | bloque decorativo (sin texto encima) | N/A — solo decorativo | N/A |
+  | color/accent-gold | --color-accent-gold | #c9a227 | hairline decorativo únicamente, nunca texto | N/A por diseño | N/A |
+  | color/text-secondary | --color-text-secondary | #6b5d4f | texto secundario sobre surface/ink-tint-8 | 5.85:1 / 4.97:1 | PASS |
+  | color/disabled-fill | --color-disabled-fill | #e0dad2 | fondo de estado deshabilitado | disabled-text/disabled-fill = 2.25:1 | exento (WCAG 1.4.3, UI inactiva) |
+  | color/disabled-text | --color-disabled-text | #979189 | texto de estado deshabilitado | ver arriba | exento |
+  | color/ink-tint-8 | --color-ink-tint-8 | #e8e3da | fondo de sección terciaria | ink/ink-tint-8 = 13.95:1 | PASS |
+  | color/ink-tint-16 | --color-ink-tint-16 | #d7d1c9 | placeholder de mapa (Coffee Shops) | decorativo, sin texto encima | N/A |
+
+- Verificación: cálculo de contraste vía script Python (fórmula de luminancia relativa WCAG 2.1);
+  inspección directa de `boundVariables` en nodos reales de Figma (no solo visual) antes de
+  confirmar el diagnóstico; `get_screenshot` de ambos chips corregidos.
+- Commit: (este mismo commit)
+- Siguiente paso: Escribir `variables.css` con los tokens de la tabla anterior (ya con el bug
+  corregido) más tokens de tipografía (estilos `injerto/*`), espaciado y radio derivados del uso
+  consistente en el build de Fase 2 (no existen variables numéricas en Figma, así que se
+  documentan aquí por primera vez).
