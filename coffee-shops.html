@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coffee Shops — El Injerto</title>
+  <meta name="description" content="Visita las 4 sucursales de El Injerto en Ciudad de Guatemala, o pide a domicilio en todo el país.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,900&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+  <a class="sr-only" href="#main">Saltar al contenido principal</a>
+
+  <header class="site-header">
+    <div class="site-header__row">
+      <a href="index.html" class="site-header__logo">
+        <img src="assets/img/logo.svg" alt="" class="site-header__logo-icon" width="28" height="28">
+        EL INJERTO
+      </a>
+      <button type="button" class="site-header__toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav">
+        <span class="sr-only">Abrir menú</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+          <path d="M3 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M3 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <nav class="site-header__nav" id="site-nav" hidden aria-label="Principal">
+      <ul class="site-header__nav-list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="tienda.html">Tienda</a></li>
+        <li><a href="finca.html">Finca</a></li>
+        <li><a href="coffee-shops.html" aria-current="page">Coffee Shops</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <!-- Cabecera de página -->
+    <section class="page-header">
+      <div class="container">
+        <div class="stack stack--sm">
+          <h1>Coffee Shops</h1>
+          <p>Visítanos en nuestras 4 sucursales en Ciudad de Guatemala, o pide a domicilio en todo el país.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mapa + lista de sucursales -->
+    <div class="container section-bottom">
+      <div class="split">
+        <div class="map-placeholder" aria-hidden="true">
+          <span class="map-placeholder__pin"></span>
+        </div>
+        <ul class="shop-list">
+          <li class="shop-list__row">
+            <span class="shop-list__chip shop-list__chip--cherry" aria-hidden="true"></span>
+            <div class="shop-list__text">
+              <h2 class="h4">Sucursal Z13</h2>
+              <p>9 Calle 15-15, Zona 13, Ciudad de Guatemala</p>
+              <p class="shop-list__hours">+502 2425-8520 · Lun–Vie 7:00–18:00 · Sáb 7:00–13:00</p>
+            </div>
+          </li>
+          <li class="shop-list__row">
+            <span class="shop-list__chip shop-list__chip--pine" aria-hidden="true"></span>
+            <div class="shop-list__text">
+              <h2 class="h4">Plaza Cemaco</h2>
+              <p>Bulevar Los Próceres, Zona 10, Ciudad de Guatemala</p>
+              <p class="shop-list__hours">+502 2310-9280 · Lun–Dom 9:00–21:00</p>
+            </div>
+          </li>
+          <li class="shop-list__row">
+            <span class="shop-list__chip shop-list__chip--terracotta" aria-hidden="true"></span>
+            <div class="shop-list__text">
+              <h2 class="h4">Periroosevelt</h2>
+              <p>Calzada Roosevelt, Zona 11, Ciudad de Guatemala</p>
+              <p class="shop-list__hours">+502 2310-8996 · Lun–Dom 9:00–21:00</p>
+            </div>
+          </li>
+          <li class="shop-list__row">
+            <span class="shop-list__chip shop-list__chip--cherry" aria-hidden="true"></span>
+            <div class="shop-list__text">
+              <h2 class="h4">Zona Express 1</h2>
+              <p>Local 4, Condado Concepción, Ciudad de Guatemala</p>
+              <p class="shop-list__hours">+502 2310-9210 · Lun–Dom 9:00–19:00</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <a href="index.html" class="site-header__logo">
+        <img src="assets/img/logo.svg" alt="" class="site-header__logo-icon" width="28" height="28">
+        EL INJERTO
+      </a>
+      <nav aria-label="Pie de página">
+        <ul class="site-footer__nav-list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="tienda.html">Tienda</a></li>
+          <li><a href="finca.html">Finca</a></li>
+          <li><a href="coffee-shops.html">Coffee Shops</a></li>
+        </ul>
+      </nav>
+      <p class="site-footer__disclaimer">Proyecto académico de rediseño — no afiliado a El Injerto.</p>
+    </div>
+  </footer>
+</body>
+</html>

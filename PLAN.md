@@ -616,3 +616,39 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
 - Siguiente paso: coffee-shops.html (Fase 3 paso 8) — última página de contenido antes de
   js/main.js. Después de coffee-shops.html toca el checkpoint de revisión con Nicolle ya
   acordado en el plan de Fase 3.
+
+### [2026-09-28 20:55] Fase 3.7 — coffee-shops.html
+
+- Agente: frontend
+- Prompt (resumen fiel del pedido de Nicolle): "aprobado" tras preguntar si seguía con la misma
+  dinámica para esta página — se interpretó como luz verde para construir (no como aprobación de
+  un commit, ya que aún no había nada que aprobar).
+- Qué hizo la IA:
+  - Inspección de solo lectura en Figma: árbol completo de Coffee Shops Desktop (335:258) y
+    Mobile (336:276). Extraídas las 4 sucursales reales (Sucursal Z13, Plaza Cemaco,
+    Periroosevelt, Zona Express 1) con dirección, teléfono y horario reales; colores de chip por
+    sucursal (cherry/pine/terracotta/cherry); confirmado que el mapa es un placeholder explícito
+    en Figma (sin mapa real, fuera de alcance de esta PEC), cuadrado en desktop (600×600) y
+    rectangular en mobile (327×240) — un pin decorativo terracotta centrado en ambos.
+  - Construyó coffee-shops.html: cabecera de página (.page-header), y un layout mapa|lista
+    (.split, colapsa a 1 columna apilada en mobile igual que en Figma) con 2 componentes nuevos:
+    .map-placeholder/.map-placeholder__pin y .shop-list/.shop-list__row/__chip/__text/__hours.
+  - Nombre de cada sucursal en <h2 class="h4"> (estilo visual de Figma exacto: Fraunces SemiBold
+    22px/ink) en vez de un <h3> o <span> — evita saltar de <h1> a <h4> en la jerarquía de
+    encabezados de la página, ya que Coffee Shops no tiene ningún <h2> real en el diseño.
+    Dirección usa <p> sin clase (coincide exacto con el estilo base de párrafo). Horario usa
+    nueva clase .shop-list__hours (caption 13px pero en Medium, no Regular como .text-caption).
+  - variables.css: +2 tokens (--size-dot-sm 12px, --size-pin-lg 24px).
+- Desviaciones documentadas:
+  1. .page-header se reutiliza tal cual (32/24 mobile, 64/32 desktop) aunque el padding-bottom
+     real de Coffee Shops en desktop es 40px, no 32px — 8px de diferencia, mismo criterio de
+     tolerancia ya usado en el resto del proyecto.
+  2. .section-bottom (56→96px) se reutiliza para el padding inferior de la sección mapa/lista;
+     el valor real de Figma en mobile es 48px (8px de diferencia), el de desktop es exacto (96px).
+- Verificación: capturas Playwright (375px/1440px) comparadas contra la estructura de Figma —
+  colores de chip, línea divisoria bajo cada fila (incluida la última, igual que en Figma),
+  proporción del mapa en ambos anchos, y el colapso a 1 columna en mobile, todos correctos. grep
+  limpio (sin !important, sin @media max-width, sin valores hex/px sueltos en líneas añadidas).
+- Commit: (pendiente de que Nicolle escriba "aprobado")
+- Siguiente paso: checkpoint de revisión con Nicolle (ya acordado en el plan de Fase 3) antes de
+  empezar js/main.js — las 4 páginas de contenido HTML/CSS están completas.

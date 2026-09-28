@@ -438,3 +438,81 @@
   border-radius: var(--radius-full);
   background-color: var(--color-surface);
 }
+
+/* ---- Coffee Shops: mapa placeholder ---- */
+/* Sin mapa real (fuera de alcance de esta PEC) — bloque neutro con un pin
+   decorativo centrado, mismo criterio que .hero-photos/.finca-photo.
+   Proporción real de Figma: 327×240 en mobile, cuadrado (600×600) desde
+   1024px, que es cuando .split pasa a 2 columnas. */
+.map-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 327 / 240;
+  border-radius: var(--radius-md);
+  background-color: var(--color-ink-tint-16);
+}
+
+@media (min-width: 1024px) {
+  .map-placeholder {
+    aspect-ratio: 1 / 1;
+  }
+}
+
+.map-placeholder__pin {
+  width: var(--size-pin-lg);
+  height: var(--size-pin-lg);
+  border-radius: var(--radius-full);
+  background-color: var(--color-block-terracotta);
+}
+
+/* ---- Coffee Shops: lista de sucursales ---- */
+.shop-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.shop-list__row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-5); /* 20px */
+  padding-block: var(--space-6); /* 24px */
+  border-bottom: var(--stroke-hairline);
+}
+
+.shop-list__chip {
+  flex-shrink: 0;
+  width: var(--size-dot-sm);
+  height: var(--size-dot-sm);
+  border-radius: var(--radius-full);
+}
+
+.shop-list__chip--cherry {
+  background-color: var(--color-block-cherry);
+}
+
+.shop-list__chip--pine {
+  background-color: var(--color-block-pine);
+}
+
+.shop-list__chip--terracotta {
+  background-color: var(--color-block-terracotta);
+}
+
+.shop-list__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1); /* 4px */
+}
+
+/* .shop-list__text > p (dirección) hereda el estilo base de párrafo
+   (--fs-body-sm, color text-secondary) — coincide exacto con Figma, sin
+   clase adicional. El nombre usa la utilidad .h4 ya existente en base.css
+   (Fraunces SemiBold 22px, color ink) sobre un <h2> real, para no saltar
+   niveles de encabezado (Title de la página ya es <h1>). */
+.shop-list__hours {
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-secondary);
+}

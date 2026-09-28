@@ -109,6 +109,8 @@
   --size-hairline-thick: 2px; /* grosor de la línea conectora de Proceso (accent-gold) */
   --size-underline-selected: 3px; /* grosor del subrayado de la tab seleccionada */
   --size-icon-lg: 4rem;       /* 64px — icono circular de "Encuentra tu sabor" (Home) */
+  --size-dot-sm: 0.75rem;      /* 12px — chip de color en la lista de Coffee Shops */
+  --size-pin-lg: 1.5rem;       /* 24px — pin decorativo del mapa placeholder (Coffee Shops) */
 
   /* ---- Accesibilidad ---- */
   --focus-ring-color: var(--color-block-terracotta);
