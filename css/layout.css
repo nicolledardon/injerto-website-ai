@@ -1,0 +1,296 @@
+/* ==========================================================================
+   El Injerto — Layout
+   ==========================================================================
+   Contenedor, cabecera, pie de página, ritmo vertical de secciones y
+   patrones de grid reutilizables (product-grid, split). Solo usa
+   var(--…) — nunca valores sueltos (skills/design-tokens). Mobile-first,
+   min-width en 480/768/1024/1280px (skills/css-architecture).
+
+   Nota de fidelidad: Figma solo diseñó 2 anchos (375 y 1440), así que el
+   padding lateral en los breakpoints intermedios (768/1024) es una
+   interpolación razonable entre esos dos extremos, no un valor sacado
+   directamente de un frame de Figma.
+   ========================================================================== */
+
+/* ---- Contenedor ---- */
+.container {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: var(--space-6); /* 24px — coincide con el margen lateral mobile de Figma */
+  max-width: calc(var(--container-max) + 2 * var(--space-30));
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-inline: var(--space-10); /* 40px — coincide con el padding del Header/Footer desktop */
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-inline: var(--space-16); /* 64px */
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    padding-inline: var(--space-30); /* 120px — coincide con el margen lateral desktop de Figma */
+  }
+}
+
+/* ---- Cabecera del sitio ---- */
+.site-header {
+  display: flex;
+  flex-direction: column;
+  padding-block: var(--space-4); /* 16px */
+  padding-inline: var(--space-6); /* 24px */
+  background-color: var(--color-surface);
+}
+
+@media (min-width: 768px) {
+  .site-header {
+    padding-block: var(--space-5); /* 20px — coincide con Header Desktop de Figma */
+    padding-inline: var(--space-10); /* 40px */
+  }
+}
+
+.site-header__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: var(--fs-h4);
+  color: var(--color-ink);
+}
+
+.site-header__logo-icon {
+  width: var(--size-icon-md);
+  height: var(--size-icon-md);
+}
+
+/* Wrapper que agrupa logo + botón hamburguesa en una fila; el nav (panel
+   desplegable) va DEBAJO de esta fila en el flujo normal del documento —
+   nunca en position:fixed con un offset adivinado, para no depender de la
+   altura real de la cabecera. */
+.site-header__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* Botón hamburguesa — visible solo por debajo del breakpoint de navegación
+   horizontal. El toggle de estado (aria-expanded, atributo [hidden] en el
+   nav) lo aplica js/main.js; aquí solo se define el aspecto visual. */
+.site-header__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-tap-target);
+  height: var(--size-tap-target);
+}
+
+@media (min-width: 768px) {
+  .site-header__toggle {
+    display: none;
+  }
+}
+
+/* Nav — panel desplegable en flujo normal en mobile (oculto por defecto vía
+   [hidden], que js/main.js quita/pone al hacer toggle), fila horizontal en
+   desktop. Al estar en el flujo del documento (no position:fixed), la
+   cabecera crece para contenerlo y no hace falta calcular ninguna altura. */
+.site-header__nav[hidden] {
+  display: none;
+}
+
+.site-header__nav {
+  width: 100%;
+  padding-block: var(--space-6);
+}
+
+.site-header__nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-h3);
+}
+
+@media (min-width: 768px) {
+  .site-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  .site-header__row {
+    width: auto;
+  }
+
+  .site-header__nav,
+  .site-header__nav[hidden] {
+    display: block;
+    width: auto;
+    padding-block: 0;
+  }
+
+  .site-header__nav-list {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-8);
+    font-family: var(--font-body);
+    font-weight: var(--fw-medium);
+    font-size: var(--fs-body);
+  }
+}
+
+/* ---- Pie de página ---- */
+.site-footer {
+  background-color: var(--color-ink);
+  color: var(--color-surface);
+  border-top: var(--stroke-gold);
+}
+
+.site-footer__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding-block: var(--space-8); /* 32px */
+  padding-inline: var(--space-6); /* 24px */
+}
+
+@media (min-width: 768px) {
+  .site-footer__inner {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding-inline: var(--space-10); /* 40px */
+  }
+}
+
+.site-footer__nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+@media (min-width: 768px) {
+  .site-footer__nav-list {
+    flex-direction: row;
+    gap: var(--space-8);
+  }
+}
+
+.site-footer__disclaimer {
+  font-size: var(--fs-caption);
+  color: var(--color-surface);
+  opacity: 0.7;
+  margin-top: var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .site-footer__disclaimer {
+    margin-top: 0;
+  }
+}
+
+/* ---- Ritmo vertical de secciones ---- */
+.section {
+  padding-block: var(--space-12); /* 48px */
+}
+
+@media (min-width: 768px) {
+  .section {
+    padding-block: var(--space-16); /* 64px */
+  }
+}
+
+@media (min-width: 1024px) {
+  .section {
+    padding-block: var(--space-20); /* 80px */
+  }
+}
+
+@media (min-width: 1280px) {
+  .section {
+    padding-block: var(--space-24); /* 96px */
+  }
+}
+
+/* Variante compacta — bandas de título, no secciones de contenido completo */
+.section--tight {
+  padding-block: var(--space-8); /* 32px */
+}
+
+@media (min-width: 1024px) {
+  .section--tight {
+    padding-block: var(--space-10); /* 40px */
+  }
+}
+
+/* Variante con fondo terciario (Procesos, Subscription teaser) */
+.section--tinted {
+  background-color: var(--color-ink-tint-8);
+}
+
+/* ---- Grids reutilizables ---- */
+
+/* split — layout de 2 columnas que colapsa a 1 en mobile. Usado en Hero
+   (texto | foto), Coffee Shops (mapa | lista), Subscription builder
+   (texto | panel). */
+.split {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-10);
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .split {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: var(--space-16);
+  }
+}
+
+/* product-grid — grid de Product Card, Home "Cafés de Temporada" y Tienda.
+   Nota de fidelidad: el hi-fi de Figma usa un offset vertical alterno
+   (efecto "escalonado") entre tarjetas para dar ritmo visual al wireframe;
+   aquí se simplifica a un grid alineado porque un offset por nth-child se
+   rompe de forma impredecible al cambiar el número de columnas entre
+   breakpoints — desviación deliberada, documentada en PLAN.md. */
+.product-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* steps-grid — timeline de Proceso (Finca): fila única desktop, 2×2 mobile */
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-8) var(--space-6);
+  justify-items: center;
+}
+
+@media (min-width: 768px) {
+  .steps-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

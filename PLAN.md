@@ -379,3 +379,60 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
 - Commit: (este mismo commit)
 - Siguiente paso: `css/layout.css` — contenedor, header, footer, ritmo de secciones y grids, mobile
   first con breakpoints 480/768/1024/1280px, consumiendo solo `var(--…)`.
+
+### [2026-09-28 19:48] Corrección de proceso — regla de aprobación explícita por commit
+
+- Agente: docs
+- Prompt (resumen fiel del pedido de Nicolle): Ninguno explícito; la IA detectó por revisión
+  propia de `skills/git-workflow/SKILL.md` que el commit `fb1e1ed` (variables.css + base.css) se
+  ejecutó sin que Nicolle escribiera "aprobado" para ese commit concreto (regla 3 de la skill),
+  y se lo señaló proactivamente en vez de repetir el error en silencio.
+- Qué hizo la IA: Preguntó a Nicolle cómo proceder (deshacer el commit vs. dejarlo y corregir el
+  proceso hacia adelante).
+- Decisiones de Nicolle / cambios manuales: Eligió dejar el commit `fb1e1ed` tal cual (su
+  contenido no está en duda) y que, a partir de ahora, cada `git commit` espere su "aprobado"
+  explícito en el chat para ESE commit concreto, tal como exige la skill.
+- Problemas encontrados y corrección: Ver arriba. A partir de este punto, cada unidad de Fase 3
+  se presenta para revisión y espera "aprobado" antes de ejecutar `git commit` — no se asume
+  aprobación a partir de instrucciones generales como "lets start" o respuestas de
+  `AskUserQuestion` que no sean literalmente "aprobado".
+- Verificación: N/A (corrección de proceso, no de código).
+- Commit: (este mismo commit, una vez Nicolle escriba "aprobado")
+- Siguiente paso: Escribir `css/layout.css` y presentarlo para aprobación antes de comitear.
+
+### [2026-09-28 19:51] Fase 3.2 — layout.css
+
+- Agente: frontend
+- Prompt (resumen fiel del pedido de Nicolle): Continuación de Fase 3 tras variables.css/base.css.
+- Qué hizo la IA:
+  - `css/layout.css`: `.container` (ancho máximo + padding lateral progresivo 24→40→64→120px en
+    los 4 breakpoints), `.site-header`/`.site-footer` (BEM completo, cabecera con logo + botón
+    hamburguesa en fila propia `.site-header__row` y nav como panel en flujo normal debajo —
+    nunca `position: fixed` con un offset de altura adivinado), ritmo vertical `.section` (con
+    variantes `--tight` y `--tinted`), y 3 patrones de grid reutilizables: `.split` (2 columnas →
+    1 en mobile; Hero, Coffee Shops, Subscription builder), `.product-grid` (1→2→4 columnas;
+    Product Card en Home/Tienda) y `.steps-grid` (2×2 mobile → fila de 4 desktop; Procesos).
+  - Añadió a `variables.css` dos tokens de tamaño que faltaban (`--size-icon-md: 28px`,
+    `--size-tap-target: 44px`, este último documentado como mínimo de área táctil WCAG 2.5.5).
+  - Verificó con contraste (fórmula de luminancia + mezcla alfa) que el texto del disclaimer del
+    footer a `opacity: 0.7` sigue pasando AA (8.49:1 efectivo sobre el fondo `ink`) antes de
+    dejarlo así.
+- Decisiones de Nicolle / cambios manuales: Ninguna en este paso.
+- Problemas encontrados y corrección:
+  - Primer borrador tenía 4 valores px sueltos (`28px`, `44px` ×2, `top: 64px`) — prohibido por
+    `skills/design-tokens/SKILL.md` ("ningún valor hexadecimal ni número de espaciado suelto
+    fuera de variables.css"). Detectado con `grep -nE '[0-9]+px|#[0-9a-fA-F]{3,8}'` antes de
+    proponer el commit. Corregido: los dos tamaños de icono/botón se movieron a tokens nuevos en
+    `variables.css`; el offset `top: 64px` del panel de navegación mobile se eliminó del todo
+    rediseñando el nav como panel en flujo normal (no `position: fixed`) — así no depende de
+    ningún número mágico ni de la altura real, variable, de la cabecera.
+  - Al hacer ese rediseño, `.site-header` quedó con `flex-direction: column` en mobile pero sin
+    volver a `row` en el breakpoint desktop — bug de layout detectado por lectura propia del
+    archivo completo antes de proponer el commit, corregido añadiendo `flex-direction: row` al
+    media query de 768px.
+- Verificación: `grep -nE '[0-9]+px|#[0-9a-fA-F]{3,8}' css/layout.css` → cero valores sueltos
+  fuera de comentarios; `grep -in "important" css/*.css` → cero apariciones; lectura completa del
+  archivo final; cálculo de contraste del disclaimer con opacidad.
+- Commit: (pendiente de que Nicolle escriba "aprobado")
+- Siguiente paso: `css/components.css` (botones, product card, proceso step, tabs) — checkpoint de
+  revisión de Nicolle tras este archivo, según el plan de Fase 3.
