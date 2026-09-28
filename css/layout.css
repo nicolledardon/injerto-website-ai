@@ -329,3 +329,55 @@
   align-items: center;
   text-align: center;
 }
+
+/* ---- Cabecera de página (Tienda, Finca, Coffee Shops) ---- */
+/* Título + intro de página, antes del contenido principal. Padding vertical
+   asimétrico tomado directamente de Tienda en Figma (no interpolado: mobile
+   32/24 y desktop 64/32 son los valores reales de los 2 anchos diseñados). */
+.page-header {
+  padding-block: var(--space-8) var(--space-6); /* 32px / 24px */
+}
+
+@media (min-width: 768px) {
+  .page-header {
+    padding-block: var(--space-16) var(--space-8); /* 64px / 32px */
+  }
+}
+
+/* ---- Fila de Category Tabs (Tienda) ---- */
+.category-tabs-row {
+  padding-bottom: var(--space-6); /* 24px */
+}
+
+@media (min-width: 768px) {
+  .category-tabs-row {
+    padding-bottom: var(--space-10); /* 40px */
+  }
+}
+
+/* ---- Utilidad: sección con padding solo abajo ---- */
+/* Para contenido que ya viene precedido de espaciado propio (p.ej. justo
+   después de .category-tabs-row) y no debe duplicar espacio arriba. Sigue
+   la misma progresión de 4 breakpoints que .section, desplazada a los
+   valores reales de Tienda en Figma (mobile 56px, desktop 96px). */
+.section-bottom {
+  padding-bottom: var(--space-14); /* 56px */
+}
+
+@media (min-width: 768px) {
+  .section-bottom {
+    padding-bottom: var(--space-16); /* 64px — interpolación */
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-bottom {
+    padding-bottom: var(--space-20); /* 80px — interpolación */
+  }
+}
+
+@media (min-width: 1280px) {
+  .section-bottom {
+    padding-bottom: var(--space-24); /* 96px */
+  }
+}

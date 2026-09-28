@@ -536,3 +536,41 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
 - Commit: (pendiente de que Nicolle escriba "aprobado")
 - Siguiente paso: `tienda.html` (Fase 3 paso 6) — reutilizará el header/footer/tabs ya construidos
   y el patrón `.product-grid`.
+
+
+### [2026-09-28 20:44] Fase 3.5 — tienda.html
+
+- Agente: frontend
+- Prompt (resumen fiel del pedido de Nicolle): "go" — continuar con la siguiente página del
+  plan ya acordado tras aprobar y pushear index.html.
+- Qué hizo la IA:
+  - Inspección de solo lectura en Figma: árbol completo de Tienda Desktop (Café activo, 332:82),
+    Tienda Desktop (Merch activo, 333:122, un frame estático aparte que Figma usa solo para
+    previsualizar el estado del tab) y Tienda Mobile (333:2039). Extraídos los 4 productos reales
+    de Merch (Gorra El Injerto Q184.00, Filtros Hario V60 Q99.00, Hario V60 Suiren Q379.00, Hario
+    V60 Buono Q2,900.00 — precios ya aprobados en GATE 2, no verificados de nuevo aquí) y sus
+    colores de bloque (terracotta/pine/cherry/terracotta).
+  - Consolidó los 2 frames estáticos de Figma (Café / Merch) en un único patrón ARIA tabs
+    funcional: un tablist con 2 botones (role="tab", aria-selected, roving tabindex) y 2
+    tabpanel (Café visible por defecto, Merch con [hidden]) — el cambio de estado real lo
+    implementará js/main.js en Fase 3 paso 9; por ahora el HTML ya es válido y accesible con
+    JS desactivado (ambos paneles existen, solo uno visible).
+  - Reutilizó .site-header / .site-footer / .product-grid / .product-card / .tablist / .tab tal
+    cual, sin tocar CSS ya aprobado de esos componentes.
+  - Añadió a layout.css 3 utilidades nuevas de espaciado específicas de cabecera de página:
+    .page-header (título + intro, valores REALES de Figma sin interpolar: mobile 32/24,
+    desktop 64/32 — coinciden exactos con --space-8/--space-6 y --space-16/--space-8),
+    .category-tabs-row (padding-bottom 24/40, también exacto), .section-bottom (padding-bottom
+    56→96 con la misma progresión de 4 breakpoints que .section, mobile/desktop exactos e
+    interpolación solo en los 2 pasos intermedios, mismo criterio ya usado en .container).
+- Desviaciones: ninguna nueva — mismo criterio de interpolación en breakpoints intermedios ya
+  documentado en layout.css/PLAN.md. Precios/nombres de Merch se toman tal cual de Figma
+  (incluido el precio alto de "Hario V60 Buono"); no se corrigen sin que Nicolle lo pida, porque
+  ya fueron aprobados en GATE 2.
+- Verificación: capturas Playwright (375px/1440px) del estado por defecto (Café) y una prueba
+  manual del panel Merch (toggle de "hidden" vía script, sin JS de producción) — contenido,
+  colores y layout correctos en ambos. grep limpio: sin !important, sin
+  @media (max-width: …), sin valores hex/px sueltos en las líneas añadidas.
+- Commit: (pendiente de que Nicolle escriba "aprobado")
+- Siguiente paso: finca.html (Fase 3 paso 7) — reutilizará .page-header, .proceso /
+  .proceso-step / .proceso-connector y .split (Historia).
