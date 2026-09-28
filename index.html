@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Injerto — Café de finca, directo a tu casa</title>
+  <meta name="description" content="Café premiado de Finca El Injerto, directo desde Guatemala a tu casa. Descubre la tienda, la finca y nuestros coffee shops.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,900&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+  <a class="sr-only" href="#main">Saltar al contenido principal</a>
+
+  <header class="site-header">
+    <div class="site-header__row">
+      <a href="index.html" class="site-header__logo">
+        <img src="assets/img/logo.svg" alt="" class="site-header__logo-icon" width="28" height="28">
+        EL INJERTO
+      </a>
+      <button type="button" class="site-header__toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav">
+        <span class="sr-only">Abrir menú</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+          <path d="M3 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M3 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <nav class="site-header__nav" id="site-nav" hidden aria-label="Principal">
+      <ul class="site-header__nav-list">
+        <li><a href="index.html" aria-current="page">Home</a></li>
+        <li><a href="tienda.html">Tienda</a></li>
+        <li><a href="finca.html">Finca</a></li>
+        <li><a href="coffee-shops.html">Coffee Shops</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="section">
+      <div class="container">
+        <div class="split">
+          <div class="stack stack--md">
+            <h1>El café que conquistó el mundo, directo a tu casa.</h1>
+            <p>Durante años, la mejor cosecha de Finca El Injerto se reservó para la exportación. Hoy llevamos ese mismo café, premiado internacionalmente, directo a tu puerta.</p>
+            <a href="tienda.html" class="btn btn--primary">Comprar café</a>
+          </div>
+          <div class="hero-photos" aria-hidden="true">
+            <div class="hero-photos__block hero-photos__block--cherry"></div>
+            <div class="hero-photos__stack">
+              <div class="hero-photos__block hero-photos__block--terracotta"></div>
+              <div class="hero-photos__block hero-photos__block--pine">
+                <span class="hero-photos__accent"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Encuentra tu sabor -->
+    <section class="section">
+      <div class="container">
+        <div class="stack stack--lg stack--center">
+          <h2>Encuentra tu sabor</h2>
+          <ul class="steps-grid">
+            <li class="flavor-step">
+              <span class="flavor-step__icon" aria-hidden="true"></span>
+              <span class="flavor-step__label">Ánimo</span>
+            </li>
+            <li class="flavor-step">
+              <span class="flavor-step__icon" aria-hidden="true"></span>
+              <span class="flavor-step__label">Notas</span>
+            </li>
+            <li class="flavor-step">
+              <span class="flavor-step__icon" aria-hidden="true"></span>
+              <span class="flavor-step__label">Método</span>
+            </li>
+            <li class="flavor-step">
+              <span class="flavor-step__icon" aria-hidden="true"></span>
+              <span class="flavor-step__label">Intensidad</span>
+            </li>
+          </ul>
+          <a href="tienda.html" class="btn btn--primary">Encuentra tu sabor</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cafés de temporada -->
+    <section class="section">
+      <div class="container">
+        <div class="stack stack--xl">
+          <h2>Cafés de temporada</h2>
+          <ul class="product-grid">
+            <li class="product-card">
+              <div class="product-card__image product-card__image--cherry"></div>
+              <div class="product-card__body">
+                <p class="product-card__name">Bourbon</p>
+                <p class="product-card__price">Q133.00</p>
+              </div>
+            </li>
+            <li class="product-card">
+              <div class="product-card__image product-card__image--pine"></div>
+              <div class="product-card__body">
+                <p class="product-card__name">Espresso Blend</p>
+                <p class="product-card__price">Q103.00</p>
+              </div>
+            </li>
+            <li class="product-card">
+              <div class="product-card__image product-card__image--terracotta"></div>
+              <div class="product-card__body">
+                <p class="product-card__name">Geisha G1 · 300g</p>
+                <p class="product-card__price">Q329.00</p>
+              </div>
+            </li>
+            <li class="product-card">
+              <div class="product-card__image product-card__image--cherry"></div>
+              <div class="product-card__body">
+                <p class="product-card__name">Cold Brew</p>
+                <p class="product-card__price">Q26.00</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Arma tu suscripción (teaser) -->
+    <section class="section section--tinted">
+      <div class="container">
+        <div class="split">
+          <div class="stack stack--sm">
+            <h2>Arma tu suscripción</h2>
+            <p>Elige variedad, tamaño y frecuencia de envío. Pausa o cancela cuando quieras.</p>
+            <a href="tienda.html" class="btn btn--primary">Arma tu suscripción</a>
+          </div>
+          <div class="subscription-panel">
+            <div class="subscription-panel__chips" role="group" aria-label="Tamaño (vista previa)">
+              <span class="chip chip--selected">250g</span>
+              <span class="chip">500g</span>
+              <span class="chip">1kg</span>
+            </div>
+            <label class="sr-only" for="subscription-frequency">Frecuencia de envío</label>
+            <select id="subscription-frequency" class="subscription-panel__select" disabled>
+              <option>Cada 2 semanas</option>
+            </select>
+            <p class="subscription-panel__price">Q95.00 / envío</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <a href="index.html" class="site-header__logo">
+        <img src="assets/img/logo.svg" alt="" class="site-header__logo-icon" width="28" height="28">
+        EL INJERTO
+      </a>
+      <nav aria-label="Pie de página">
+        <ul class="site-footer__nav-list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="tienda.html">Tienda</a></li>
+          <li><a href="finca.html">Finca</a></li>
+          <li><a href="coffee-shops.html">Coffee Shops</a></li>
+        </ul>
+      </nav>
+      <p class="site-footer__disclaimer">Proyecto académico de rediseño — no afiliado a El Injerto.</p>
+    </div>
+  </footer>
+</body>
+</html>

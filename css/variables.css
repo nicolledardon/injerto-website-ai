@@ -108,6 +108,7 @@
   --size-hairline-thin: 1px;  /* grosor base de subrayado (tab en reposo, mantiene la altura reservada) */
   --size-hairline-thick: 2px; /* grosor de la línea conectora de Proceso (accent-gold) */
   --size-underline-selected: 3px; /* grosor del subrayado de la tab seleccionada */
+  --size-icon-lg: 4rem;       /* 64px — icono circular de "Encuentra tu sabor" (Home) */
 
   /* ---- Accesibilidad ---- */
   --focus-ring-color: var(--color-block-terracotta);

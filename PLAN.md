@@ -477,3 +477,62 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
 - Siguiente paso: `index.html` (Fase 3 paso 5) — primera página HTML, con checkpoint de revisión
   de Nicolle tras `components.css` según el plan (ya cumplido con esta entrada) antes de empezar
   el HTML.
+
+### [2026-09-28 20:31] Fase 3.4 — index.html (Home)
+
+- Agente: frontend
+- Prompt (resumen fiel del pedido de Nicolle): continuación directa de Fase 3 tras aprobar
+  components.css ("aprobado"); siguiente paso ya acordado en el plan: construir index.html.
+- Qué hizo la IA:
+  - Inspección de solo lectura en Figma (Home Desktop 323:2 y Home Mobile 329:43): árbol completo
+    de texto real (H1, body, nav, botones, 4 productos con precios, footer), variantes de botón
+    usadas (las 3 instancias de Home son "Primary"), geometría exacta de la composición
+    fotográfica del Hero (bag 360×420 cherry + columna apilada terracotta/pine 360×210 c/u con
+    acento circular centrado; mobile = un solo bloque cherry 327×220), tamaño/color del icono de
+    "Encuentra tu sabor" (64px, terracotta), y estado de los chips de tamaño del Subscription
+    Builder (250g=terracotta/seleccionado, 500g y 1kg=disabled-fill).
+  - Construyó `index.html`: skip link, header con botón hamburguesa + nav (marcado ya listo para
+    el patrón disclosure que implementará js/main.js en Fase 3 paso 9), Hero (`.split`), "Encuentra
+    tu sabor" (`.steps-grid` + `.flavor-step` nuevo), "Cafés de temporada" (`.product-grid`, sin
+    los productos como `<img>` — bloque de color plano, ya documentado en components.css), "Arma
+    tu suscripción" (teaser, `.section--tinted`), footer.
+  - Añadió al Google Fonts (Fraunces + Work Sans) vía `<link>` en `<head>` — primera vez que se
+    carga la tipografía real; pendiente de replicar en cada página HTML siguiente.
+  - Extendió el sistema de tokens/componentes para cubrir contenido nuevo de Home:
+    - `variables.css`: +1 token (`--size-icon-lg`, 64px, icono de Flavor Step).
+    - `layout.css`: +utilidad `.stack`/`.stack--sm/md/lg/xl`/`.stack--center` (agrupa
+      título+contenido+CTA con el gap real de cada frame de Figma); +fix `object-fit: contain` en
+      `.site-header__logo-icon` (el logo real no es cuadrado, 98×116, y el icono se fuerza a
+      28×28 — sin este fix se deformaba).
+    - `components.css`: +`.hero-photos` (composición fotográfica con `aspect-ratio` proporcional,
+      no valores sueltos), +`.flavor-step`, +`.chip`/`.chip--selected` (mismos colores ya
+      auditados que `.btn--primary`, sin auditoría nueva), +`.subscription-panel`.
+- Desviaciones documentadas (todas visuales/menores, nunca silenciosas):
+  1. El selector de frecuencia y la línea de precio del Subscription Builder se implementaron
+     como controles reales `disabled` con texto (`<select disabled>`, `<p>`) en vez de las barras
+     grises vacías de Figma — más semántico/accesible, mismo aspecto visual (mismos tokens
+     disabled-fill/disabled-text).
+  2. `.split` (gap 64px) se reutiliza para Hero (Figma: 60px) y Subscription Builder (Figma: 80px)
+     — interpolación razonable ya aceptada como patrón en este proyecto (ver nota de fidelidad en
+     layout.css), no un valor nuevo inventado.
+  3. `.steps-grid` (gap 24/32px) se reutiliza para los Flavor Steps de Home (Figma: 48px en fila
+     única desktop) — mismo criterio; further ventaja: el mismo grid servirá para el timeline de
+     Proceso en Finca.
+  4. Padding vertical del chip ajustado de 10px (Figma) a `--space-3` (12px) para mantenerse en la
+     escala de 4px.
+  5. Los 3 botones "Encuentra tu sabor"/"Arma tu suscripción" (CTA de sección y del panel) enlazan
+     a `tienda.html` — no existe un flujo de checkout/subscripción dedicado dentro del alcance de
+     4 páginas de esta PEC.
+- Verificación: capturas con Playwright/Chromium (375px y 1440px, página completa) — el servidor
+  local de `device_bash` no es alcanzable por un navegador real, así que los archivos se copiaron
+  al entorno cloud para renderizarlos. Comparadas lado a lado contra las capturas de Figma de Home
+  Desktop (323:2) y Home Mobile (329:43): estructura, espaciado, colores y grids coinciden;
+  únicas diferencias son las desviaciones ya documentadas arriba. La carga real de Fraunces/Work
+  Sans no se pudo verificar visualmente en este entorno (fonts.googleapis.com bloqueado por la
+  política de red del sandbox), pero cargará con normalidad para cualquier usuario real o en
+  GitHub Pages — fallback declarado (Georgia/sans-serif) usado solo en esta captura de control.
+  Verificado también: sin `!important`, sin `@media (max-width: …)`, sin valores hex/px sueltos
+  en las líneas de declaración añadidas (`grep` limpio).
+- Commit: (pendiente de que Nicolle escriba "aprobado")
+- Siguiente paso: `tienda.html` (Fase 3 paso 6) — reutilizará el header/footer/tabs ya construidos
+  y el patrón `.product-grid`.
