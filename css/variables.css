@@ -1,0 +1,111 @@
+/* ==========================================================================
+   El Injerto — Design tokens
+   ==========================================================================
+   Fuente: colecciones de variables de Figma "El Injerto — Color" (fileKey
+   C8CzTyhKqB1bXOBC3PZxYd) y estilos de texto "injerto/*", extraídos vía
+   Figma Plugin API (getLocalVariableCollectionsAsync / getLocalTextStylesAsync)
+   el 2026-09-28/29. Tabla de mapeo Figma ↔ CSS completa, con ratios de
+   contraste WCAG calculados para cada par usado, en PLAN.md
+   ("Fase 3 (previo a variables.css) — Auditoría de contraste WCAG").
+
+   Figma no define variables numéricas (espaciado/radio/motion) — esa parte
+   de este archivo se deriva de los valores usados de forma consistente en
+   el build de Figma de la Fase 2 y se documenta aquí por primera vez.
+   ========================================================================== */
+
+:root {
+  /* ---- Color — tokens nombrados por rol, no por apariencia ---- */
+  --color-ink: #1e1611;              /* texto principal · fondos oscuros (footer, nav) */
+  --color-surface: #faf5ec;          /* fondo claro por defecto · texto sobre ink */
+  --color-block-cherry: #e8422c;     /* bloque decorativo saturado — nunca lleva texto encima */
+  --color-block-terracotta: #ef8a24; /* fondo de botón Primary · chip seleccionado */
+  --color-block-terracotta-hover: #ce771f;
+  --color-block-terracotta-active: #bf6e1d;
+  --color-block-pine: #16794c;       /* bloque decorativo saturado — nunca lleva texto encima */
+  --color-accent-gold: #c9a227;      /* hairline/acento decorativo ÚNICAMENTE — nunca color de texto ni de fondo funcional */
+  --color-text-secondary: #6b5d4f;   /* texto secundario sobre surface / ink-tint-8 */
+  --color-disabled-fill: #e0dad2;    /* fondo de estado deshabilitado */
+  --color-disabled-text: #979189;    /* texto de estado deshabilitado (exento de AA — WCAG 1.4.3, UI inactiva) */
+  --color-ink-tint-8: #e8e3da;       /* fondo de sección terciaria (p.ej. Procesos, Subscription teaser) */
+  --color-ink-tint-16: #d7d1c9;      /* superficie de mayor contraste tonal (p.ej. placeholder de mapa) */
+
+  /* ---- Tipografía ---- */
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-body: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-black: 900;
+
+  /* Tamaños fluidos para h1/h2 (clamp entre el valor mobile y desktop usados
+     en el hi-fi de Figma); el resto de tamaños son fijos por breakpoint. */
+  --fs-h1: clamp(2rem, 1.3rem + 3.1vw, 3.5rem);   /* 32px → 56px */
+  --fs-h2: clamp(1.625rem, 1.35rem + 1.2vw, 2.5rem); /* 26px → 40px */
+  --fs-h3: clamp(1.1875rem, 1.05rem + 0.6vw, 1.5rem); /* 19px → 24px */
+  --fs-h4: 1.375rem;    /* 22px — nombre de sucursal en Coffee Shops */
+  --fs-body: 1rem;      /* 16px */
+  --fs-body-sm: 0.9375rem; /* 15px — variante mobile de body */
+  --fs-small: 0.875rem; /* 14px — injerto/small */
+  --fs-caption: 0.8125rem; /* 13px — leyendas de Procesos */
+  --fs-button: 0.9375rem; /* 15px — injerto/button-label */
+
+  --lh-tight: 1.05;   /* h1 */
+  --lh-snug: 1.1;     /* h2 */
+  --lh-normal: 1.2;   /* h3, h4 */
+  --lh-relaxed: 1.6;  /* body */
+  --lh-button: 1;
+
+  --ls-h1: -0.5px;
+  --ls-h2: -0.3px;
+  --ls-button: 0.3px;
+
+  /* ---- Espaciado — escala de 4px, nombrada por múltiplo ---- */
+  --space-1: 0.25rem;  /* 4px */
+  --space-2: 0.5rem;   /* 8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.25rem;  /* 20px */
+  --space-6: 1.5rem;   /* 24px */
+  --space-8: 2rem;     /* 32px */
+  --space-10: 2.5rem;  /* 40px */
+  --space-12: 3rem;    /* 48px */
+  --space-14: 3.5rem;  /* 56px */
+  --space-16: 4rem;    /* 64px */
+  --space-20: 5rem;    /* 80px */
+  --space-24: 6rem;    /* 96px */
+  --space-30: 7.5rem;  /* 120px — padding lateral desktop (≥1280px) */
+
+  /* ---- Radio ---- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 999px; /* chips, pills */
+
+  /* ---- Contorno ---- */
+  --stroke-hairline: 1px solid var(--color-ink-tint-8);
+  --stroke-gold: 1px solid var(--color-accent-gold);
+
+  /* ---- Movimiento ---- */
+  /* Duración y easing separados (no como un solo shorthand) para poder
+     anular solo la duración bajo prefers-reduced-motion sin recurrir a la
+     declaración de máxima prioridad que este proyecto prohíbe
+     — ver base.css. */
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --easing-standard: ease;
+  --transition-fast: var(--duration-fast) var(--easing-standard);
+  --transition-base: var(--duration-base) var(--easing-standard);
+
+  /* ---- Layout ---- */
+  --container-max: 1200px; /* ancho de contenido a 1440px de viewport (120px de margen lateral) */
+
+  /* ---- Accesibilidad ---- */
+  --focus-ring-color: var(--color-block-terracotta);
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+}
+
+/* Breakpoints del proyecto (mobile-first, min-width, sin variables CSS
+   porque no son utilizables dentro de @media): 480px · 768px · 1024px · 1280px */

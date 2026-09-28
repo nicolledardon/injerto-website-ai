@@ -338,3 +338,44 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
   corregido) más tokens de tipografía (estilos `injerto/*`), espaciado y radio derivados del uso
   consistente en el build de Fase 2 (no existen variables numéricas en Figma, así que se
   documentan aquí por primera vez).
+
+### [2026-09-28 19:47] Fase 3.1 — variables.css + base.css
+
+- Agente: frontend
+- Prompt (resumen fiel del pedido de Nicolle): "lets start" — primeros dos archivos del orden de
+  carga fijado en `skills/css-architecture/SKILL.md` (`variables.css` → `base.css` → `layout.css`
+  → `components.css`).
+- Qué hizo la IA:
+  - `css/variables.css`: los 13 tokens de color de la tabla de mapeo Figma↔CSS (ya con el bug de
+    contraste corregido), tokens tipográficos derivados de los 6 estilos de texto `injerto/*` de
+    Figma (family, weight, tamaño, interlineado, tracking), escala de espaciado de 4px (12
+    valores, de 4px a 120px, derivada de los valores realmente usados en el build de Fase 2 — no
+    existen variables numéricas en Figma), radio, contorno, movimiento y accesibilidad (anillo de
+    foco). Tamaños de `h1`/`h2` como `clamp()` fluido entre el valor mobile y desktop observado en
+    Figma; el resto de tamaños quedan fijos y se ajustan por media query donde aplica.
+  - `css/base.css`: reset moderno (box-sizing, márgenes a cero, imágenes responsivas, reset de
+    botones/inputs/enlaces/listas/tablas), tipografía base sobre `body`, escala de encabezados
+    h1–h4 consumiendo únicamente `var(--…)`, estilo `:focus-visible` (no `:focus`, para no mostrar
+    el anillo en clics de ratón), utilidad `.sr-only`, y una salvaguarda global de
+    `prefers-reduced-motion`.
+- Decisiones de Nicolle / cambios manuales: Ninguna en este paso.
+- Problemas encontrados y corrección:
+  - Al escribir la salvaguarda de `prefers-reduced-motion`, el primer intento usó la declaración
+    de máxima prioridad sobre `transition-duration`/`animation-duration` en un selector universal
+    (`*`) — la forma estándar de implementar esto, pero **prohibida explícitamente** en
+    `skills/css-architecture/SKILL.md` ("`!important` está prohibido en todo el proyecto"),
+    detectado por revisión propia antes de que Nicolle lo viera. Corregido: se separaron los
+    tokens de movimiento en duración (`--duration-fast`, `--duration-base`) y easing
+    (`--easing-standard`) en vez de un solo shorthand, y la salvaguarda ahora redefine solo los
+    tokens de duración dentro de `:root` bajo el media query — como todo el proyecto (obligatorio
+    desde ahora en `components.css`/`js/main.js`) consume `var(--transition-fast)`/
+    `var(--transition-base)` y nunca milisegundos sueltos, la redefinición de variable se propaga
+    sin necesidad de ganar ninguna guerra de especificidad. Verificado con
+    `grep -rin "important" css/` → cero resultados, incluidos los comentarios.
+- Verificación: lectura completa de ambos archivos antes de proponer el commit;
+  `grep -rin "important" css/` (cero apariciones); confirmación manual de que
+  `components.css`/`layout.css` (aún no escritos) solo podrán referenciar estos tokens vía `var()`
+  según `skills/design-tokens/SKILL.md`.
+- Commit: (este mismo commit)
+- Siguiente paso: `css/layout.css` — contenedor, header, footer, ritmo de secciones y grids, mobile
+  first con breakpoints 480/768/1024/1280px, consumiendo solo `var(--…)`.

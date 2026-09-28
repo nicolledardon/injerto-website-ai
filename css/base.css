@@ -1,0 +1,174 @@
+/* ==========================================================================
+   El Injerto — Base
+   ==========================================================================
+   Reset moderno, tipografía base, escala de encabezados (fluida en h1/h2
+   vía clamp(), fija en h3/h4/body), estilos de foco visible y utilidades
+   de accesibilidad. Depende de variables.css (debe cargarse después).
+   ========================================================================== */
+
+/* ---- Reset moderno ---- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  line-height: var(--lh-relaxed);
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+picture,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+/* ---- Tipografía base ---- */
+html {
+  font-size: 100%; /* respeta el tamaño de fuente configurado por el usuario */
+}
+
+body {
+  font-family: var(--font-body);
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-body);
+  color: var(--color-ink);
+  background-color: var(--color-surface);
+}
+
+/* ---- Escala de encabezados ---- */
+h1,
+.h1 {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: var(--fs-h1);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-h1);
+}
+
+h2,
+.h2 {
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-h2);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-h2);
+}
+
+h3,
+.h3 {
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-h3);
+  line-height: var(--lh-normal);
+}
+
+h4,
+.h4 {
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-h4);
+  line-height: var(--lh-normal);
+}
+
+p {
+  color: var(--color-text-secondary);
+  font-size: var(--fs-body-sm);
+  line-height: var(--lh-relaxed);
+}
+
+@media (min-width: 768px) {
+  p {
+    font-size: var(--fs-body);
+  }
+}
+
+small,
+.text-small {
+  font-size: var(--fs-small);
+  font-weight: var(--fw-medium);
+}
+
+.text-caption {
+  font-size: var(--fs-caption);
+  color: var(--color-text-secondary);
+}
+
+/* ---- Foco visible ---- */
+/* :focus-visible en vez de :focus para no mostrar el anillo en clics de
+   ratón, solo en navegación por teclado — requisito de accesibilidad. */
+:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-sm);
+}
+
+/* ---- Utilidades de accesibilidad ---- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- Movimiento reducido ---- */
+/* Esta regla no usa la declaración de máxima prioridad (prohibida en todo
+   el proyecto, ver skills/css-architecture):
+   en vez de forzar transition-duration en cada elemento, se redefinen los
+   TOKENS de duración a nivel :root. Como components.css y js/main.js SOLO
+   consumen var(--transition-fast)/var(--transition-base) (nunca ms sueltos,
+   ver skills/design-tokens), esta redefinición de variable se propaga a
+   todas las transiciones sin necesidad de ganar ninguna guerra de
+   especificidad. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0.01ms;
+    --duration-base: 0.01ms;
+  }
+}
