@@ -55,7 +55,43 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
   `design.md` — corrección diferida a la Fase 1, no bloquea la Fase 0).
 - Verificación: `git init` confirmado por su propio mensaje de salida ("Initialized empty Git
   repository"); estructura de carpetas verificada con `find`.
-- Commit: pendiente de aprobación
+- Commit: 47ad618 — "chore: inicializa el repositorio con gitignore, gitattributes y documentación"
 - Siguiente paso: Proponer el commit #1 ("chore: inicializa el repositorio con gitignore,
   gitattributes y documentación") y, tras la aprobación, guiar a Nicolle para crear el repo
   vacío en GitHub y conectarlo desde su Terminal (Gate 0).
+
+### [2026-09-28 17:20] Fase 0.2 — GATE 0 superada
+
+- Agente: (ninguno — coordinación de repositorio)
+- Prompt (resumen fiel del pedido de Nicolle): Confirmó que los archivos ya aparecen en GitHub
+  tras `git remote add origin` + `git push -u origin main` desde su Terminal.
+- Qué hizo la IA: Ninguna acción de archivo — solo registró la confirmación de Nicolle.
+- Decisiones de Nicolle / cambios manuales: Ninguna sobre archivos; confirmó el push.
+- Problemas encontrados y corrección: Ninguno.
+- Verificación: Confirmación verbal de Nicolle ("files show up on gthub") — no verificado
+  directamente por la IA (sin acceso de lectura al repo remoto desde esta sesión).
+- Commit: n/a (no hay cambios de archivo en este paso)
+- Siguiente paso: Iniciar Fase 1 — releer la sección Track B de Notion y los frames lo-fi de la
+  PEC 2 en Figma, luego proponer los tokens de diseño (color, tipografía, espaciado) para
+  aprobación antes de construir nada en Figma.
+
+### [2026-09-28 19:45] Fase 1.1–1.4 — Fundamentos y componentes en Figma
+
+- Agente: design
+- Prompt (resumen fiel del pedido de Nicolle): Aprobó el sistema de color/tipografía/botones/tabs/header/footer propuesto (tras pedir primero una imagen de referencia visual estilo "Café del Alma" para verlo antes de aprobar) y aprobó construir en una página nueva dentro del archivo Figma existente (`C8CzTyhKqB1bXOBC3PZxYd`).
+- Qué hizo la IA:
+  - Inspeccionó el archivo Figma: 4 páginas existentes, 2 colecciones de variables de Book Nook ("type a", "type b") y estilos de texto (h1–h4, body1–2) — todos de Book Nook, ninguno reutilizable para El Injerto.
+  - Creó página nueva "PEC 6 — El Injerto Hi-Fi" (id `308:2`).
+  - Creó colección de variables "El Injerto — Color" (13 variables de color, con scopes explícitos y code syntax WEB `var(--…)`, nunca ALL_SCOPES).
+  - Creó 6 estilos de texto (`injerto/h1`…`injerto/button-label`) en Fraunces (Black/Bold/SemiBold) y Work Sans (Regular/Medium/SemiBold).
+  - Construyó frame Fundamentos (swatches de color + specimen de tipografía, todo vinculado a variables/estilos reales, no hex suelto).
+  - Construyó componentes: Button (15 variantes: Primary/Secondary/Tertiary × Default/Hover/Active/Focus/Disabled), Tab — Tienda categoría (4 estados), Product Card (6 variantes: Café/Merch × Default/Hover/Focus), Proceso Step + Connector, Header (Desktop/Mobile-Closed/Mobile-Open), Footer (con línea de disclaimer académico y hairline dorado superior).
+- Decisiones de Nicolle / cambios manuales: Ninguna edición manual todavía — pendiente de su revisión en este GATE.
+- Problemas encontrados y corrección:
+  - `use_figma` lanzó `TypeError` al acceder a `appendChild` en un nodo ELLIPSE (línea de código muerta); el script no dejó nodos huérfanos (confirma la nota de tools-and-workflow.md: los scripts que fallan revierten completo) — se corrigió y reintentó limpio.
+  - Auto-layout frames (`Top row`, `Nav list`, `Item` del menú móvil; `Footer row`, `Footer nav`) se crearon con el fill blanco por defecto de Figma, tapando el fondo `ink` — corregido vaciando `fills` explícitamente en cada uno.
+  - `resize()` reseteó el modo de tamaño de `Footer row` a FIXED con altura 1px, colapsando el contenido — corregido restaurando `counterAxisSizingMode='AUTO'` + `layoutSizingVertical='HUG'` después del resize, y lo mismo en el frame `Footer` padre.
+  - Posicionamiento inicial de las secciones se solapaba (Footer en y=756 caía encima de Button; Proceso Step en y=1450 caía encima de Product Card) — corregido recalculando un stack vertical limpio sin solapes (Fundamentos → Botones → Tabs → Product Card → Proceso → Header → Footer).
+- Verificación: `get_screenshot` en cada componente tras crearlo (incluida verificación post-fix); `get_metadata` para confirmar posiciones/tamaños reales antes y después del reposicionamiento; captura de página completa final sin solapes, enviada a Nicolle.
+- Commit: pendiente de aprobación (solo actualiza PLAN.md — el trabajo en sí vive en Figma, no en este repo)
+- Siguiente paso: Nicolle revisa el resultado en Figma/las capturas → si aprueba, GATE 1 superado y se pasa a Fase 2 (páginas hi-fi completas, 1440px + 375px).
