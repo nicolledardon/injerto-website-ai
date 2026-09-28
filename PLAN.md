@@ -436,3 +436,44 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
 - Commit: (pendiente de que Nicolle escriba "aprobado")
 - Siguiente paso: `css/components.css` (botones, product card, proceso step, tabs) — checkpoint de
   revisión de Nicolle tras este archivo, según el plan de Fase 3.
+
+### [2026-09-28 20:06] Fase 3.3 — components.css
+
+- Agente: frontend
+- Prompt (resumen fiel del pedido de Nicolle): Continuación de Fase 3 tras layout.css.
+- Qué hizo la IA:
+  - Antes de escribir el archivo, inspeccionó (lectura, sin mutar) los componentes reales de
+    Figma para no inventar valores: variantes Secondary/Tertiary del set de Botones (`308:1954`,
+    ya que solo se habían auditado las de Primary), estados Default/Hover/Selected/Focus del
+    componente Tab (`308:1963`), dimensiones de Product Card (`308:1964`) y de Proceso
+    Step/Connector (`308:2004`/`308:2008`), incluido el color real del conector (`accent-gold`,
+    no adivinado).
+  - `css/components.css`: sistema de 3 botones (`.btn--primary/secondary/tertiary`, con
+    `:hover`/`:active`/`:disabled` fieles a los colores reales de cada variante de Figma),
+    `.product-card` (imagen como color plano con clases modificadoras `--cherry/--pine/
+    --terracotta`, sin `<img>` ya que no hay foto real), `.proceso-step`/`.proceso-connector`
+    (círculo numerado + línea conectora `accent-gold`, oculta en mobile porque el timeline pasa a
+    grid 2×2), y `.tablist`/`.tab`/`.tabpanel` (aspecto visual del patrón ARIA tabs — el
+    comportamiento con teclado se implementa en `js/main.js`, Fase 3 paso 9). El estado
+    seleccionado de la tab se comunica con subrayado más grueso (3px vs 1px) Y peso de fuente
+    (bold vs medium), nunca solo con color (`skills/accessibility` regla 7).
+  - Añadió a `variables.css` 3 tokens de tamaño que faltaban: `--size-dot-lg` (72px, círculo de
+    Proceso Step), `--size-hairline-thin`/`--size-hairline-thick` (1px/2px, grosor de bordes
+    decorativos) y `--size-underline-selected` (3px, subrayado de tab activa).
+- Decisiones de Nicolle / cambios manuales: Ninguna en este paso.
+- Problemas encontrados y corrección:
+  - Primer borrador ocultaba `.proceso-connector` en mobile con `@media (max-width: 767px)` —
+    prohibido por `skills/css-architecture/SKILL.md` ("mobile-first, siempre min-width... nunca
+    max-width como base"). Detectado con `grep -rn "@media.*max-width" css/` antes de proponer el
+    commit. Corregido: `display: none` como estado base (mobile-first) y `display: block` dentro
+    de `@media (min-width: 768px)`.
+  - Un valor `1px` suelto en el borde inferior transparente de `.tab` (placeholder para reservar
+    altura) — detectado con el mismo grep de valores sueltos que en Fase 3.2. Corregido con el
+    nuevo token `--size-hairline-thin`.
+- Verificación: `grep -rin "important" css/` (cero), `grep -rn "@media.*max-width" css/` (cero —
+  todas las media queries son `min-width`), `grep -nE '[0-9]+px|#[0-9a-fA-F]{3,8}' css/components.css`
+  (cero valores sueltos fuera de comentarios/breakpoints), lectura completa del archivo final.
+- Commit: (pendiente de que Nicolle escriba "aprobado")
+- Siguiente paso: `index.html` (Fase 3 paso 5) — primera página HTML, con checkpoint de revisión
+  de Nicolle tras `components.css` según el plan (ya cumplido con esta entrada) antes de empezar
+  el HTML.

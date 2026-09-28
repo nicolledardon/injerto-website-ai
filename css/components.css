@@ -1,0 +1,238 @@
+/* ==========================================================================
+   El Injerto — Componentes
+   ==========================================================================
+   Botones, Product Card, Proceso Step/Connector, y las Category Tabs
+   (patrón ARIA tabs). Solo usa var(--…) — nunca valores sueltos
+   (skills/design-tokens). Valores tomados directamente de los componentes
+   reales de Figma (fileKey C8CzTyhKqB1bXOBC3PZxYd, set de Botones
+   308:1954, Product Card 308:2000, Proceso Step/Connector 308:2004/308:2008,
+   Tab 308:1963) — no inventados.
+   ========================================================================== */
+
+/* ---- Botones ---- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: var(--space-3); /* 12px */
+  padding-inline: var(--space-6); /* 24px */
+  min-height: var(--size-tap-target);
+  border: var(--size-hairline-thick) solid transparent;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-button);
+  line-height: var(--lh-button);
+  letter-spacing: var(--ls-button);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+}
+
+/* Primary — relleno terracotta, etiqueta ink (auditado: 7.07:1 / 5.33:1 /
+   4.64:1 en default/hover/active, ver PLAN.md "Auditoría de contraste WCAG") */
+.btn--primary {
+  background-color: var(--color-block-terracotta);
+  border-color: var(--color-block-terracotta);
+  color: var(--color-ink);
+}
+
+.btn--primary:hover {
+  background-color: var(--color-block-terracotta-hover);
+  border-color: var(--color-block-terracotta-hover);
+}
+
+.btn--primary:active {
+  background-color: var(--color-block-terracotta-active);
+  border-color: var(--color-block-terracotta-active);
+}
+
+.btn--primary:disabled {
+  background-color: var(--color-disabled-fill);
+  border-color: var(--color-disabled-fill);
+  color: var(--color-disabled-text);
+}
+
+/* Secondary — contorno ink, relleno transparente */
+.btn--secondary {
+  background-color: transparent;
+  border-color: var(--color-ink);
+  color: var(--color-ink);
+}
+
+.btn--secondary:hover {
+  background-color: var(--color-ink-tint-8);
+}
+
+.btn--secondary:disabled {
+  border-color: var(--color-disabled-fill);
+  color: var(--color-disabled-text);
+  background-color: transparent;
+}
+
+/* Tertiary — solo texto, sin relleno ni contorno */
+.btn--tertiary {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--color-ink);
+  padding-inline: var(--space-2);
+}
+
+.btn--tertiary:hover {
+  text-decoration: underline; /* el estado no depende solo del color */
+}
+
+.btn--tertiary:disabled {
+  color: var(--color-disabled-text);
+}
+
+/* ---- Product Card ---- */
+/* Home "Cafés de temporada" y Tienda (café/merch). El bloque de imagen es
+   un color plano (placeholder de producto real, ver design.md) — no una
+   <img>, así que no requiere alt text; el color se fija con una clase
+   modificadora, nunca inline. */
+.product-card {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--color-surface);
+}
+
+.product-card__image {
+  aspect-ratio: 6 / 5;
+  width: 100%;
+}
+
+.product-card__image--cherry {
+  background-color: var(--color-block-cherry);
+}
+
+.product-card__image--pine {
+  background-color: var(--color-block-pine);
+}
+
+.product-card__image--terracotta {
+  background-color: var(--color-block-terracotta);
+}
+
+.product-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1); /* 4px */
+  padding: var(--space-4); /* 16px */
+}
+
+.product-card__name {
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-h4);
+  color: var(--color-ink);
+}
+
+.product-card__price {
+  font-size: var(--fs-small);
+  color: var(--color-text-secondary);
+}
+
+/* ---- Proceso Step / Connector ---- */
+/* Timeline "De la semilla a la taza" (Finca): 4 pasos numerados conectados
+   por una línea decorativa accent-gold. */
+.proceso {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.proceso-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3); /* 12px */
+  text-align: center;
+}
+
+.proceso-step__number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-dot-lg);
+  height: var(--size-dot-lg);
+  border-radius: var(--radius-full);
+  background-color: var(--color-block-terracotta);
+  color: var(--color-ink); /* 7.07:1, ver tabla de contraste en variables.css */
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-h3);
+}
+
+.proceso-step__label {
+  font-size: var(--fs-small);
+  font-weight: var(--fw-medium);
+  color: var(--color-ink);
+}
+
+.proceso-step__caption {
+  font-size: var(--fs-caption);
+  color: var(--color-text-secondary);
+  max-width: 12rem;
+}
+
+/* Mobile-first: oculto por defecto porque en mobile el timeline usa grid
+   2×2 (.steps-grid, ver layout.css) y un conector horizontal no tiene
+   sentido entre filas. Se muestra desde 768px, cuando el timeline vuelve a
+   ser una fila única de 4 pasos. */
+.proceso-connector {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .proceso-connector {
+    display: block;
+    flex: 1 1 var(--space-20); /* 80px */
+    height: var(--size-hairline-thick);
+    background-color: var(--color-accent-gold);
+    align-self: center;
+    margin-inline: var(--space-2);
+  }
+}
+
+/* ---- Category Tabs (Tienda) ---- */
+/* Patrón ARIA tabs completo: role="tablist"/"tab"/"tabpanel", aria-selected,
+   roving tabindex y navegación ←/→/Home/End — implementados en js/main.js.
+   Aquí solo el aspecto visual de cada estado. El estado seleccionado NUNCA
+   se comunica solo con color: lleva además subrayado más grueso (3px vs 1px)
+   y peso de fuente distinto (bold vs medium) — skills/accessibility regla 7. */
+.tablist {
+  display: flex;
+  gap: var(--space-4); /* 16px */
+}
+
+.tab {
+  padding-block: var(--space-2) var(--space-3); /* 8px arriba, 12px abajo */
+  padding-inline: var(--space-1);
+  border: none;
+  border-bottom: var(--size-hairline-thin) solid transparent;
+  font-family: var(--font-body);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-body-sm);
+  color: var(--color-ink);
+  transition: border-color var(--transition-fast), border-width var(--transition-fast);
+}
+
+.tab:hover {
+  border-bottom-color: var(--color-accent-gold);
+  border-bottom-width: var(--size-hairline-thick);
+}
+
+.tab[aria-selected='true'] {
+  font-weight: var(--fw-bold);
+  border-bottom-color: var(--color-block-terracotta);
+  border-bottom-width: var(--size-underline-selected);
+}
+
+.tabpanel[hidden] {
+  display: none;
+}
