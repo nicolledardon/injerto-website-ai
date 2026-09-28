@@ -139,11 +139,26 @@
 /* ---- Proceso Step / Connector ---- */
 /* Timeline "De la semilla a la taza" (Finca): 4 pasos numerados conectados
    por una línea decorativa accent-gold. */
+/* Mobile-first: grid 2x2 real (mismo patrón que "Steps row" en Finca Mobile
+   de Figma, no un flex-wrap orgánico — el texto de las captions no
+   garantiza 2 por fila de forma fiable si se deja al wrap del navegador).
+   Desde 768px pasa a fila única; el espacio entre pasos lo generan los
+   Proceso Connector (flex:1), por eso el gap se resetea a 0. */
 .proceso {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-items: center;
+  gap: var(--space-6) var(--space-10); /* 24px filas / 40px columnas — reales de Figma mobile */
+}
+
+@media (min-width: 768px) {
+  .proceso {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 0;
+  }
 }
 
 .proceso-step {
@@ -392,4 +407,34 @@
 .subscription-panel__price {
   font-size: var(--fs-small);
   color: var(--color-disabled-text);
+}
+
+/* ---- Finca: bloque fotográfico del Hero ---- */
+/* Mismo patrón que .hero-photos de Home (bloque de color + acento circular
+   centrado), pero de una sola pieza en ambos anchos — Figma no cambia la
+   composición entre mobile y desktop aquí, solo la proporción (327×220 →
+   640×420) y el tamaño relativo del círculo (27.5% → 21.875% del ancho);
+   se usa un 25% único, un promedio razonable entre ambos anchos reales. */
+.finca-photo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 327 / 220;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background-color: var(--color-block-pine);
+}
+
+@media (min-width: 1024px) {
+  .finca-photo {
+    aspect-ratio: 640 / 420;
+  }
+}
+
+.finca-photo__accent {
+  width: 25%;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface);
 }

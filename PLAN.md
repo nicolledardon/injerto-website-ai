@@ -574,3 +574,45 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
 - Commit: (pendiente de que Nicolle escriba "aprobado")
 - Siguiente paso: finca.html (Fase 3 paso 7) — reutilizará .page-header, .proceso /
   .proceso-step / .proceso-connector y .split (Historia).
+
+### [2026-09-28 20:50] Fase 3.6 — finca.html
+
+- Agente: frontend
+- Prompt (resumen fiel del pedido de Nicolle): "go ahead" — siguiente página del plan tras
+  aprobar tienda.html.
+- Qué hizo la IA:
+  - Inspección de solo lectura en Figma: árbol completo de Finca Desktop (334:200) y Mobile
+    (334:2114). Extraídos Hero (título + copy real sobre Huehuetenango/familia Aguirre desde
+    1874), Nuestra historia (copy sobre Jesús Aguirre Panamá y Cup of Excellence), y el timeline
+    Procesos (4 pasos numerados con caption real cada uno).
+  - Corrigió un hueco real en el .proceso ya aprobado (components.css): no tenía gap definido y
+    dependía de un flex-wrap orgánico sin controlar cuántos pasos caen por fila — con el texto
+    real de las captions eso no garantizaba el 2×2 que Figma Mobile sí define explícitamente
+    (frames "Steps row" separados). Se cambió a CSS Grid 2 columnas en mobile (gap real de Figma,
+    24px filas / 40px columnas) y solo pasa a fila flex única (con los Proceso Connector como
+    separadores) desde 768px — mismo criterio que layout.css: fix documentado, no silencioso.
+  - Construyó finca.html: Hero (.split + nuevo .finca-photo, mismo patrón que .hero-photos de
+    Home pero de una sola pieza en ambos anchos), Nuestra historia (bloque de texto simple),
+    Procesos (.section--tinted + .proceso, captions agrupadas DENTRO de cada .proceso-step en
+    vez de en una fila aparte como en Figma Desktop — decisión ya tomada al diseñar
+    .proceso-step__caption en Fase 3.3, coincide con el patrón real de Figma Mobile).
+  - Nuevo componente .finca-photo/.finca-photo__accent en components.css (aspect-ratio real de
+    Figma en ambos anchos, acento circular centrado).
+- Desviaciones documentadas:
+  1. Captions del timeline agrupadas con su paso (no en fila aparte bajo los conectores como en
+     Figma Desktop) — más robusto para wrap de texto real, y ya era el diseño de .proceso-step.
+  2. Nuestra historia usa .section--tight (gap interno 16px) en vez del padding asimétrico exacto
+     de Figma (20px desktop / 16px mobile, top casi 0) — reutiliza una utilidad ya aprobada en
+     vez de crear una nueva solo para este caso.
+  3. Procesos usa .section + .section--tinted (padding simétrico, 48/96px en los extremos) en vez
+     del padding asimétrico real de Figma (40-80 / 48-96) — mismo criterio de interpolación ya
+     aceptado en el proyecto.
+  4. .finca-photo__accent usa un 25% de ancho fijo para el círculo en vez de 21.875% (desktop) /
+     27.5% (mobile) exactos de Figma — promedio razonable, un solo valor para ambos anchos.
+- Verificación: capturas Playwright (375px/1440px) — el grid 2×2 de Procesos en mobile y la fila
+  con conectores en desktop coinciden con Figma; grep limpio (sin !important, sin
+  @media max-width, sin valores hex/px sueltos en las líneas añadidas).
+- Commit: (pendiente de que Nicolle escriba "aprobado")
+- Siguiente paso: coffee-shops.html (Fase 3 paso 8) — última página de contenido antes de
+  js/main.js. Después de coffee-shops.html toca el checkpoint de revisión con Nicolle ya
+  acordado en el plan de Fase 3.

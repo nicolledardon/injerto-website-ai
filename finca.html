@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finca — El Injerto</title>
+  <meta name="description" content="Finca El Injerto: cinco generaciones de la familia Aguirre cultivando café premiado en Huehuetenango, Guatemala, desde 1874.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,900&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+  <a class="sr-only" href="#main">Saltar al contenido principal</a>
+
+  <header class="site-header">
+    <div class="site-header__row">
+      <a href="index.html" class="site-header__logo">
+        <img src="assets/img/logo.svg" alt="" class="site-header__logo-icon" width="28" height="28">
+        EL INJERTO
+      </a>
+      <button type="button" class="site-header__toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav">
+        <span class="sr-only">Abrir menú</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+          <path d="M3 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M3 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <nav class="site-header__nav" id="site-nav" hidden aria-label="Principal">
+      <ul class="site-header__nav-list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="tienda.html">Tienda</a></li>
+        <li><a href="finca.html" aria-current="page">Finca</a></li>
+        <li><a href="coffee-shops.html">Coffee Shops</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="section">
+      <div class="container">
+        <div class="split">
+          <div class="stack stack--md">
+            <h1>Finca El Injerto</h1>
+            <p>En las montañas de Huehuetenango, a más de 1,500 metros de altura, cultivamos café desde 1874. Cinco generaciones de la familia Aguirre han dedicado su vida a un mismo objetivo: la taza perfecta.</p>
+          </div>
+          <div class="finca-photo" aria-hidden="true">
+            <span class="finca-photo__accent"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Nuestra historia -->
+    <section class="section--tight">
+      <div class="container">
+        <div class="stack stack--sm">
+          <h2>Nuestra historia</h2>
+          <p>Fundada en 1874 por Jesús Aguirre Panamá, Finca El Injerto ha estado en manos de la familia Aguirre desde 1956. Hoy la finca es reconocida internacionalmente por sus microlotes de altísima calidad, con múltiples primeros lugares en Cup of Excellence Guatemala.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Procesos -->
+    <section class="section section--tinted">
+      <div class="container">
+        <div class="stack stack--lg stack--center">
+          <h2>De la semilla a la taza</h2>
+          <div class="proceso">
+            <div class="proceso-step">
+              <span class="proceso-step__number">1</span>
+              <span class="proceso-step__label">Cultivo</span>
+              <p class="proceso-step__caption">Variedades de altura seleccionadas por parcela y microclima.</p>
+            </div>
+            <div class="proceso-connector" aria-hidden="true"></div>
+            <div class="proceso-step">
+              <span class="proceso-step__number">2</span>
+              <span class="proceso-step__label">Cosecha</span>
+              <p class="proceso-step__caption">Recolección manual, solo cerezas maduras.</p>
+            </div>
+            <div class="proceso-connector" aria-hidden="true"></div>
+            <div class="proceso-step">
+              <span class="proceso-step__number">3</span>
+              <span class="proceso-step__label">Beneficio</span>
+              <p class="proceso-step__caption">Lavado y fermentación controlada para resaltar cada perfil.</p>
+            </div>
+            <div class="proceso-connector" aria-hidden="true"></div>
+            <div class="proceso-step">
+              <span class="proceso-step__number">4</span>
+              <span class="proceso-step__label">Tueste</span>
+              <p class="proceso-step__caption">Perfiles de tueste propios para cada lote.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <a href="index.html" class="site-header__logo">
+        <img src="assets/img/logo.svg" alt="" class="site-header__logo-icon" width="28" height="28">
+        EL INJERTO
+      </a>
+      <nav aria-label="Pie de página">
+        <ul class="site-footer__nav-list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="tienda.html">Tienda</a></li>
+          <li><a href="finca.html">Finca</a></li>
+          <li><a href="coffee-shops.html">Coffee Shops</a></li>
+        </ul>
+      </nav>
+      <p class="site-footer__disclaimer">Proyecto académico de rediseño — no afiliado a El Injerto.</p>
+    </div>
+  </footer>
+</body>
+</html>
