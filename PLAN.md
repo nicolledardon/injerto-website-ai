@@ -652,3 +652,45 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
 - Commit: (pendiente de que Nicolle escriba "aprobado")
 - Siguiente paso: checkpoint de revisión con Nicolle (ya acordado en el plan de Fase 3) antes de
   empezar js/main.js — las 4 páginas de contenido HTML/CSS están completas.
+
+### [2026-09-28 21:09] Fase 3.8 — js/main.js
+- Prompt (resumen fiel del pedido de Nicolle): "move on to javascript" — paso 9 de Fase 3, a
+  cargo del Interaction Agent (agents/interaction-agent.md).
+- Qué hizo la IA:
+  - Releidos skills/accessibility/SKILL.md (reglas 3 y 4: patron ARIA tabs y patron disclosure)
+    y agents/interaction-agent.md antes de escribir codigo, para confirmar el alcance exacto:
+    solo js/main.js, sin nuevas dependencias, dos comportamientos.
+  - Corregido un bug real en tienda.html (ya commiteado en Fase 3.5): el panel de Merch tenia
+    el atributo hidden estatico en el HTML. La regla del Interaction Agent es explicita: el
+    sitio debe seguir siendo funcional, mostrando todos los productos, con JavaScript
+    desactivado. Con hidden estatico, los productos de Merch habrian sido permanentemente
+    inalcanzables sin JS. Se quito ese atributo del HTML; ahora js/main.js es quien oculta el
+    panel inactivo de forma dinamica al iniciar, nunca al reves.
+  - Creado js/main.js (114 lineas, sin dependencias):
+    initDisclosureNav(): boton hamburguesa (nav-toggle) con aria-expanded/aria-controls sobre
+    site-nav; Escape cierra el menu y devuelve el foco al boton; el texto sr-only del boton
+    alterna entre "Abrir menu" y "Cerrar menu".
+    initCategoryTabs(): patron ARIA tabs completo sobre el tablist de Tienda — aria-selected,
+    roving tabindex (0 en el tab seleccionado, -1 en el resto), flechas izquierda/derecha con
+    wraparound, Home/End, click. El estado inicial respeta el aria-selected="true" ya presente
+    en el HTML (Cafe por defecto) en vez de asumir siempre el primer tab.
+  - Añadido <script src="js/main.js" defer></script> antes de </body> en las 4 paginas
+    (index.html, tienda.html, finca.html, coffee-shops.html).
+- Verificacion (Playwright, servidor local de vista previa):
+  - Sin JavaScript (contexto con java_script_enabled=False): panel-cafe visible, panel-merch
+    presente en el DOM con sus 4 product-card y sin atributo hidden estatico — ambos paneles de
+    producto accesibles sin JS, como exige el Interaction Agent.
+  - Con JavaScript, estado inicial: tab-cafe aria-selected=true, tab-merch aria-selected=false,
+    panel-cafe.hidden=false, panel-merch.hidden=true (aplicado dinamicamente por el script, tal
+    como debe ser).
+  - Click en tab-merch: aria-selected y tabIndex intercambian correctamente (cafe pasa a -1,
+    merch a 0), panel-cafe se oculta y panel-merch se muestra.
+  - Teclado: flecha izquierda desde merch mueve el foco y la seleccion a cafe; End mueve el foco
+    al ultimo tab (merch); Home lo devuelve al primero (cafe); flecha derecha desde el ultimo tab
+    (merch) hace wraparound correcto al primero (cafe).
+  - Nav movil en index.html: estado inicial aria-expanded=false y nav oculto; click abre el menu
+    (aria-expanded=true, nav visible, etiqueta cambia a "Cerrar menu"); Escape lo cierra, el foco
+    vuelve al boton nav-toggle y la etiqueta vuelve a "Abrir menu".
+- Commit: (pendiente de que Nicolle escriba "aprobado")
+- Siguiente paso: checkpoint de revision con Nicolle tras este archivo (segun el plan de Fase 3)
+  antes de cerrar la Fase 3 por completo.
