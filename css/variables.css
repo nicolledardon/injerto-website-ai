@@ -98,6 +98,18 @@
   --transition-fast: var(--duration-fast) var(--easing-standard);
   --transition-base: var(--duration-base) var(--easing-standard);
 
+  /* Animación de la timeline Proceso (Finca). --easing-bounce tiene un valor
+     y > 1 (1.56): la curva SE PASA de su destino y vuelve, que se percibe
+     como rebote. Secuencia en escritorio: cada paso espera a que el
+     conector anterior termine de dibujarse, por eso --duration-draw =
+     --duration-stagger (la mitad de un ciclo paso + conector). Todas estas
+     duraciones se redefinen bajo prefers-reduced-motion en base.css. */
+  --duration-bounce: 600ms;
+  --duration-stagger: 350ms;
+  --duration-draw: 350ms;
+  --duration-pulse: 700ms;
+  --easing-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
   /* ---- Layout ---- */
   --container-max: 1200px; /* ancho de contenido a 1440px de viewport (120px de margen lateral) */
 

@@ -181,5 +181,9 @@ small,
   :root {
     --duration-fast: 0.01ms;
     --duration-base: 0.01ms;
+    --duration-bounce: 0.01ms;
+    --duration-stagger: 0ms;
+    --duration-draw: 0.01ms;
+    --duration-pulse: 0.01ms;
   }
 }

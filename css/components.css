@@ -145,25 +145,25 @@
 /* ---- Proceso Step / Connector ---- */
 /* Timeline "De la semilla a la taza" (Finca): 4 pasos numerados conectados
    por una línea decorativa accent-gold. */
-/* Mobile-first: grid 2x2 real (mismo patrón que "Steps row" en Finca Mobile
-   de Figma, no un flex-wrap orgánico — el texto de las captions no
-   garantiza 2 por fila de forma fiable si se deja al wrap del navegador).
-   Desde 768px pasa a fila única; el espacio entre pasos lo generan los
-   Proceso Connector (flex:1), por eso el gap se resetea a 0. */
+/* Mobile-first: columna vertical única, con un conector VERTICAL corto entre
+   paso y paso. Decisión de Nicolle (2026-09-29): sustituye al grid 2x2 del
+   frame Finca Mobile de Figma, que a 320px dejaba pasos de solo 116px de
+   ancho. Desde 768px vuelve a la fila horizontal de Figma; el espacio entre
+   pasos lo generan los conectores (flex:1), por eso el gap es 0. */
 .proceso {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  justify-items: center;
-  gap: var(--space-6) var(--space-10); /* 24px filas / 40px columnas — reales de Figma mobile */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
 }
 
 @media (min-width: 768px) {
   .proceso {
-    display: flex;
-    align-items: center;
+    flex-direction: row;
     justify-content: center;
+    align-items: flex-start; /* los 4 círculos quedan a la misma altura aunque
+      las captions midan distinto (antes align-items:center los desnivelaba) */
     flex-wrap: nowrap;
-    gap: 0;
   }
 }
 
@@ -187,6 +187,20 @@
   font-family: var(--font-display);
   font-weight: var(--fw-bold);
   font-size: var(--fs-h3);
+  transition: transform var(--duration-base) var(--easing-bounce);
+}
+
+/* Vida al interactuar: el círculo "salta" al pasar el puntero (solo en
+   dispositivos con hover real, regla 9 de responsive-detail) y se encoge un
+   poco al pulsar, lo que también da respuesta táctil en móvil. */
+@media (hover: hover) {
+  .proceso-step:hover .proceso-step__number {
+    transform: scale(1.12);
+  }
+}
+
+.proceso-step:active .proceso-step__number {
+  transform: scale(0.94);
 }
 
 .proceso-step__label {
@@ -205,23 +219,119 @@
   max-width: 12rem;
 }
 
-/* Mobile-first: oculto por defecto porque en mobile el timeline usa grid
-   2×2 (.steps-grid, ver layout.css) y un conector horizontal no tiene
-   sentido entre filas. Se muestra desde 768px, cuando el timeline vuelve a
-   ser una fila única de 4 pasos. */
+/* Conector: vertical en mobile (línea de 2px x 32px entre pasos, centrada por
+   align-items:center) y horizontal desde 768px (línea flexible de 2px de
+   alto, alineada al centro de los círculos numerados). */
 .proceso-connector {
-  display: none;
+  display: block;
+  width: var(--size-hairline-thick);
+  height: var(--space-8); /* 32px */
+  margin-block: var(--space-2);
+  background-color: var(--color-accent-gold);
 }
 
 @media (min-width: 768px) {
   .proceso-connector {
-    display: block;
     flex: 1 1 var(--space-20); /* 80px */
+    width: auto;
     height: var(--size-hairline-thick);
-    background-color: var(--color-accent-gold);
-    align-self: center;
+    align-self: flex-start;
+    /* Baja la línea hasta el centro vertical de los círculos numerados (la
+       mitad del círculo menos la mitad del grosor de la línea), en vez del
+       centro de toda la columna de texto. */
+    margin-block: calc(var(--size-dot-lg) / 2 - var(--size-hairline-thick) / 2) 0;
     margin-inline: var(--space-2);
   }
+}
+
+/* ---- Proceso: animación de entrada (rebote + conector que se dibuja) ---- */
+/* Solo se activa si js/main.js añade .proceso--animado (requiere
+   IntersectionObserver): sin JavaScript todo se ve siempre, sin animar. El
+   JS añade .is-visible a cada paso/conector al entrar en pantalla y lo
+   QUITA cuando sale del todo, así la animación se repite al volver con el
+   scroll. Bajo prefers-reduced-motion, base.css reduce las duraciones a ~0
+   y todo aparece de golpe, sin movimiento. */
+@keyframes proceso-rebote {
+  from {
+    opacity: 0;
+    transform: translateY(-2rem) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes proceso-numero-pop {
+  from {
+    transform: scale(0.5);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* Pulso único: un aro accent-gold que se expande y se desvanece cuando el
+   número aterriza. */
+@keyframes proceso-numero-pulso {
+  from {
+    box-shadow: 0 0 0 0 var(--color-accent-gold);
+  }
+  to {
+    box-shadow: 0 0 0 var(--space-4) transparent;
+  }
+}
+
+/* --retraso = cuándo empieza cada elemento. Mobile: 0 (cada paso entra al
+   hacer scroll, ya llegan en orden natural). Escritorio: los 4 pasos entran
+   a la vez, así que se encadenan paso → conector → paso: el paso n espera
+   a que termine de dibujarse el conector anterior. */
+.proceso--animado .proceso-step,
+.proceso--animado .proceso-connector {
+  --retraso: 0ms;
+}
+
+.proceso--animado .proceso-step {
+  opacity: 0;
+}
+
+/* Conector: crece desde su extremo inicial (arriba en mobile, izquierda en
+   escritorio). El estado oculto es scale(0), sin opacidad. */
+.proceso--animado .proceso-connector {
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+.proceso--animado .proceso-connector.is-visible {
+  transform: none;
+  transition: transform var(--duration-draw) var(--easing-standard) var(--retraso);
+}
+
+.proceso--animado .proceso-step.is-visible {
+  opacity: 1;
+  animation: proceso-rebote var(--duration-bounce) var(--easing-bounce) var(--retraso) backwards;
+}
+
+.proceso--animado .proceso-step.is-visible .proceso-step__number {
+  animation:
+    proceso-numero-pop var(--duration-bounce) var(--easing-bounce)
+      calc(var(--retraso) + var(--duration-bounce) * 0.25) backwards,
+    proceso-numero-pulso var(--duration-pulse) ease-out
+      calc(var(--retraso) + var(--duration-bounce)) backwards;
+}
+
+@media (min-width: 768px) {
+  .proceso--animado .proceso-connector {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .proceso--animado :nth-child(2) { --retraso: var(--duration-stagger); }
+  .proceso--animado :nth-child(3) { --retraso: calc(var(--duration-stagger) * 2); }
+  .proceso--animado :nth-child(4) { --retraso: calc(var(--duration-stagger) * 3); }
+  .proceso--animado :nth-child(5) { --retraso: calc(var(--duration-stagger) * 4); }
+  .proceso--animado :nth-child(6) { --retraso: calc(var(--duration-stagger) * 5); }
+  .proceso--animado :nth-child(7) { --retraso: calc(var(--duration-stagger) * 6); }
 }
 
 /* ---- Category Tabs (Tienda) ---- */

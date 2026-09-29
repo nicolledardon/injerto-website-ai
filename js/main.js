@@ -1,11 +1,13 @@
 /* ==========================================================================
    El Injerto — Interacción
    ==========================================================================
-   Dos comportamientos, sin dependencias:
+   Tres comportamientos, sin dependencias:
    1) Navegación móvil (patrón disclosure): botón hamburguesa con
       aria-expanded/aria-controls, Esc cierra, el foco vuelve al botón.
    2) Category Tabs de Tienda (patrón ARIA tabs completo): aria-selected,
       roving tabindex, navegación con ←/→/Home/End.
+   3) Entrada con rebote de la timeline Proceso (Finca): IntersectionObserver
+      que añade .is-visible; el movimiento en sí vive en components.css.
 
    Ambos se degradan con gracia sin JavaScript: el nav móvil se reemplaza
    por el nav del footer (siempre visible, sin JS de por medio), y las
@@ -117,8 +119,37 @@
     });
   }
 
+  // Animación de la timeline de Proceso (Finca): cada paso y conector recibe
+  // .is-visible cuando entra en pantalla (>= 30% visible) y lo pierde cuando
+  // sale del todo, así la animación (rebote + conector que se dibuja) se
+  // repite al volver con el scroll. Quitarlo solo con 0% visible evita el
+  // parpadeo que habría si se reiniciara en el borde de los 30%. Sin
+  // IntersectionObserver o sin .proceso en la página no hace nada y los pasos
+  // se quedan visibles (mejora progresiva).
+  function initProcesoAnimation() {
+    var proceso = document.querySelector('.proceso');
+    if (!proceso || !('IntersectionObserver' in window)) return;
+
+    var items = proceso.querySelectorAll('.proceso-step, .proceso-connector');
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.intersectionRatio >= 0.3) {
+          entry.target.classList.add('is-visible');
+        } else if (!entry.isIntersecting) {
+          entry.target.classList.remove('is-visible');
+        }
+      });
+    }, { threshold: [0, 0.3] });
+
+    proceso.classList.add('proceso--animado');
+    items.forEach(function (item) {
+      observer.observe(item);
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     initDisclosureNav();
     initCategoryTabs();
+    initProcesoAnimation();
   });
 })();
