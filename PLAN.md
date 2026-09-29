@@ -909,3 +909,43 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
   Google Fonts (mismas familias); no se comparó píxel a píxel con los frames de Figma.
 - Commit: pendiente de aprobación
 - Siguiente paso: aprobación de este commit y Grupo 2 (jerarquía).
+
+### [2026-09-29 09:23] Fase 6.2 — Grupo 2 (jerarquía) del Home
+- Agente: polish (referencia a la entrada de Fase 6.1)
+- Prompt (resumen fiel del pedido de Nicolle): el mismo de la entrada 6.1 ("apply all groups in
+  proposed order and s2, a1 and h3 is approved"); H3 aprobado explícitamente.
+- Qué hizo la IA:
+  (H1) Los 4 nombres de "Cafés de temporada" pasan de `<p>` sin enlace a
+  `<p class="product-card__name"><a class="product-card__link" href="tienda.html">…</a></p>`.
+  Patrón "stretched link": `.product-card { position: relative }` y `.product-card__link::after
+  { inset: 0 }`, de modo que toda la tarjeta es clicable pero el lector de pantalla oye un solo
+  enlace con el nombre. El anillo de foco se dibuja hacia dentro (offset negativo) porque la
+  tarjeta tiene `overflow: hidden`; subrayado en hover solo bajo `@media (hover: hover)`.
+  (H2) Había 3 botones principales en una vista; ahora uno (el "Comprar café" del hero).
+  "Encuentra tu sabor" y "Arma tu suscripción" pasan a `btn--secondary`, con un hover propio
+  (ink-tint-16) sobre la banda `.section--tinted`.
+  (H3) Los círculos de sabor dejan el terracotta (color de acción) y alternan cherry/pine con
+  modificadores `.flavor-step__icon--cherry` / `--pine`.
+  (H4) La página actual se distingue en el nav: `a[aria-current='page']` en negrita con subrayado
+  terracotta de 3px (el mismo lenguaje que la tab seleccionada de Tienda). `aria-current` ya estaba
+  en el HTML de las 4 páginas; faltaba el estilo.
+- Decisiones de Nicolle / cambios manuales: aprobó H3. CONFLICTO CON DECISIÓN BLOQUEADA: toca los
+  roles de color de la dirección de bloques saturados (el terracotta pasa a significar solo
+  acción); no se quita saturación, solo se cambia qué bloque usa cada círculo.
+- Problemas encontrados y corrección: el hover de `.btn--secondary` (ink-tint-8) es idéntico al
+  fondo de `.section--tinted`, es decir, invisible en "Arma tu suscripción"; se añadió la regla
+  acotada. Observado y NO corregido: `.btn--secondary` y `.btn--tertiary` no tienen regla
+  `:active`. El enlace de la tarjeta mide solo 28px de alto por sí mismo: un escáner que mida la
+  caja del enlace lo marcará como < 44px, pero el área real es toda la tarjeta.
+- Verificación (medido en Chromium): orden de tabulación en el Home: Comprar café → Encuentra tu
+  sabor → 4 tarjetas → Arma tu suscripción. En cada tarjeta, 8 de 8 puntos de prueba (centro,
+  esquinas, borde inferior) caen sobre el enlace a 320/375/768/1024/1440px (tarjeta más pequeña
+  272×323); un clic real sobre la imagen de la 3.ª tarjeta navega a tienda.html. Anillo de foco de
+  la tarjeta: 2px ink dibujado sobre el ::after. Botones de `main`: 3 primary → 1 primary + 2
+  secondary. Círculos: 4× rgb(239,138,36) → rgb(232,66,44), rgb(22,121,76), rgb(232,66,44),
+  rgb(22,121,76). Nav actual: peso 500 (600 en móvil) sin subrayado → 700, underline, rgb(239,138,36), 3px. En las
+  4 páginas a 768/900/1024/1280px el nav no se solapa ni salta de línea y la cabecera sigue en
+  84px (el enlace actual crece como máximo 1px). 0 desbordamientos en las 240 cargas. NO
+  verificado: hover con ratón real (solo la presencia de la regla) ni lector de pantalla.
+- Commit: pendiente de aprobación
+- Siguiente paso: aprobación de este commit y Grupo 3 (espaciado).

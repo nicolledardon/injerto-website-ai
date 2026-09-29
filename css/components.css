@@ -77,6 +77,14 @@
   background-color: transparent;
 }
 
+/* Sobre la banda tinted el hover de ink-tint-8 sería idéntico al fondo (sin
+   cambio visible); se sube un escalón. */
+@media (hover: hover) {
+  .section--tinted .btn--secondary:hover {
+    background-color: var(--color-ink-tint-16);
+  }
+}
+
 /* Tertiary — solo texto, sin relleno ni contorno */
 .btn--tertiary {
   background-color: transparent;
@@ -101,6 +109,7 @@
    <img>, así que no requiere alt text; el color se fija con una clase
    modificadora, nunca inline. */
 .product-card {
+  position: relative; /* ancla el ::after del enlace estirado (.product-card__link) */
   border-radius: var(--radius-md);
   overflow: hidden;
   background-color: var(--color-surface);
@@ -140,6 +149,34 @@
 .product-card__price {
   font-size: var(--fs-small);
   color: var(--color-text-secondary);
+}
+
+/* Enlace de la tarjeta (Home "Cafés de temporada"): el nombre es el enlace y su
+   ::after se estira sobre toda la tarjeta (patrón "stretched link"), así toda
+   el área es clicable pero el lector de pantalla oye un solo enlace con el
+   nombre del producto. El anillo de foco se dibuja hacia dentro (offset
+   negativo) porque .product-card tiene overflow:hidden y recortaría un anillo
+   exterior. Auditoría apple-design, 2026-09-29. */
+.product-card__link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.product-card__link:focus-visible {
+  outline: none;
+}
+
+.product-card__link:focus-visible::after {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: calc(var(--focus-ring-offset) * -1);
+  border-radius: var(--radius-md);
+}
+
+@media (hover: hover) {
+  .product-card__link:hover {
+    text-decoration: underline;
+  }
 }
 
 /* ---- Proceso Step / Connector ---- */
@@ -467,7 +504,18 @@
   width: var(--size-icon-lg);
   height: var(--size-icon-lg);
   border-radius: var(--radius-full);
-  background-color: var(--color-block-terracotta);
+}
+
+/* Terracotta se reserva para acciones (botón principal, chip seleccionado);
+   los círculos alternan cherry y pine, que son bloques decorativos. Cambio
+   aprobado por Nicolle (2026-09-29): toca los roles de color de la dirección
+   de bloques saturados, sin quitar saturación. */
+.flavor-step__icon--cherry {
+  background-color: var(--color-block-cherry);
+}
+
+.flavor-step__icon--pine {
+  background-color: var(--color-block-pine);
 }
 
 .flavor-step__label {

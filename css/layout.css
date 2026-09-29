@@ -139,6 +139,17 @@
   overflow-wrap: anywhere;
 }
 
+/* Página actual: negrita + subrayado terracotta de 3px, el mismo lenguaje que
+   la tab seleccionada de Tienda (nunca solo color). aria-current ya estaba en
+   el HTML de las 4 páginas; faltaba el estilo visual. */
+.site-header__nav-list a[aria-current='page'] {
+  font-weight: var(--fw-bold);
+  text-decoration: underline;
+  text-decoration-color: var(--color-block-terracotta);
+  text-decoration-thickness: var(--size-underline-selected);
+  text-underline-offset: 0.4em;
+}
+
 /* ---- Pie de página: enlaces de nav con área táctil >= 44px ---- */
 /* Mismo criterio que .site-header__nav-list a arriba: el texto por sí solo
    (line-height) no garantiza 44px con cualquier fuente/estado de carga, así
