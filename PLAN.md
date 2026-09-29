@@ -694,3 +694,65 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
 - Commit: (pendiente de que Nicolle escriba "aprobado")
 - Siguiente paso: checkpoint de revision con Nicolle tras este archivo (segun el plan de Fase 3)
   antes de cerrar la Fase 3 por completo.
+
+### [2026-09-29 07:28] Fase 4 — Auditoria responsive de detalle (Responsive QA Agent)
+- Prompt (resumen fiel del pedido de Nicolle): "starttt" (inicio de Fase 4) y luego "lets fix
+  all fails" (autorizacion para corregir todo lo detectado).
+- Rol: Responsive QA Agent (agents/responsive-qa-agent.md), checklist de 18 reglas en
+  skills/responsive-detail/SKILL.md.
+- Que hizo la IA:
+  - Audito programaticamente (Playwright, no solo capturas visuales) las 4 paginas en 320,
+    375, 414, 768, 1024, 1280 y 1440px, mas 375x667 en horizontal y una aproximacion de zoom al
+    200% (viewport a la mitad, metodologia documentada en el propio audit).
+  - Resultado inicial: 13 de 18 reglas en verde, 2 no aplicables a este diseño (sin hero a
+    pantalla completa -> regla 5 N/A; sin header sticky -> regla 12 N/A), 5 fallos reales
+    confirmados con medicion (no solo sospecha visual).
+- Fallos encontrados y corregidos (uno por commit, ver mensajes de commit para el detalle
+  exacto de cada uno):
+  1. Regla 9 (hover): los 4 selectores :hover de components.css (.btn--primary/secondary/
+     tertiary, .tab) no estaban protegidos con @media (hover: hover) — exactamente el
+     anti-patron que skills/responsive-detail/SKILL.md marca como incorrecto en su propio
+     ejemplo. Corregido envolviendo los 4 en el media query.
+  2. Regla 3 (min-width:0 + overflow-wrap en hijos de flex/grid con texto): probado
+     inyectando una palabra larga sin espacios (108 caracteres) en cada componente y midiendo
+     scrollWidth a 320px. Desbordaban de verdad: .flavor-step__label (Home), .proceso-step__
+     label y __caption (Finca), .shop-list__text (Coffee Shops), los links del nav movil
+     (index.html, con el menu abierto) y .tab (Tienda). Corregido añadiendo min-width:0 y
+     overflow-wrap:anywhere a los 6.
+  3. Regla 7 (area tactil >= 44x44px): medido con getBoundingClientRect. Los links del footer
+     median 43x17px y los del menu movil 49x21px (ningun padding propio, solo la altura de
+     linea del texto) — ambos muy por debajo de 44px de alto. Las tabs de Tienda medían 41px
+     de ancho ("Café"), por debajo del minimo. Corregido con min-height:44px (+ inline-flex
+     para centrar) en los links de ambos nav, padding-inline en los del footer para llegar
+     tambien a 44px de ANCHO (con margin-inline negativo equivalente para que el texto no se
+     desplace visualmente), y padding-inline ampliado en .tab.
+  4. Regla 10 (nav movil se cierra al hacer clic en un link): confirmado con un test de
+     interaccion — Esc y aria-expanded ya funcionaban (Fase 3.8), pero click en un link del
+     menu no lo cerraba. Corregido en js/main.js: cada link del nav ahora tambien cierra el
+     menu al hacer clic.
+  5. Regla 6 (longitud de linea <= ~70 caracteres): medido el ancho real de un parrafo en
+     cada breakpoint. A 768px (columna unica todavia, antes de que .split pase a 2 columnas
+     en 1024px) llegaba a 83 caracteres por linea. Corregido con max-width:65ch en `p`.
+  - Nota sobre el cuerpo de texto a 15px en mobile (--fs-body-sm): la regla 6 pide cuerpo
+    >=16px, pero ese valor es el estilo de texto real de Figma para mobile (tokenizado desde
+    la Fase 3.1), no un error. Se le pregunto a Nicolle si mantenerlo o subirlo a 16px; "fix
+    all fails" se interpreto como referido a los 5 fallos de codigo de arriba, no a este
+    cambio de diseño aprobado — se deja el valor de Figma sin tocar salvo que Nicolle pida lo
+    contrario.
+- Bug adicional encontrado (no es una de las 18 reglas, es un defecto real preexistente):
+  investigando la correccion de area tactil del footer, el area medida no cuadraba con la
+  posicion esperada. Causa: `ul, ol { list-style: none; }` en base.css quitaba la vineta pero
+  nunca reseteaba el padding-left de 40px por defecto del navegador, asi que TODOS los <ul>
+  del sitio (product-grid, steps-grid, ambos nav-list, shop-list) tenian una sangria de 40px
+  no intencionada respecto al resto del contenido — no coincidia con Figma y no se habia
+  detectado en las revisiones visuales de la Fase 3. Corregido añadiendo padding:0 al mismo
+  reset.
+- Verificacion final (tras todas las correcciones, re-auditado por completo): las 5 reglas que
+  fallaban ahora pasan (confirmado con las mismas mediciones programaticas, no solo visual);
+  cero regresiones en las otras 13 reglas que ya pasaban (vuelto a correr el barrido completo
+  de las 7 anchuras x 4 paginas); alineacion de logo/nav/disclaimer del footer verificada
+  pixel a pixel tras el fix del padding de listas.
+- Commits: (pendiente de que Nicolle escriba "aprobado") — 6 commits pequeños, uno por
+  correccion, en vez de uno solo agrupando todo.
+- Siguiente paso: tras los commits, re-confirmar que las 18 reglas siguen en verde y cerrar la
+  Fase 4.

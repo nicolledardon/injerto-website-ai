@@ -58,6 +58,11 @@ a {
 ul,
 ol {
   list-style: none;
+  padding: 0; /* el reset de arriba solo quita la vineta; el padding-left de
+    40px por defecto del user-agent seguia activo y desalineaba product-grid,
+    steps-grid, ambos nav-list y shop-list ~40px respecto al resto del
+    contenido — detectado en la auditoria de la Fase 4 al investigar la
+    correccion de area tactil del footer. */
 }
 
 table {
