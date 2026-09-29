@@ -148,8 +148,9 @@
 }
 
 .product-card__price {
-  font-size: var(--fs-small);
-  color: var(--color-text-secondary);
+  font-size: var(--fs-body); /* antes 14px regular en color secundario */
+  font-weight: var(--fw-medium);
+  color: var(--color-ink);
 }
 
 /* Enlace de la tarjeta (Home "Cafés de temporada"): el nombre es el enlace y su
@@ -687,7 +688,8 @@
 }
 
 /* .shop-list__text > p (dirección) hereda el estilo base de párrafo
-   (--fs-body-sm, color text-secondary) — coincide exacto con Figma, sin
+   (--fs-body, color text-secondary; en móvil sube de 15px a 16px tras la
+   auditoría apple-design, así que ya no coincide con el 15px de Figma) — sin
    clase adicional. El nombre usa la utilidad .h4 ya existente en base.css
    (Fraunces SemiBold 22px, color ink) sobre un <h2> real, para no saltar
    niveles de encabezado (Title de la página ya es <h1>). */

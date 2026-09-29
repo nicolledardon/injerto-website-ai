@@ -987,3 +987,31 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
   cargas. NO verificado: la fidelidad con Figma en 768–1023px (no hay frame).
 - Commit: pendiente de aprobación
 - Siguiente paso: aprobación de este commit y Grupo 4 (tipografía).
+
+### [2026-09-29 09:23] Fase 6.4 — Grupo 4 (tipografía) del Home
+- Agente: polish (referencia a la entrada de Fase 6.1)
+- Prompt (resumen fiel del pedido de Nicolle): el mismo de la entrada 6.1.
+- Qué hizo la IA:
+  (T3) El párrafo base pasa de 15px a 16px en móvil (`p { font-size: var(--fs-body) }` y se elimina
+  la regla que lo subía a 16px desde 768px): regla 6 de `responsive-detail`, cuerpo ≥ 16px.
+  `--fs-body-sm` (15px) sigue usándose en las tabs y su comentario queda actualizado.
+  (T4) `.product-card__price` pasa de 14px regular en color secundario a 16px (`--fs-body`)
+  medium en ink: es un dato de decisión, no una nota al pie.
+  (T5) `text-wrap: balance` en h1–h3 para evitar una palabra suelta al final ("casa." sola en el
+  H1); mejora progresiva, un navegador sin soporte lo ignora.
+- Decisiones de Nicolle / cambios manuales: ninguna adicional. T3 se aparta del 15px móvil del
+  hi-fi de Figma por aplicar la regla propia del proyecto.
+- Problemas encontrados y corrección: T3 y T4 tocan CSS compartido, así que también afectan a
+  Tienda, Finca y Coffee Shops (párrafos de 16px en móvil y precio de Tienda); revisado en capturas
+  a 375 y 1440px. Límite conocido, NO corregido: a 320px con el texto al 200% el Home (346px de
+  scroll) y Finca (336px) ya desbordaban antes; con párrafos de 16px pasan a 362px y 353px (probablemente
+  por palabras largas que no se parten; no investigado a fondo). En 375px con texto al 200% no hay desbordamiento ni
+  antes ni después. Posible seguimiento: `overflow-wrap: anywhere` en `p` (probado en una copia:
+  Finca queda en 320px, el Home en 352px: el H1 también aparece desbordando).
+- Verificación (medido en Chromium): párrafo del hero a 375px 15px → 16px; precio 14px/400/
+  rgb(107,93,79) → 16px/500/rgb(30,22,17). H1 con `text-wrap: balance`: a 375, 1440 y 1920px
+  "El café que / conquistó el mundo, / directo a tu casa." (antes "…el mundo, directo a tu / casa.");
+  a 768px "El café que conquistó el / mundo, directo a tu casa.". 0 desbordamientos en las 240 cargas.
+  NO verificado: `text-wrap: balance` en Safari/Firefox (solo Chromium).
+- Commit: pendiente de aprobación
+- Siguiente paso: aprobación de este commit y Grupo 5 (movimiento).

@@ -117,22 +117,30 @@ h4,
   line-height: var(--lh-normal);
 }
 
+/* Reparte las líneas de los títulos para evitar una palabra suelta al final
+   ("casa." sola en el H1 a 375px y a 1440px). Mejora progresiva: un navegador
+   sin soporte ignora la propiedad y el título se ve como antes. */
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3 {
+  text-wrap: balance;
+}
+
 /* max-width en ch (no px/rem — depende del ancho real de caracter de la
    fuente) para que la longitud de linea no supere ~70 caracteres. Sin esto,
    un parrafo a ancho completo de columna unica entre 768px y 1024px (antes
    de que .split pase a 2 columnas) llega a ~83 caracteres por linea —
    detectado en la auditoria de la Fase 4 (regla 6 de responsive-detail). */
+/* Cuerpo a 16px en todos los anchos (regla 6 de responsive-detail: cuerpo >= 16px).
+   Antes era 15px por debajo de 768px. Auditoría apple-design, 2026-09-29. */
 p {
   color: var(--color-text-secondary);
-  font-size: var(--fs-body-sm);
+  font-size: var(--fs-body);
   line-height: var(--lh-relaxed);
   max-width: 65ch;
-}
-
-@media (min-width: 768px) {
-  p {
-    font-size: var(--fs-body);
-  }
 }
 
 small,
