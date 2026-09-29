@@ -58,6 +58,12 @@
   display: flex;
   align-items: center;
   gap: var(--space-2);
+  /* Área táctil >= 44px (regla 7 de responsive-detail): el logo mide 35px de
+     alto, así que se amplía el área clicable con padding vertical y un
+     margin negativo igual que la compensa, para que el logo no cambie de
+     tamaño ni de posición. Sirve tanto a la cabecera como al pie. */
+  padding-block: var(--space-2); /* 35 + 16 = 51px de alto táctil */
+  margin-block: calc(var(--space-2) * -1);
   font-family: var(--font-display);
   font-weight: var(--fw-black);
   font-size: var(--fs-h4);
@@ -126,6 +132,10 @@
   align-items: center;
   min-width: 0;
   min-height: var(--size-tap-target); /* 44px — regla 7 de responsive-detail */
+  padding-inline: var(--space-2); /* "Home" mide 43px de ancho solo con su
+    texto (1px menos que el mínimo); con 8px por lado llega a 59px */
+  margin-inline: calc(var(--space-2) * -1); /* compensa el padding para que el
+    texto no se desplace ni se abra el espacio entre enlaces */
   overflow-wrap: anywhere;
 }
 
