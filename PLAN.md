@@ -859,3 +859,53 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
   pulso del aro en pantalla.
 - Commit: pendiente de aprobación
 - Siguiente paso: aprobacion de los 3 commits propuestos y luego Fase 6.
+
+### [2026-09-29 09:23] Fase 6.1 — Auditoría apple-design del Home + Grupo 1 (accesibilidad)
+- Agente: polish (Fase 6; skill `apple-design` de Claude; todavía no existe `agents/polish-agent.md`
+  en el repo)
+- Prompt (resumen fiel del pedido de Nicolle): "Using the apple-design skill, audit PEC 6 El injerto
+  page against Apple's design principles. Go through spacing, hierarchy, typography and motion
+  separately, and tell me what is wrong and why it matters." Eligió auditar el Home (index.html) en
+  solo lectura. Tras ver el informe: "apply all groups in proposed order and s2, a1 and h3 is
+  approved". Confirmó editar 5 archivos (index.html + 4 CSS), añadir 5 entradas a PLAN.md y que los
+  commits se creen solo después de su aprobación.
+- Qué hizo la IA: Auditó el Home a 375/768/1024/1440px con mediciones en Chromium (tamaños, cajas,
+  contrastes calculados desde los hex) separando espaciado, jerarquía, tipografía y movimiento, más
+  accesibilidad. Resultado "Critical issues", ~19 hallazgos (uno, de movimiento en Finca, queda
+  fuera de esta pasada). Los agrupó en 5 grupos con un commit cada uno: 1 accesibilidad, 2
+  jerarquía, 3 espaciado, 4 tipografía, 5 movimiento. Este grupo 1:
+  (a) `.site-footer .site-header__logo` pasa a color surface: el nombre del logo del pie era ink
+  sobre fondo ink (1.00:1) y solo se veía el icono; ahora 16.41:1.
+  (b) Texto del chip no seleccionado, del select "Cada 2 semanas" y del precio del teaser: de
+  `--color-disabled-text` a `--color-text-secondary` (2.25:1 → 4.58:1 sobre disabled-fill; 2.87:1
+  → 5.85:1 sobre surface). Son contenido informativo, no controles :disabled, así que no están
+  exentos de AA; el comentario del token queda actualizado.
+  (c) Anillo de foco: `--focus-ring-color` de terracotta a ink (2.32:1 → 16.41:1 sobre surface;
+  1.97:1 → 13.95:1 sobre ink-tint-8) y token nuevo `--focus-ring-color-on-dark` (surface) para el
+  pie, donde un anillo ink sería invisible.
+  (d) `.sr-only:focus-visible` hace visible el enlace "Saltar al contenido" cuando recibe el foco
+  (antes era un cuadro recortado de 1×1px); token nuevo `--z-skip-link`.
+  (e) Pie en tablet: con el nombre del logo ya visible se veía partido en "EL / INJERTO" a 768px y
+  el aviso legal quedaba en 112px de ancho; `nowrap` + `flex-shrink: 0` en el logo desde 768px y
+  el aviso pasa a una segunda fila entre 768 y 1023px (desde 1024px igual que antes).
+- Decisiones de Nicolle / cambios manuales: aprobó A1 (foco ink en lugar del terracotta del estado
+  de foco del hi-fi de Figma; se aparta de Figma a propósito) y, para grupos posteriores, S2 y H3.
+  Aceptó el orden de grupos propuesto y que los commits esperen a su aprobación.
+- Problemas encontrados y corrección: (1) Mi `git status` de solo lectura dejó un `.git/index.lock`
+  vacío que la VM no podía borrar (habría bloqueado git a Nicolle); se lo dije, lo borré con su
+  permiso y desde entonces uso `git --no-optional-locks`. (2) Al hacer visible el nombre del logo
+  del pie apareció el salto "EL / INJERTO" a 768px (antes invisible): corregido con (e). (3) Mi
+  primera versión de (e) ponía `nowrap` en todos los anchos y con el texto al 200% en 375px la
+  página desbordaba 4px en horizontal (antes no): lo limité a ≥768px, restauré los archivos desde
+  los commits y repetí todas las mediciones.
+- Verificación (medido en Chromium, con las fuentes Fraunces y Work Sans cargadas): 240 cargas de
+  página (4 páginas × 10 anchos de 320 a 1920 × estado inicial y cada grupo acumulado): 0 con
+  scroll horizontal. Primer Tab: el enlace "Saltar al contenido" mide 254×50 y es visible (antes
+  1×1). Color del logo del pie rgb(30,22,17) → rgb(250,245,236). Anillo de foco rgb(30,22,17) en
+  la página y rgb(250,245,236) en el pie. Pie a 768/900px: logo en 1 línea (51px), aviso en 1
+  línea en la segunda fila, altura 135 → 154px; a 1024px+ sin cambios. 375px con texto al 200%: sin
+  desbordamiento en las 4 páginas, igual que antes. NO verificado: Safari/iOS/Firefox (solo
+  Chromium); las fuentes se sirvieron desde una copia local porque el entorno de pruebas no llega a
+  Google Fonts (mismas familias); no se comparó píxel a píxel con los frames de Figma.
+- Commit: pendiente de aprobación
+- Siguiente paso: aprobación de este commit y Grupo 2 (jerarquía).

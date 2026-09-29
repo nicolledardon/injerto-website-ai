@@ -189,6 +189,13 @@
   border-top: var(--stroke-gold);
 }
 
+/* El pie reutiliza .site-header__logo, cuyo color es ink: sobre el fondo ink
+   del pie el nombre quedaba invisible (1.00:1) y solo se veía el icono.
+   Se invierte a surface (16.41:1). Auditoría apple-design, 2026-09-29. */
+.site-footer .site-header__logo {
+  color: var(--color-surface);
+}
+
 .site-footer__inner {
   display: flex;
   flex-direction: column;
@@ -229,6 +236,39 @@
 @media (min-width: 768px) {
   .site-footer__disclaimer {
     margin-top: 0;
+  }
+}
+
+/* Tablet (768-1023px): con el nombre del logo ya visible, logo + nav + aviso no
+   caben en una sola fila (688px útiles a 768px): el aviso se quedaba en 112px de
+   ancho y 5 líneas. El aviso pasa a una segunda fila a todo el ancho; desde
+   1024px vuelve a caber en una fila, igual que antes. El nombre del logo no
+   debe partirse ("EL / INJERTO" a 768px) ni encogerse; el nowrap va solo desde
+   768px porque en móvil el pie es una columna y, con el texto ampliado al 200%,
+   un nowrap desbordaba la página en horizontal. */
+@media (min-width: 768px) {
+  .site-footer .site-header__logo {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .site-footer__inner {
+    flex-wrap: wrap;
+    row-gap: var(--space-6);
+  }
+
+  .site-footer__disclaimer {
+    flex-basis: 100%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .site-footer__inner {
+    flex-wrap: nowrap;
+  }
+
+  .site-footer__disclaimer {
+    flex-basis: auto;
   }
 }
 

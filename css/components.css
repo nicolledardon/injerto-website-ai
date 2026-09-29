@@ -495,7 +495,8 @@
   padding-inline: var(--space-4); /* 16px */
   border-radius: var(--radius-full);
   background-color: var(--color-disabled-fill);
-  color: var(--color-disabled-text);
+  color: var(--color-text-secondary); /* 4.58:1 sobre disabled-fill. Antes disabled-text (2.25:1):
+    el chip es texto informativo, no un control :disabled, así que no está exento de AA */
   font-size: var(--fs-small);
   font-weight: var(--fw-medium);
 }
@@ -528,13 +529,13 @@
   border: none;
   border-radius: var(--radius-sm);
   background-color: var(--color-disabled-fill);
-  color: var(--color-disabled-text);
+  color: var(--color-text-secondary); /* 4.58:1; el texto "Cada 2 semanas" es contenido */
   appearance: none;
 }
 
 .subscription-panel__price {
   font-size: var(--fs-small);
-  color: var(--color-disabled-text);
+  color: var(--color-text-secondary); /* 5.85:1 sobre surface. Antes disabled-text (2.87:1) */
 }
 
 /* ---- Finca: bloque fotográfico del Hero ---- */

@@ -25,7 +25,7 @@
   --color-accent-gold: #c9a227;      /* hairline/acento decorativo ÚNICAMENTE — nunca color de texto ni de fondo funcional */
   --color-text-secondary: #6b5d4f;   /* texto secundario sobre surface / ink-tint-8 */
   --color-disabled-fill: #e0dad2;    /* fondo de estado deshabilitado */
-  --color-disabled-text: #979189;    /* texto de estado deshabilitado (exento de AA — WCAG 1.4.3, UI inactiva) */
+  --color-disabled-text: #979189;    /* solo para controles realmente :disabled (exentos de AA — WCAG 1.4.3). Texto informativo, aunque parezca inactivo (chips, precio), usa --color-text-secondary */
   --color-ink-tint-8: #e8e3da;       /* fondo de sección terciaria (p.ej. Procesos, Subscription teaser) */
   --color-ink-tint-16: #d7d1c9;      /* superficie de mayor contraste tonal (p.ej. placeholder de mapa) */
 
@@ -112,6 +112,7 @@
 
   /* ---- Layout ---- */
   --container-max: 1200px; /* ancho de contenido a 1440px de viewport (120px de margen lateral) */
+  --z-skip-link: 100;      /* capa del enlace "Saltar al contenido" cuando recibe el foco */
 
   /* ---- Tamaño de componentes ---- */
   --size-icon-md: 1.75rem;    /* 28px — icono del lockup del logo */
@@ -125,7 +126,11 @@
   --size-pin-lg: 1.5rem;       /* 24px — pin decorativo del mapa placeholder (Coffee Shops) */
 
   /* ---- Accesibilidad ---- */
-  --focus-ring-color: var(--color-block-terracotta);
+  /* Anillo de foco en ink (antes terracotta: 2.32:1 sobre surface y 1.97:1 sobre
+     ink-tint-8, por debajo de 3:1). Aprobado por Nicolle (2026-09-29): se aparta
+     a propósito del estado de foco del hi-fi de Figma. */
+  --focus-ring-color: var(--color-ink);            /* 16.41:1 sobre surface, 13.95:1 sobre ink-tint-8 */
+  --focus-ring-color-on-dark: var(--color-surface); /* 16.41:1 sobre ink (pie de página) */
   --focus-ring-width: 2px;
   --focus-ring-offset: 2px;
 }
