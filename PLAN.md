@@ -1015,3 +1015,26 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
   NO verificado: `text-wrap: balance` en Safari/Firefox (solo Chromium).
 - Commit: pendiente de aprobación
 - Siguiente paso: aprobación de este commit y Grupo 5 (movimiento).
+
+### [2026-09-29 09:23] Fase 6.5 — Grupo 5 (movimiento) del Home
+- Agente: polish (referencia a la entrada de Fase 6.1)
+- Prompt (resumen fiel del pedido de Nicolle): el mismo de la entrada 6.1.
+- Qué hizo la IA: (M1) El icono de hamburguesa no reflejaba el estado del menú. En
+  `.site-header__toggle`, cada `path` del SVG recibe `transform-box: fill-box`, origen centrado y
+  `transition: transform, opacity` con `var(--transition-fast)`; con `aria-expanded="true"` las
+  líneas 1 y 3 giran ±45° con `translateY(±6px)` y la del medio se desvanece: queda una X.
+  Reduced-motion: no se añadió nada, `base.css` ya redefine el token de duración.
+- Decisiones de Nicolle / cambios manuales: ninguna adicional. Fuera de esta pasada, sin tocar:
+  el hallazgo de movimiento de Finca (M2).
+- Problemas encontrados y corrección: ninguno en este grupo.
+- Verificación (medido en Chromium a 375px): con el menú abierto `aria-expanded="true"` y los
+  centros de las 3 líneas coinciden en (329, 38) (cerrado: 32 / 38 / 44 en y), transición 0.15s;
+  con `prefers-reduced-motion: reduce` la duración es 1e-05s. Captura del icono cerrado y abierto
+  revisada. 0 desbordamientos en las 240 cargas, sin cambios en el nav a 768/900/1024/1280px.
+  NO verificado: el aspecto del giro en movimiento a ojo (solo estados muestreados y capturas).
+  Comprobación final tras los 5 grupos: 0 scroll horizontal, tabs sin desbordamiento en Tienda a
+  10 anchos, enlaces táctiles del pie a 44px en las 4 páginas.
+- Commit: pendiente de aprobación
+- Siguiente paso: aprobación de los 5 commits y, si Nicolle lo pide, la documentación de la Fase 6
+  (`agents/polish-agent.md`, `skills/apple-design`, sección "Polish pass" del README), que no se
+  ha tocado.

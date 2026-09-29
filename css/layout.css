@@ -99,6 +99,29 @@
   height: var(--size-tap-target);
 }
 
+/* El icono refleja el estado del menú: las 3 líneas pasan a una X cuando
+   aria-expanded="true". Transición corta (--transition-fast) que, bajo
+   prefers-reduced-motion, se reduce a ~0 porque base.css redefine el token de
+   duración. 6px = distancia entre líneas en el viewBox de 24 del SVG.
+   Auditoría apple-design, 2026-09-29. */
+.site-header__toggle path {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform var(--transition-fast), opacity var(--transition-fast);
+}
+
+.site-header__toggle[aria-expanded='true'] path:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.site-header__toggle[aria-expanded='true'] path:nth-child(2) {
+  opacity: 0;
+}
+
+.site-header__toggle[aria-expanded='true'] path:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
 @media (min-width: 768px) {
   .site-header__toggle {
     display: none;
