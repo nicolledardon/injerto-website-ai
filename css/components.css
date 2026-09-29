@@ -40,9 +40,11 @@
   color: var(--color-ink);
 }
 
-.btn--primary:hover {
-  background-color: var(--color-block-terracotta-hover);
-  border-color: var(--color-block-terracotta-hover);
+@media (hover: hover) {
+  .btn--primary:hover {
+    background-color: var(--color-block-terracotta-hover);
+    border-color: var(--color-block-terracotta-hover);
+  }
 }
 
 .btn--primary:active {
@@ -63,8 +65,10 @@
   color: var(--color-ink);
 }
 
-.btn--secondary:hover {
-  background-color: var(--color-ink-tint-8);
+@media (hover: hover) {
+  .btn--secondary:hover {
+    background-color: var(--color-ink-tint-8);
+  }
 }
 
 .btn--secondary:disabled {
@@ -81,8 +85,10 @@
   padding-inline: var(--space-2);
 }
 
-.btn--tertiary:hover {
-  text-decoration: underline; /* el estado no depende solo del color */
+@media (hover: hover) {
+  .btn--tertiary:hover {
+    text-decoration: underline; /* el estado no depende solo del color */
+  }
 }
 
 .btn--tertiary:disabled {
@@ -237,9 +243,11 @@
   transition: border-color var(--transition-fast), border-width var(--transition-fast);
 }
 
-.tab:hover {
-  border-bottom-color: var(--color-accent-gold);
-  border-bottom-width: var(--size-hairline-thick);
+@media (hover: hover) {
+  .tab:hover {
+    border-bottom-color: var(--color-accent-gold);
+    border-bottom-width: var(--size-hairline-thick);
+  }
 }
 
 .tab[aria-selected='true'] {
