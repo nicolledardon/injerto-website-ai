@@ -756,3 +756,106 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
   correccion, en vez de uno solo agrupando todo.
 - Siguiente paso: tras los commits, re-confirmar que las 18 reglas siguen en verde y cerrar la
   Fase 4.
+
+### [2026-09-29 08:00] Fase 4 — Cierre (referencia a la entrada de Fase 4 de las 07:28)
+- Agente: responsive-qa
+- Prompt (resumen fiel del pedido de Nicolle): "lets do phase 6 of the pec 6 el injerto". Al
+  detectar que la Fase 4 seguia abierta y la Fase 5 sin hacer, Nicolle eligio: "finish phase 4
+  and skip phase 5 for now".
+- Qué hizo la IA: Contrasto la entrada de Fase 4 (07:28), que dice "commits pendientes de
+  aprobacion", con `git log`: los 6 commits ya existian (07:33-07:34). Esta entrada corrige ese
+  dato (no reescribe la anterior) y registra los hashes reales:
+  - 60fba97 fix(css): estados hover solo en dispositivos con puntero real (regla 9)
+  - e303938 fix(css): evitar desbordamiento de texto largo en hijos de flex/grid (regla 3)
+  - a2a0c8b fix(css): area tactil minima de 44px en tabs y ambos nav de enlaces (regla 7)
+  - c934877 fix(js): cerrar el menu movil al hacer clic en un link de nav (regla 10)
+  - 76f1643 fix(css): limitar la longitud de linea de los parrafos a ~65ch (regla 6)
+  - cee3cb6 fix(css): quitar el padding-left de 40px por defecto de ul/ol (bug extra)
+- Decisiones de Nicolle / cambios manuales: Fase 5 (documentacion) se aplaza; la Fase 6 (pulido)
+  se hara antes que la documentacion final para no reescribir el README dos veces. Queda
+  abierta la decision sobre el cuerpo mobile de 15px (regla 6, valor de Figma no modificado).
+- Problemas encontrados y corrección: existe un `.git/index.lock` vacio (07:39) sin proceso
+  asociado que bloqueara los proximos commits; no se borro (Nicolle no autorizo el borrado).
+  Solucion: `rm .git/index.lock` desde su Terminal.
+- Verificación: hashes y fechas leidos de `git log`. NO se volvio a ejecutar el barrido de las
+  18 reglas tras los commits (Nicolle no lo autorizo en esta sesion); el resultado "5 fallos
+  corregidos, 0 regresiones" es el de la entrada de las 07:28, medido antes de commitear.
+- Commit: pendiente de aprobación (docs: registra el cierre de la Fase 4 con los hashes reales)
+- Siguiente paso: Fase 6 (instalar la skill apple-design en su Terminal, auditar las 4 paginas).
+
+### [2026-09-29 08:40] Fase 4 — Re-auditoria tras los commits + 2 fallos tactiles + Proceso vertical con rebote
+- Agente: responsive-qa (re-auditoria y fallos tactiles) y frontend (Proceso vertical + animacion)
+- Prompt (resumen fiel del pedido de Nicolle): "fine then do the re run"; despues: "the 2x2 is
+  shown but i would like it to be all in one vertical, and to add some sort of fun bouncy
+  animation to it, and fix the two target fails before we move on to phase 6".
+- Qué hizo la IA: Copio el sitio a una carpeta temporal fuera de su proyecto y re-midio con
+  Playwright las 4 paginas en 320, 375, 414, 768, 1024, 1280, 1440 + 375 horizontal + zoom 200%
+  aproximado (viewport reducido). Antes de tocar codigo encontro 2 fallos nuevos de la regla 7
+  que la auditoria de las 07:28 no habia visto: (a) enlace "Home" del nav de cabecera de
+  43x44px desde 768px (1px por debajo); (b) los enlaces del logo (cabecera y pie, misma clase
+  .site-header__logo) median 35px de alto. Con la aprobacion de Nicolle:
+  1. layout.css: padding-inline + margin-inline negativo en `.site-header__nav-list a`; y
+     padding-block + margin-block negativo en `.site-header__logo` (area tactil de 51px sin
+     cambiar tamaño ni posicion visual del logo).
+  2. components.css: `.proceso` pasa de grid 2x2 a columna vertical en mobile (<768px) con
+     conector vertical de 2x32px entre pasos; desde 768px vuelve a la fila de Figma.
+  3. Animacion de rebote al entrar en pantalla: keyframes `proceso-rebote` y
+     `proceso-numero-pop` en components.css, tokens nuevos (`--duration-bounce`,
+     `--duration-stagger`, `--easing-bounce` con y=1.56 para el sobreimpulso) en variables.css,
+     y `initProcesoAnimation()` en js/main.js (IntersectionObserver, ~15 lineas).
+     Reduced-motion: base.css redefine las duraciones nuevas a ~0 (sin `!important`).
+- Decisiones de Nicolle / cambios manuales: (1) Proceso vertical solo en mobile (<768px); esto
+  se aparta del frame Finca Mobile aprobado en Figma (2x2) por decision suya. (2) Animacion al
+  hacer scroll (no solo hover). (3) Aprobo los 2 arreglos tactiles tal cual se propusieron.
+  Nicolle ya habia borrado `.git/index.lock` desde su Terminal.
+- Problemas encontrados y corrección: el 2x2 dejaba pasos de 116px de ancho a 320px. Mi primer
+  barrido no detecto el fallo de "Home" ni el del logo; ver arriba.
+- Verificación (medido, no visual): 0 de 36 combinaciones pagina x ancho con scroll horizontal,
+  desbordamiento o area tactil < 44px (se excluye el skip-link .sr-only). Nav movil: abre,
+  cierra con Esc, cierra al hacer clic en link, aria-expanded correcto, foco vuelve al toggle;
+  boton oculto a 768px. Tabs: ←/→/Home/End OK; sin JS se ven ambos paneles y el nav. Proceso:
+  columna a 320/375 (centros a x=160 y x=188 = mitad del viewport, conectores alineados), fila
+  a 768/1440. Animacion: 0 pasos visibles antes de hacer scroll, los 7 elementos con
+  .is-visible despues; transform del numero muestreado 0.5 -> 0.93 -> 1.007 (sobreimpulso
+  real). Con prefers-reduced-motion: duracion 1e-05s. Sin errores de consola. Captura de
+  Finca a 375px revisada. NO re-medido: reglas 4, 15 y loading="lazy". La animacion NO se vio
+  en movimiento real por Nicolle en navegador; conviene que la pruebe.
+- Commit: pendiente de aprobación (3 commits propuestos: fix tactil, feat Proceso vertical +
+  rebote, docs de PLAN)
+- Siguiente paso: aprobacion de los commits y comienzo de la Fase 6 (skill apple-design).
+
+### [2026-09-29 09:10] Fase 4 — Mejora de la animacion de Proceso + conectores centrados en escritorio
+- Agente: frontend (referencia a la entrada de las 08:40, aun sin commitear)
+- Prompt (resumen fiel del pedido de Nicolle): "before we commit or push, can we improve the
+  animation on timeline proceso please" (elige: conector que se dibuja, vida en los circulos,
+  repetir al volver con el scroll); despues: "also fix the [fold] conectors to be more centered
+  in the desktop version please".
+- Qué hizo la IA: (1) components.css: el conector ahora crece (`transform: scaleY/scaleX`,
+  origen arriba/izquierda) en vez de aparecer con fade; en escritorio la secuencia se encadena
+  paso → conector → paso con `--retraso` calculado desde `--duration-stagger` (350ms). Se
+  corrigio un fallo de mi version anterior: el "pop" del numero tenia un retraso fijo y en
+  escritorio ocurria antes de que el paso apareciera; ahora hereda `--retraso` del paso.
+  (2) Vida en los circulos: salto `scale(1.12)` en hover (solo `@media (hover:hover)`),
+  `scale(.94)` al pulsar, y un pulso unico de aro accent-gold al aterrizar
+  (`proceso-numero-pulso`). (3) js/main.js: `.is-visible` se añade al 30% visible y se quita
+  con 0% visible, asi se repite al volver sin parpadeo en el borde. (4) Tokens nuevos
+  `--duration-draw` y `--duration-pulse` (variables.css) y su reduccion en base.css. (5)
+  Conectores en escritorio: `.proceso` pasa a `align-items:flex-start` y la linea baja al
+  centro vertical de los circulos con `margin-block` calculado con `--size-dot-lg`; antes se
+  centraba respecto a toda la columna de texto y los circulos con captions de distinta
+  longitud quedaban desnivelados (~10px).
+- Decisiones de Nicolle / cambios manuales: elige las 3 mejoras anteriores (rechaza el "rebote
+  multiple con linear()"). "More centered" interpretado como alineacion VERTICAL con los
+  circulos; si se referia a centrar la linea horizontalmente entre circulos, queda pendiente.
+- Problemas encontrados y corrección: ver (1), retraso del pop mal calculado.
+- Verificación (medido en navegador): a 768/1024/1440 el centro vertical de los 4 circulos y los
+  3 conectores coincide (spread 0.0px); secuencia a 1440 muestreada cada 400ms: 1→conector→2→
+  conector→3→conector→4 en orden, completa a ~2.4s; al volver arriba se quitan las 7 clases y
+  al re-entrar se reanima (paso 1 a opacidad 0.95 a los 200ms) y termina completo; hover =
+  matrix(1.12); mobile: conectores dibujados (sin transform) tras entrar; reduced-motion: todo
+  visible al instante; sin JS: sin clase .proceso--animado y opacidad 1; sin errores de
+  consola; barrido de 36 combinaciones pagina x ancho: 0 fallos (scroll, desbordamiento, area
+  tactil). NO verificado: el aspecto del movimiento a ojo (solo estados muestreados) ni el
+  pulso del aro en pantalla.
+- Commit: pendiente de aprobación
+- Siguiente paso: aprobacion de los 3 commits propuestos y luego Fase 6.
