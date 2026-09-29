@@ -949,3 +949,41 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
   verificado: hover con ratón real (solo la presencia de la regla) ni lector de pantalla.
 - Commit: pendiente de aprobación
 - Siguiente paso: aprobación de este commit y Grupo 3 (espaciado).
+
+### [2026-09-29 09:23] Fase 6.3 — Grupo 3 (espaciado) del Home
+- Agente: polish (referencia a la entrada de Fase 6.1)
+- Prompt (resumen fiel del pedido de Nicolle): el mismo de la entrada 6.1; S2 aprobado
+  explícitamente.
+- Qué hizo la IA:
+  (S1) Botones dentro de `.stack`: antes se estiraban a la columna completa (568px a 1440px)
+  salvo el CTA centrado (198px). Ahora ocupan todo el ancho por debajo de 480px y desde 480px se
+  ajustan a su contenido (a la izquierda; centrados en `.stack--center`).
+  (S2) Cabecera y pie se alinean con `.container`: desde 1024px `padding-inline` de 64px y desde
+  1280px el mismo margen que el contenedor (120px a 1440px, centrado por encima de 1440px). Antes
+  el logo quedaba 80px a la izquierda del H1 a 1440px y 320px a 1920px.
+  (S3) La composición de 3 bloques del hero empieza en 768px y no en 1024px: entre 768 y 1023px
+  era un bloque rojo liso de 688×463.
+  (S4) La fila "Encuentra tu sabor" tiene ancho propio (`max-width: 640px`; antes se encogía al
+  contenido, 364px, y a 375px 170px) y desde 768px el gap de 48px.
+  (S5) `.product-card__body` sin padding lateral (`var(--space-4) 0`): el texto se alinea con el
+  borde de la imagen; la tarjeta no tiene borde visible, así que la sangría de 16px no
+  correspondía a nada.
+  (S6) `white-space: nowrap` en los enlaces del nav del pie: "Coffee Shops" se partía en 2 líneas a
+  768px (51px de alto). Tras el ajuste del pie de tablet (entrada 6.1) el nav ya tiene sitio; se
+  mantiene como refuerzo.
+- Decisiones de Nicolle / cambios manuales: aprobó S2, que se aparta a propósito del hi-fi
+  (header de escritorio con 40px laterales). El hi-fi solo tiene frames de 375 y 1440px, así que
+  S3 (tablet) no tiene referencia en Figma.
+- Problemas encontrados y corrección: `.product-card__body` es un componente compartido, así que
+  S5 también cambia las tarjetas de Tienda (texto alineado con la imagen); Tienda no estaba en la
+  auditoría, revisado en captura a 375 y 1440px.
+- Verificación (medido en Chromium): logo de la cabecera = H1 = logo del pie en x: 64px a 1024,
+  120px a 1280 y 1440, 360px a 1920 (antes 40px); sin cambios a 320–900px (24 / 40px). Las
+  otras 3 páginas a 1440px: logo en x=120. Botones a 1440px: 568/198/568 → 156/198/204 de ancho
+  (a 320 y 375px: 272 y 327, ancho completo). Hero a 768px: bloque liso 688×463 → 3 bloques
+  688×401. Fila de sabores: 364 → 640px de ancho a 768/1440/1920px (x=400 a 1440). Texto de
+  tarjeta: x = x de la imagen (antes +16px) a 375/768/1440/1920px. Nav del pie: 51px → 44px de
+  alto a 768 y 900px en las 4 páginas (44px en todos los anchos). 0 desbordamientos en las 240
+  cargas. NO verificado: la fidelidad con Figma en 768–1023px (no hay frame).
+- Commit: pendiente de aprobación
+- Siguiente paso: aprobación de este commit y Grupo 4 (tipografía).

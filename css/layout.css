@@ -157,6 +157,7 @@
 .site-footer__nav-list a {
   display: inline-flex;
   align-items: center;
+  white-space: nowrap; /* "Coffee Shops" se partía en 2 líneas a 768px (51px de alto) */
   min-height: var(--size-tap-target); /* 44px */
   padding-inline: var(--space-2); /* 8px — palabras cortas como "Finca"/"Home"
     no llegan a 44px de ANCHO solo con su texto; con este padding si */
@@ -283,6 +284,27 @@
   }
 }
 
+/* ---- Alineación de cabecera y pie con .container ---- */
+/* Desde 1024px .container usa gutters de 64px y desde 1280px de 120px (o el
+   margen centrado cuando el viewport supera su max-width); la cabecera y el pie
+   mantenían 40px, así que el logo quedaba 80px a la izquierda del H1 a 1440px
+   (320px a 1920px). Se iguala el padding lateral. Aprobado por Nicolle
+   (2026-09-29): se aparta a propósito del hi-fi, donde el header desktop
+   llevaba 40px. */
+@media (min-width: 1024px) {
+  .site-header,
+  .site-footer__inner {
+    padding-inline: var(--space-16); /* 64px — igual que .container */
+  }
+}
+
+@media (min-width: 1280px) {
+  .site-header,
+  .site-footer__inner {
+    padding-inline: max(var(--space-30), calc((100% - var(--container-max)) / 2));
+  }
+}
+
 /* ---- Ritmo vertical de secciones ---- */
 .section {
   padding-block: var(--space-12); /* 48px */
@@ -380,6 +402,20 @@
   }
 }
 
+/* Dentro de un stack centrado (Home "Encuentra tu sabor") el grid se encogía al
+   ancho de su contenido (364px en un contenedor de 1200px). Se le da ancho
+   propio y, desde 768px, el gap de 48px que usa Figma. */
+.stack--center > .steps-grid {
+  width: 100%;
+  max-width: 40rem; /* 640px */
+}
+
+@media (min-width: 768px) {
+  .stack--center > .steps-grid {
+    column-gap: var(--space-12); /* 48px */
+  }
+}
+
 /* ---- Utilidades de composición vertical ---- */
 /* .stack agrupa título + contenido + CTA dentro de una sección con un gap
    consistente tomado de la escala de espaciado; los tamaños coinciden con
@@ -411,6 +447,26 @@
 .stack--center {
   align-items: center;
   text-align: center;
+}
+
+/* Botones dentro de un .stack: mismo tratamiento en las 3 secciones del Home.
+   Por debajo de 480px ocupan todo el ancho (área táctil cómoda); desde 480px se
+   ajustan a su contenido: a la izquierda en un stack alineado a la izquierda y
+   centrados en .stack--center. Antes se estiraban a la columna completa
+   (568px a 1440px) salvo el CTA centrado (198px). Auditoría apple-design,
+   2026-09-29. */
+.stack > .btn {
+  align-self: stretch;
+}
+
+@media (min-width: 480px) {
+  .stack > .btn {
+    align-self: flex-start;
+  }
+
+  .stack--center > .btn {
+    align-self: center;
+  }
 }
 
 /* ---- Cabecera de página (Tienda, Finca, Coffee Shops) ---- */
