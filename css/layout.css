@@ -121,6 +121,28 @@
   font-size: var(--fs-h3);
 }
 
+.site-header__nav-list a {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  min-height: var(--size-tap-target); /* 44px — regla 7 de responsive-detail */
+  overflow-wrap: anywhere;
+}
+
+/* ---- Pie de página: enlaces de nav con área táctil >= 44px ---- */
+/* Mismo criterio que .site-header__nav-list a arriba: el texto por sí solo
+   (line-height) no garantiza 44px con cualquier fuente/estado de carga, así
+   que se fija min-height directamente en vez de confiar solo en padding. */
+.site-footer__nav-list a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--size-tap-target); /* 44px */
+  padding-inline: var(--space-2); /* 8px — palabras cortas como "Finca"/"Home"
+    no llegan a 44px de ANCHO solo con su texto; con este padding si */
+  margin-inline: calc(var(--space-2) * -1); /* compensa visualmente el padding
+    para no separar demasiado la lista del borde del contenedor */
+}
+
 @media (min-width: 768px) {
   .site-header {
     flex-direction: row;

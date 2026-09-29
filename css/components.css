@@ -236,8 +236,12 @@
 }
 
 .tab {
+  min-width: 0;
+  overflow-wrap: anywhere;
   padding-block: var(--space-2) var(--space-3); /* 8px arriba, 12px abajo */
-  padding-inline: var(--space-1);
+  padding-inline: var(--space-2); /* 8px — antes space-1 (4px); ampliado para
+    alcanzar el area tactil minima de 44px de ancho (regla 7 de
+    responsive-detail) en tabs con etiquetas cortas como "Café" */
   border: none;
   border-bottom: var(--size-hairline-thin) solid transparent;
   font-family: var(--font-body);
