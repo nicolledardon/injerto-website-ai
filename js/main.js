@@ -46,6 +46,16 @@
       setExpanded(false);
       toggle.focus();
     });
+
+    // Cerrar el menú al hacer clic en un link de navegación (regla 10 de
+    // responsive-detail). No hace falta devolver el foco al toggle aquí:
+    // cada link navega a otra página, así que el foco pasa de forma natural
+    // a la página siguiente.
+    nav.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function () {
+        setExpanded(false);
+      });
+    });
   }
 
   function initCategoryTabs() {
