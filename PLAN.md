@@ -1233,3 +1233,29 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
 - Siguiente paso: aprobación de los 4 commits; decidir los grupos que siguen sin aplicar
   (Jerarquía: COF-H1, resto de COF-H2, FIN-H2; Espaciado: TIE-S1, COF-S1, TIE-S2, FIN-S2, ALL-S1;
   Accesibilidad: FIN-A2, TIE-A1) y escribir la documentación de la Fase 6.
+
+### [2026-10-01 19:38] Fase 6.13 — Accesibilidad de Finca y Tienda (FIN-A2, TIE-A1)
+- Agente: polish (referencia a la entrada de Fase 6.6)
+- Prompt (resumen fiel del pedido de Nicolle): hacer los tres grupos que seguían sin aplicar:
+  jerarquía, espaciado y accesibilidad (este es el de accesibilidad).
+- Qué hizo la IA: `finca.html`: `.proceso` con `role="list"` y cada `.proceso-step` con
+  `role="listitem"` (FIN-A2; los conectores ya eran `aria-hidden`, así que el lector de pantalla
+  oye una lista de 4 elementos y no 7 bloques sueltos). `tienda.html`: un
+  `<noscript><style>.category-tabs-row { display: none; }</style></noscript>` en el `<head>`
+  (TIE-A1): sin JavaScript las tabs Café/Accesorios eran botones que no hacían nada mientras las
+  dos listas ya se veían; ahora se ocultan y quedan las dos listas una tras otra.
+- Decisiones de Nicolle / cambios manuales: eligió los tres grupos; en TIE-A1 eligió "ocultar las
+  tabs cuando no hay JS" en vez de dejar el fallback documentado tal cual.
+- Problemas encontrados y corrección: (1) las capturas completas de Finca no mostraban los pasos
+  del Proceso porque la animación de entrada los mantiene ocultos hasta que entran en pantalla;
+  para revisar el diseño se forzó su estado visible solo en la captura (el código no cambia).
+  (2) Sin JS los paneles conservan `role="tabpanel"` y `aria-labelledby` apuntando a tabs que ya
+  no se ven: el nombre accesible se conserva, pero el rol queda algo huérfano; no se ha tocado
+  porque sin JS no hay otra forma de que el HTML sea a la vez "tabs" y "dos listas".
+- Verificación (medido en Chromium): capturas a 10 anchos × 4 páginas, menú abierto y cerrado:
+  idénticas píxel a píxel a las de antes (el ARIA y el `<noscript>` no cambian nada con JS). Árbol
+  de accesibilidad de Playwright: `list` con 4 `listitem`. Con JS desactivado: la tablist no se ve
+  y los 2 paneles sí. Con JS: ←/→ cambian de tab y de panel como antes. NO verificado: lector de
+  pantalla real (VoiceOver/NVDA), que `role="list"` sobre un `div` se anuncie igual en todos.
+- Commit: pendiente de aprobación
+- Siguiente paso: Fase 6.14 (espaciado) y 6.15 (jerarquía).
