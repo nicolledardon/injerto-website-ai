@@ -1103,3 +1103,37 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
 - Siguiente paso: aprobación de los 2 commits del lote 1; decidir los grupos restantes y, después,
   `agents/polish-agent.md` y la sección "Polish pass (apple-design skill)" del README, que siguen
   sin escribirse.
+
+### [2026-10-01 07:30] Fase 6.8 — ALL-A1 (Crítico): cabecera y botón del menú con texto ampliado
+- Agente: polish (referencia a la entrada de Fase 6.6)
+- Prompt (resumen fiel del pedido de Nicolle): corregir ALL-A1, el hallazgo Crítico de la
+  auditoría de la Fase 6.6 (cabecera y menú con el texto al 200%), que no se había seleccionado en
+  el lote 1.
+- Qué hizo la IA: en `css/layout.css`, `.site-header__row` pasa a `flex-wrap: wrap` con
+  `gap: var(--space-2) var(--space-4)`: con texto ampliado el botón baja a la fila siguiente en
+  vez de solaparse con el logo; con texto normal todo cabe y no cambia nada. `.site-header__toggle`
+  recibe `flex-shrink: 0` (nunca por debajo de 44px; a 320px con texto al 200% medía 12px) y
+  `margin-left: auto` (sigue a la derecha aunque quede solo en su fila).
+- Decisiones de Nicolle / cambios manuales: eligió corregir ALL-A1 y dejar el resto de desbordes
+  con texto ampliado (pie, Home, FIN-A1) como hallazgos abiertos, sin tocarlos en esta pasada.
+- Problemas encontrados y corrección: (1) el fallo era más amplio de lo anotado en 6.6:
+  solapamiento logo/botón a 320px con texto al 150% y al 200%, y a 375px al 200%, en las 4
+  páginas, con el botón de 12px de ancho a 320px/200%. (2) Se probó `overflow-wrap: anywhere` en
+  el logo para cubrir el 250–300%: se descartó porque parte el wordmark en letras sueltas
+  (E / L / IN / JE / R / T / O a 320px/300%) y choca con la decisión bloqueada de logo
+  preservado. (3) Desbordes horizontales con texto ampliado que NO son de la cabecera y siguen SIN
+  corregir: pie a 768px/200% (enlace "Coffee Shops" hasta 777px), 1024px/150% (aviso hasta 1064px)
+  y 1280px/200% (nav hasta 1325px, aviso hasta 1528px); Home a 320px/200% (hero hasta 362px,
+  flavor-step hasta 352px) y a 768px/200% (flavor-step hasta 880px); Finca a 320px/200% (353px,
+  FIN-A1). (4) Con texto al 250–300% en pantallas de 414px o menos el wordmark "INJERTO" sigue
+  siendo más ancho que la pantalla (334px necesarios al 250%, 400px al 300%).
+- Verificación (medido en Chromium, texto ampliado con `html{font-size}`): barrido de 8 anchos
+  (320–767px) × 7 tamaños (100–300%) en Home: antes 22 celdas con fallo, después 9, todas al
+  250–300%; hasta el 200%, 0 fallos (sin solape, botón de al menos 44px, cabecera sin
+  desborde). Matriz de 9 anchos × 3 tamaños × 4 páginas: 0 fallos de cabecera hasta el 200%. A
+  tamaño normal, 60 capturas (10 anchos × 4 páginas, menú abierto y cerrado) idénticas píxel a
+  píxel a las de antes. Capturas del menú abierto a 320 y 375px revisadas. NO verificado: Dynamic
+  Type/Safari de iOS ni zoom de solo texto de Firefox reales, lector de pantalla, táctil real.
+- Commit: pendiente de aprobación
+- Siguiente paso: aprobación del commit; después, decidir sobre los desbordes abiertos (pie, Home,
+  FIN-A1) y los grupos aprobados de antemano.

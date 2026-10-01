@@ -85,6 +85,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap; /* con texto ampliado (150-200%) el logo y el botón no caben en
+    una fila: el botón baja a la fila siguiente en vez de solaparse con el logo.
+    Con el texto a tamaño normal todo cabe y no cambia nada. Auditoría
+    apple-design, 2026-10-01 (ALL-A1). */
+  gap: var(--space-2) var(--space-4); /* fila 8px: el botón que baja no pisa el área táctil del logo */
   width: 100%;
 }
 
@@ -97,6 +102,9 @@
   justify-content: center;
   width: var(--size-tap-target);
   height: var(--size-tap-target);
+  flex-shrink: 0; /* nunca por debajo de 44px: a 320px con texto al 200% el botón
+    se encogía a 12px de ancho */
+  margin-left: auto; /* sigue a la derecha aunque quede solo en su fila */
 }
 
 /* El icono refleja el estado del menú: las 3 líneas pasan a una X cuando
