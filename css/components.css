@@ -660,10 +660,16 @@
   background-color: var(--color-surface);
 }
 
-/* ---- Coffee Shops: mapa placeholder ---- */
-/* Sin mapa real (fuera de alcance de esta PEC) — bloque neutro con un pin
-   decorativo centrado, mismo criterio que .hero-photos/.finca-photo.
-   Proporción real de Figma: 327×240 en mobile, cuadrado (600×600) desde
+/* ---- Coffee Shops: mapa ---- */
+/* Mapa ilustrativo hecho con imágenes (un mapa interactivo queda fuera del
+   alcance de esta PEC). Cinco imágenes apiladas en la misma caja — mapa general
+   + una por sucursal — y solo la que lleva .is-active se ve (opacity 1);
+   main.js (initShopMap) mueve esa clase al elegir una sucursal. Sin JS se ve el
+   mapa general, que lleva .is-active en el HTML. Todas las imágenes son 4:3 con
+   object-fit: cover: en cada mapa de sucursal el pin está en el centro y en el
+   general los 4 pines caben en el cuadrado central, así que ningún pin queda
+   fuera del recorte en las 4 proporciones de la caja.
+   Proporción de la caja: 327×240 en mobile (Figma), cuadrado (600×600) desde
    1024px, que es cuando .split pasa a 2 columnas. */
 /* Proporción más baja en tablet y en escritorio ancho: con 505px de alto a
    768px la lista de sucursales empezaba casi fuera de la primera pantalla, y
@@ -674,40 +680,49 @@
    alineado arriba con el primer nombre, porque centrado quedaba flotando a media
    altura. Se aparta del frame de Figma (1:1). Aprobado por Nicolle. Auditoría
    apple-design, 2026-10-01 (COF-H1). */
-.map-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.shop-map {
+  position: relative;
   width: 100%;
   aspect-ratio: 327 / 240;
+  overflow: hidden;
   border-radius: var(--radius-md);
-  background-color: var(--color-ink-tint-16);
+  background-color: var(--color-ink-tint-16); /* se ve un instante mientras carga la imagen */
 }
 
 @media (min-width: 768px) {
-  .map-placeholder {
+  .shop-map {
     aspect-ratio: 16 / 9;
   }
 }
 
 @media (min-width: 1024px) {
-  .map-placeholder {
+  .shop-map {
     aspect-ratio: 1 / 1;
   }
 }
 
 @media (min-width: 1280px) {
-  .map-placeholder {
+  .shop-map {
     aspect-ratio: 4 / 3;
     align-self: start;
   }
 }
 
-.map-placeholder__pin {
-  width: var(--size-pin-lg);
-  height: var(--size-pin-lg);
-  border-radius: var(--radius-full);
-  background-color: var(--color-block-terracotta);
+/* Cambio de mapa con un fundido corto. --transition-base (200ms) se acorta a
+   casi 0 bajo prefers-reduced-motion en base.css, así que no hace falta una
+   regla aparte. */
+.shop-map__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.shop-map__img.is-active {
+  opacity: 1;
 }
 
 /* ---- Coffee Shops: lista de sucursales ---- */
@@ -717,6 +732,7 @@
 }
 
 .shop-list__row {
+  position: relative; /* ancla el ::after de .shop-list__select (fila entera clicable) */
   display: flex;
   align-items: flex-start;
   gap: var(--space-5); /* 20px */
@@ -791,4 +807,59 @@
   font-size: var(--fs-small);
   font-weight: var(--fw-medium);
   color: var(--color-text-secondary);
+}
+
+/* ---- Coffee Shops: selección de sucursal (mapa) ---- */
+/* main.js convierte el nombre de cada sucursal (el <h2>) en un <button> con
+   aria-pressed. Sin JS el <h2> se queda como texto y no hay nada que pulsar.
+   El botón hereda la tipografía del h2.h4 y su ::after se estira sobre toda la
+   fila (.shop-list__row es position:relative): así toda la fila responde al
+   clic o al toque. El teléfono sigue siendo un enlace aparte porque es
+   position:relative y viene después en el DOM, así que queda por encima del
+   ::after. El anillo de foco es el global de base.css (alrededor del nombre). */
+.shop-list__select {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.shop-list__select::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+/* Sucursal elegida: el chip de color gana un aro ink (la señal principal, con
+   el mismo contraste que el anillo de foco: 16:1 sobre surface, muy por
+   encima de los 3:1 de WCAG 1.4.11) y el nombre un subrayado gold (acento
+   decorativo, nunca la única señal). El estado también se anuncia con
+   aria-pressed. */
+.shop-list__row.is-selected .shop-list__chip {
+  outline: var(--size-hairline-thick) solid var(--color-ink);
+  outline-offset: var(--space-1); /* 4px */
+}
+
+.shop-list__row.is-selected .shop-list__select {
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent-gold);
+  text-decoration-thickness: var(--size-hairline-thick);
+  text-underline-offset: 0.2em;
+}
+
+/* Hover solo donde hay cursor (regla 9 de responsive-detail). */
+@media (hover: hover) {
+  .shop-list__row:hover .shop-list__select {
+    text-decoration: underline;
+    text-decoration-color: var(--color-ink-tint-16);
+    text-decoration-thickness: var(--size-hairline-thick);
+    text-underline-offset: 0.2em;
+  }
+
+  .shop-list__row.is-selected:hover .shop-list__select {
+    text-decoration-color: var(--color-accent-gold);
+  }
 }

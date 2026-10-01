@@ -55,12 +55,20 @@
     <!-- Mapa + lista de sucursales -->
     <div class="container section-bottom">
       <div class="split">
-        <div class="map-placeholder" aria-hidden="true">
-          <span class="map-placeholder__pin"></span>
+        <!-- Mapa ilustrativo: 5 imágenes apiladas (general + una por sucursal). Sin JS
+             solo se ve el mapa general; main.js (initShopMap) activa la de la sucursal
+             elegida. Las inactivas llevan aria-hidden para que el lector de pantalla
+             solo lea el mapa visible. -->
+        <div class="shop-map" id="shop-map">
+          <img class="shop-map__img is-active" data-map="general" src="assets/img/mapas/mapa-general.webp" width="1600" height="1200" alt="Mapa ilustrativo de Ciudad de Guatemala con la ubicación de las 4 sucursales de El Injerto.">
+          <img class="shop-map__img" data-map="z13" src="assets/img/mapas/mapa-z13.webp" width="1600" height="1200" alt="Mapa ilustrativo con la ubicación de la Sucursal Z13, en la Zona 13." aria-hidden="true" loading="lazy">
+          <img class="shop-map__img" data-map="plaza-cemaco" src="assets/img/mapas/mapa-plaza-cemaco.webp" width="1600" height="1200" alt="Mapa ilustrativo con la ubicación de Plaza Cemaco, en la Zona 10." aria-hidden="true" loading="lazy">
+          <img class="shop-map__img" data-map="periroosevelt" src="assets/img/mapas/mapa-periroosevelt.webp" width="1600" height="1200" alt="Mapa ilustrativo con la ubicación de Periroosevelt, en la Calzada Roosevelt." aria-hidden="true" loading="lazy">
+          <img class="shop-map__img" data-map="zona-express-1" src="assets/img/mapas/mapa-zona-express-1.webp" width="1600" height="1200" alt="Mapa ilustrativo con la ubicación de Zona Express 1, en Condado Concepción." aria-hidden="true" loading="lazy">
         </div>
         <div class="stack stack--lg">
           <ul class="shop-list">
-            <li class="shop-list__row">
+            <li class="shop-list__row" data-map="z13">
               <span class="shop-list__chip shop-list__chip--cherry" aria-hidden="true"></span>
               <div class="shop-list__text">
                 <h2 class="h4">Sucursal Z13</h2>
@@ -69,7 +77,7 @@
                 <p class="shop-list__hours">Lun–Vie 7:00–18:00 · Sáb 7:00–13:00</p>
               </div>
             </li>
-            <li class="shop-list__row">
+            <li class="shop-list__row" data-map="plaza-cemaco">
               <span class="shop-list__chip shop-list__chip--pine" aria-hidden="true"></span>
               <div class="shop-list__text">
                 <h2 class="h4">Plaza Cemaco</h2>
@@ -78,7 +86,7 @@
                 <p class="shop-list__hours">Lun–Dom 9:00–21:00</p>
               </div>
             </li>
-            <li class="shop-list__row">
+            <li class="shop-list__row" data-map="periroosevelt">
               <span class="shop-list__chip shop-list__chip--terracotta" aria-hidden="true"></span>
               <div class="shop-list__text">
                 <h2 class="h4">Periroosevelt</h2>
@@ -87,7 +95,7 @@
                 <p class="shop-list__hours">Lun–Dom 9:00–21:00</p>
               </div>
             </li>
-            <li class="shop-list__row">
+            <li class="shop-list__row" data-map="zona-express-1">
               <span class="shop-list__chip shop-list__chip--cherry" aria-hidden="true"></span>
               <div class="shop-list__text">
                 <h2 class="h4">Zona Express 1</h2>

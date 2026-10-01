@@ -1521,3 +1521,74 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
 - Commit: pendiente de aprobación (1 commit propuesto: `fix(html): corrige los precios de las
   tarjetas renombradas con los de la web`). Su hash se registrará en la siguiente entrada.
 - Siguiente paso: Nicolle aprueba el commit y hace `git push` de los 4 commits de esta serie.
+
+### [2026-10-01 23:15] Fase 6.20 — Mapa de Coffee Shops que cambia según la sucursal
+- Agente: frontend + interaction
+- Prompt (resumen fiel del pedido de Nicolle): "Último cambio en la web de la PEC 6: en la página
+  Coffee Shops quiero que el contenedor gris sea un mapa real de la ubicación de cada sucursal y que
+  el mapa cambie según la que se pulse; si no se pulsa ninguna, un mapa alejado con todas las
+  ubicaciones. El mapa no tiene que ser interactivo: sirven imágenes de un mapa con el punto de su
+  ubicación. Genera tú la imagen del mapa."
+- Qué hizo la IA: (1) Buscó las coordenadas de las 4 sucursales. Zona Express 1 (14.5546768,
+  -90.456226) salió de la página de ubicaciones de elinjertocafe.com.gt; Plaza Cemaco (14.5926883,
+  -90.5130972) de una ficha de maplogs.com y Periroosevelt (14.62673, -90.55533) de una ficha de
+  mapcarta.com. Z13 (9 Calle 15-15, Zona 13) no tiene coordenadas en ninguna fuente que se pudiera
+  leer: su posición es una ESTIMACIÓN (14.5800, -90.5290). (2) Intentó bajar calles reales de
+  OpenStreetMap (API Overpass): la política de red del entorno lo bloqueó (403) y no se probó otro
+  servidor; los enlaces de Waze de El Injerto no se pudieron leer (robots.txt). Por eso los mapas
+  son ILUSTRACIONES propias, no mapas reales: las calles se generan por programa (cuadrículas
+  rotadas por distritos, avenidas, parques) con la paleta de El Injerto; solo la posición relativa
+  de los pines sale de coordenadas reales. (3) Generó 5 imágenes WebP de 1600x1200 en
+  `assets/img/mapas/`: `mapa-general.webp` (79 KB, los 4 pines) y una por sucursal (~45 KB, pin
+  centrado con halo): `mapa-z13`, `mapa-plaza-cemaco`, `mapa-periroosevelt`, `mapa-zona-express-1`.
+  Los pines llevan el color del chip de cada sucursal. (4) `coffee-shops.html`: el bloque gris
+  `.map-placeholder` pasa a `.shop-map` con las 5 imágenes apiladas (la general visible, alt en
+  español, las inactivas con `aria-hidden`) y cada fila de la lista lleva `data-map`. (5)
+  `css/components.css`: `.shop-map` conserva las proporciones del placeholder (327/240, 16/9,
+  1/1, 4/3 y alineado arriba desde 1280px), las imágenes hacen fundido de `opacity` con
+  `--transition-base` (casi 0 bajo `prefers-reduced-motion`), la fila pasa a `position: relative`
+  y se añaden los estilos de fila elegida (aro ink en el chip, subrayado gold en el nombre) y de
+  hover (solo con `@media (hover: hover)`). (6) `js/main.js`: nueva función `initShopMap`; el
+  `<h2>` de cada fila se convierte en un `<button aria-pressed>` desde JS, pulsar una sucursal
+  activa su mapa, pulsarla otra vez vuelve al general, y en pantallas de menos de 1024px (mapa
+  encima de la lista) la página se desplaza hasta el mapa solo si no se ve entero.
+- Decisiones de Nicolle / cambios manuales: eligió usar los mapas dibujados por la IA (en vez de
+  aportar capturas reales) y aprobó la lista exacta de archivos y cambios antes de tocar nada.
+  Pulsar otra vez la sucursal elegida para volver al mapa general y el desplazamiento en móvil son
+  suposiciones de la IA que ella aprobó dentro de esa lista.
+- Problemas encontrados y corrección: (1) Los mapas NO son reales (calles genéricas). Para
+  cambiarlos por capturas reales de Google Maps u OpenStreetMap basta sustituir los 5 archivos
+  conservando el nombre (en ese caso conviene quitar "ilustrativo" de los `alt`; con
+  OpenStreetMap hay que mostrar "© OpenStreetMap contributors"). (2) La posición de Z13 es
+  estimada y las otras tres vienen de fichas de terceros, no de un GPS en la puerta; en los mapas
+  de sucursal el pin siempre está centrado, así que solo se nota en el mapa general. (3) Datos
+  incoherentes entre fuentes que NO se tocaron: el texto de la página dice Periroosevelt en
+  "Zona 11", Cemaco lista Peri-Roosevelt en Calzada Roosevelt 25-50, Zona 7, y la página de El
+  Injerto muestra "Calle Principal #123, Zona 10" (parece texto de relleno). (4) En móvil el mapa
+  va encima de la lista: al pulsar la 3.ª o 4.ª sucursal la página sube hasta el mapa y la fila
+  elegida queda debajo, fuera de pantalla. Alternativa no implementada: mapa fijo (sticky) mientras
+  se recorre la lista; exige cambiar el contenedor `.split`, compartido con Home. (5) El token
+  `--size-pin-lg` de `variables.css` (pin del placeholder) ya no se usa; no se borró porque ese
+  archivo no estaba en la lista aprobada. (6) A 1024-1279px el mapa sigue centrado en vertical
+  frente a la lista (comportamiento anterior, sin tocar).
+- Verificación: Chromium con Playwright sobre una copia de prueba (sin las fuentes de Google), a
+  375, 768, 1024 y 1440px: 112 comprobaciones, 0 fallos. Estado inicial (solo el mapa general con
+  opacity 1, 4 botones con `aria-pressed="false"`); clic en cada una de las 4 filas (en un punto
+  de la fila, no solo en el nombre) activa su mapa, `aria-pressed`/`is-selected` y `aria-hidden`
+  correctos; segundo clic vuelve al general; los 4 teléfonos siguen siendo clicables (prueba de
+  `elementFromPoint`); teclado (Enter selecciona, Espacio deselecciona, anillo de foco de 2px);
+  `prefers-reduced-motion` (transición 1e-05s); sin JavaScript (0 botones, mapa general visible);
+  `scrollWidth` = `innerWidth` en los 4 anchos; en 375 y 768px el mapa queda a la vista tras
+  pulsar; chip alineado con el nombre (±1px). Se miraron capturas a 375, 1024 y 1440px. Cajas del
+  mapa: 327x240, 688x387, 416x416 y 568x426. `!important`: 0 en los 4 CSS. NO verificado: las
+  fuentes reales, Safari, Firefox, un dispositivo táctil real ni un lector de pantalla; la
+  exactitud de las coordenadas; la carga con red lenta (las 4 imágenes inactivas llevan
+  `loading="lazy"`).
+- Commit: pendiente de aprobación. Propuesta de 2 commits: (1) `feat(assets): añade mapas
+  ilustrados de las sucursales de Coffee Shops` (las 5 imágenes de `assets/img/mapas/`); (2)
+  `feat(coffee-shops): el mapa cambia según la sucursal elegida` (`coffee-shops.html`,
+  `css/components.css`, `js/main.js`, `PLAN.md`). Los hashes se registrarán en la siguiente
+  entrada.
+- Siguiente paso: Nicolle prueba la página en su navegador y aprueba los commits; después, `git
+  push` desde su Terminal (`git status` muestra `main` al día con `origin/main`, así que no
+  quedan commits anteriores por subir).
