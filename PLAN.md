@@ -1159,3 +1159,22 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
 - Commit: pendiente de aprobación
 - Siguiente paso: Fase 6.10 (FIN-S1).
 
+### [2026-10-01 07:57] Fase 6.10 — FIN-S1: Proceso vertical hasta 1024px
+- Agente: polish (referencia a la entrada de Fase 6.6)
+- Prompt (resumen fiel del pedido de Nicolle): aplicar lo que Nicolle aprobó de antemano en la
+  Fase 6.6; este es FIN-S1 ("Proceso stays vertical until 1024px").
+- Qué hizo la IA: en `css/components.css`, las tres media queries del Proceso (`.proceso` en fila,
+  `.proceso-connector` horizontal y la animación con `scaleX` y los retrasos) pasan de
+  `min-width: 768px` a `min-width: 1024px`. Comentarios actualizados. `js/main.js` no tiene ningún
+  breakpoint, así que no necesita cambios.
+- Decisiones de Nicolle / cambios manuales: aprobó revertir su decisión del 2026-09-29 (fila
+  horizontal desde 768px). Entre 768 y 1023px los pasos medían 122px y las leyendas ocupaban 5
+  líneas.
+- Problemas encontrados y corrección: en 768–1023px la columna queda más alta (4 pasos y 3
+  conectores), es el coste de la decisión.
+- Verificación (medido en Chromium): comparación píxel a píxel: solo cambia Finca a 768 y 900px
+  (2 de 60 celdas); a 1024px la fila horizontal queda igual que antes. Capturas a 900px (vertical)
+  y 1024px (horizontal, leyendas de 3 líneas como máximo) revisadas. NO verificado: Safari/Firefox.
+- Commit: pendiente de aprobación
+- Siguiente paso: Fase 6.11 (CTAs).
+

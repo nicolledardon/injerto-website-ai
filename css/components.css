@@ -187,8 +187,10 @@
 /* Mobile-first: columna vertical única, con un conector VERTICAL corto entre
    paso y paso. Decisión de Nicolle (2026-09-29): sustituye al grid 2x2 del
    frame Finca Mobile de Figma, que a 320px dejaba pasos de solo 116px de
-   ancho. Desde 768px vuelve a la fila horizontal de Figma; el espacio entre
-   pasos lo generan los conectores (flex:1), por eso el gap es 0. */
+   ancho. Desde 1024px vuelve a la fila horizontal de Figma (antes desde
+   768px: entre 768 y 1023px los pasos medían 122px y las leyendas ocupaban 5
+   líneas; decisión de Nicolle, auditoría apple-design 2026-10-01, FIN-S1); el
+   espacio entre pasos lo generan los conectores (flex:1), por eso el gap es 0. */
 .proceso {
   display: flex;
   flex-direction: column;
@@ -196,7 +198,7 @@
   gap: 0;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .proceso {
     flex-direction: row;
     justify-content: center;
@@ -248,9 +250,9 @@
   max-width: 12rem;
 }
 
-/* Conector: vertical en mobile (línea de 2px x 32px entre pasos, centrada por
-   align-items:center) y horizontal desde 768px (línea flexible de 2px de
-   alto, alineada al centro de los círculos numerados). */
+/* Conector: vertical en mobile y tablet (línea de 2px x 32px entre pasos,
+   centrada por align-items:center) y horizontal desde 1024px (línea flexible
+   de 2px de alto, alineada al centro de los círculos numerados). */
 .proceso-connector {
   display: block;
   width: var(--size-hairline-thick);
@@ -259,7 +261,7 @@
   background-color: var(--color-accent-gold);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .proceso-connector {
     flex: 1 1 var(--space-20); /* 80px */
     width: auto;
@@ -349,7 +351,7 @@
       calc(var(--retraso) + var(--duration-bounce)) backwards;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .proceso--animado .proceso-connector {
     transform: scaleX(0);
     transform-origin: left;
