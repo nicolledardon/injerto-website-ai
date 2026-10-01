@@ -1305,3 +1305,39 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
   (todas las cuadrículas actuales tienen exactamente 4).
 - Commit: pendiente de aprobación
 - Siguiente paso: Fase 6.15 (jerarquía).
+
+### [2026-10-01 19:38] Fase 6.15 — Jerarquía de Coffee Shops y Finca (COF-H1, COF-H2, FIN-H2)
+- Agente: polish (referencia a la entrada de Fase 6.6)
+- Prompt (resumen fiel del pedido de Nicolle): hacer los tres grupos que seguían sin aplicar
+  (este es el de jerarquía).
+- Qué hizo la IA: COF-H2, `coffee-shops.html` y `css/components.css`: el teléfono de cada sucursal
+  es ahora un enlace `tel:` en su propia línea (16px/500, subrayado visible, área táctil de 44px
+  con margen negativo para que la línea ocupe lo mismo que un párrafo) y el horario pasa a otra
+  línea de 14px (antes 13px y las dos cosas juntas). FIN-H2, `finca.html` y `css/components.css`:
+  el nombre de cada paso del Proceso es un `<h3>` en Fraunces semibold de 16px (antes un `span` de
+  Work Sans 14px/500, casi igual que la leyenda de 13px). COF-H1, `css/components.css`: el mapa
+  placeholder baja de proporción: 16:9 a 768px (688×505 → 688×387), 1:1 como antes entre 1024 y
+  1279px, y 4:3 y alineado arriba desde 1280px (568×568 → 568×426 a 1440px), de modo que la lista
+  de sucursales pasa a ser el bloque más grande.
+- Decisiones de Nicolle / cambios manuales: CONFLICTO CON DECISIÓN BLOQUEADA en COF-H1 (el frame de
+  Figma del mapa es 1:1): Nicolle eligió expresamente la opción B (limitar solo el tamaño del
+  mapa) frente a la C (puntos y pin en un único color neutro) y frente a omitirlo. FIN-H2 se
+  aparta del componente de Figma (nombre en Work Sans 14px) y aplica con su aprobación general.
+- Problemas encontrados y corrección: (1) con 4:3 el mapa, centrado, quedaba flotando unos 100px por
+  debajo del primer nombre a 1440px; se alineó arriba y se limitó a 1280px o más (de 1024 a 1279px
+  se mantiene 1:1). (2) La leyenda del Proceso a 14px partía más palabras con el texto al 150–200%
+  en la fila de 4 pasos; se volvió a 13px y solo cambia el nombre del paso. (3) Con el enlace del
+  teléfono a 44px sin compensar, cada fila crecía 49px; con el margen negativo crece 31px (la
+  línea extra). (4) No se aplicó: la opción C de COF-H1 (queda el pin terracotta, color que el resto
+  del sitio reserva para acciones) ni un enlace "Cómo llegar" (texto nuevo y URL externa).
+- Verificación (medido en Chromium): comparación píxel a píxel de 60 capturas: el grupo de
+  jerarquía solo cambia Finca y Coffee Shops (30 celdas) y el cambio del mapa solo cambia Coffee
+  Shops a 768, 900, 1280 y 1440px (375 y 1024px intactos). Enlace de teléfono: 44px de alto, el
+  clic cae en el enlace en la parte alta, central y baja de su caja a 375px; 4 `href="tel:…"`;
+  contorno de foco de 2px ink. Encabezados de Finca: H1, H2, H2 y 4 H3. NO verificado: marcar un
+  teléfono desde un móvil real, lector de pantalla, un mapa real incrustado en lugar del
+  placeholder.
+- Commit: pendiente de aprobación
+- Siguiente paso: aprobación de los 3 commits; escribir la documentación de la Fase 6
+  (`agents/polish-agent.md`, sección del README "Polish pass (apple-design skill)" y la entrada
+  final del PLAN con los hashes de todos los commits de la Fase 6).

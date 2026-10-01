@@ -234,11 +234,18 @@
    sin tabindex), así que escalarlo al pasar el puntero o al pulsar sugería un
    botón que no existe. Auditoría apple-design, 2026-09-30 (FIN-M2). */
 
+/* La etiqueta es un <h3> real (la sección es un <h2>) y se escribe en la
+   fuente de títulos, semibold, a 16px. Antes etiqueta y leyenda medían 14px/500
+   y 13px/400 y apenas se distinguían. La leyenda se queda en 13px: a 14px con
+   el texto al 150-200% partía más palabras en la fila de 4 pasos. Se aparta del
+   componente de Figma (Work Sans 14px). Auditoría apple-design, 2026-10-01
+   (FIN-H2). */
 .proceso-step__label {
   min-width: 0;
   overflow-wrap: anywhere;
-  font-size: var(--fs-small);
-  font-weight: var(--fw-medium);
+  font-family: var(--font-display);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
   color: var(--color-ink);
 }
 
@@ -623,6 +630,15 @@
    decorativo centrado, mismo criterio que .hero-photos/.finca-photo.
    Proporción real de Figma: 327×240 en mobile, cuadrado (600×600) desde
    1024px, que es cuando .split pasa a 2 columnas. */
+/* Proporción más baja en tablet y en escritorio ancho: con 505px de alto a
+   768px la lista de sucursales empezaba casi fuera de la primera pantalla, y
+   con 1:1 a 1440px el mapa medía 568x568 y era el elemento más grande de la
+   página, por encima de la lista, que es lo que la persona viene a buscar.
+   768px: 16:9 (688x387). 1024-1279px: 1:1 como en Figma (416px, la columna es
+   estrecha y la lista ya es más alta). Desde 1280px: 4:3 (568x426 a 1440px) y
+   alineado arriba con el primer nombre, porque centrado quedaba flotando a media
+   altura. Se aparta del frame de Figma (1:1). Aprobado por Nicolle. Auditoría
+   apple-design, 2026-10-01 (COF-H1). */
 .map-placeholder {
   display: flex;
   align-items: center;
@@ -633,9 +649,22 @@
   background-color: var(--color-ink-tint-16);
 }
 
+@media (min-width: 768px) {
+  .map-placeholder {
+    aspect-ratio: 16 / 9;
+  }
+}
+
 @media (min-width: 1024px) {
   .map-placeholder {
     aspect-ratio: 1 / 1;
+  }
+}
+
+@media (min-width: 1280px) {
+  .map-placeholder {
+    aspect-ratio: 4 / 3;
+    align-self: start;
   }
 }
 
@@ -702,8 +731,29 @@
    clase adicional. El nombre usa la utilidad .h4 ya existente en base.css
    (Fraunces SemiBold 22px, color ink) sobre un <h2> real, para no saltar
    niveles de encabezado (Title de la página ya es <h1>). */
+/* El teléfono es un enlace tel: en su propia línea (antes iba pegado al
+   horario en un texto de 13px, sin enlace: teléfono y horarios en una sola línea).
+   Subrayado visible porque el reset global de <a> lo quita, y área táctil de
+   44px (regla 7 de responsive-detail): el margen negativo reparte los ~18px
+   que sobran entre arriba y abajo para que la línea ocupe lo mismo que un
+   párrafo (la zona táctil se solapa con las líneas vecinas, que no son
+   interactivas; position:relative la deja por encima). El horario pasa a su
+   línea, a 14px. Auditoría apple-design, 2026-10-01 (COF-H2). */
+.shop-list__phone {
+  position: relative;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--size-tap-target);
+  margin-block: calc((var(--fs-body) * var(--lh-relaxed) - var(--size-tap-target)) / 2);
+  font-weight: var(--fw-medium);
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
 .shop-list__hours {
-  font-size: var(--fs-caption);
+  font-size: var(--fs-small);
   font-weight: var(--fw-medium);
   color: var(--color-text-secondary);
 }
