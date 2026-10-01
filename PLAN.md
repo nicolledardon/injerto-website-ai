@@ -1490,3 +1490,34 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
   siguiente entrada (`PLAN.md` solo se añade y un commit no puede contener su propio hash).
 - Siguiente paso: Nicolle comprueba el resultado en su navegador y da los precios correctos de
   las tres tarjetas; la IA los corrige en un commit aparte; después, `git push` desde su Terminal.
+
+### [2026-10-01 22:46] Fase 6.19 — Precios de las tarjetas renombradas, tomados de la web de El Injerto
+- Agente: frontend
+- Prompt (resumen fiel del pedido de Nicolle): "Usa los precios de la web
+  https://elinjertocafe.com.gt/ (enlace con ?srsltid=…)."
+- Qué hizo la IA: consultó con WebFetch la portada, `/collections` y `/products.json` de
+  elinjertocafe.com.gt y corrigió 5 precios: en `tienda.html` Special Blend Q329.00 → Q103.00,
+  Pacamara Q26.00 → Q189.00 y Taza El Injerto Q99.00 → Q199.00; en `index.html` Special Blend y
+  Pacamara (mismos valores). Los otros cinco precios de las tarjetas ya coincidían con la web:
+  Bourbon Q133.00 y Espresso Blend Q103.00 (portada), Gorra Q184.00, Hario V60 Suiren Q379.00 y
+  Hario V60 BuonoN Q2,900.00 (`/collections`). Registra aquí los hashes de los commits de 6.17 y
+  6.18, que esas entradas dejaron para esta: `f386d64` (fotos originales), `99b59d4` (recortes de
+  `assets/img/productos/`) y `5881683` (HTML, CSS, tokens y PLAN de 6.17 y 6.18).
+- Decisiones de Nicolle / cambios manuales: pidió usar los precios de la web en lugar de
+  indicarlos ella.
+- Problemas encontrados y corrección: (1) la web llama a la taza "Taza Edición Especial 12onzas" y
+  la muestra agotada; la tarjeta sigue llamándose "Taza El Injerto" (nombre corto, igual que
+  "Gorra El Injerto" frente a "Gorra El Injerto-Edición Especial"): el nombre no se ha tocado.
+  (2) La web confirma dos suposiciones de la IA sobre las fotos: Hario V60 Suiren es un dripper
+  (foto del V60) y Hario V60 BuonoN Control de Temperatura es el hervidor (foto del hervidor con
+  pantalla de temperatura). (3) La web también vende "Pacamara-Wine Process 300gr" a Q499.00; se
+  usó la "Pacamara" normal (Q189.00) porque la bolsa de la foto dice PACAMARA 400g.
+- Verificación: cada precio salió de al menos una lectura de la web (Special Blend y Pacamara en
+  dos: portada o `/collections` y `/products.json`). Tras el cambio, `git diff` muestra solo 5
+  líneas de precio modificadas y el recorrido de nombre y precio de las 12 tarjetas coincide con
+  la web. NO verificado: que la foto de la taza sea el producto "Taza Edición Especial 12onzas"
+  (se supone por el nombre); WebFetch resume la página con un modelo pequeño, no se comparó con la
+  página abierta en un navegador; los precios valen para hoy.
+- Commit: pendiente de aprobación (1 commit propuesto: `fix(html): corrige los precios de las
+  tarjetas renombradas con los de la web`). Su hash se registrará en la siguiente entrada.
+- Siguiente paso: Nicolle aprueba el commit y hace `git push` de los 4 commits de esta serie.
