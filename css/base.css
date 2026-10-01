@@ -147,6 +147,21 @@ p {
   text-wrap: pretty;
 }
 
+/* Red de seguridad con texto muy ampliado: una palabra larga ("conquistó",
+   "Huehuetenango,") parte la línea en vez de ensanchar toda la página. No afecta
+   a texto que ya cabe. Auditoría apple-design, 2026-10-01 (FIN-A1). */
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+h4,
+.h4,
+p {
+  overflow-wrap: break-word;
+}
+
 small,
 .text-small {
   font-size: var(--fs-small);

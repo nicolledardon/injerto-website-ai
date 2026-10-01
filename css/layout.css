@@ -266,7 +266,9 @@
 @media (min-width: 768px) {
   .site-footer__nav-list {
     flex-direction: row;
-    gap: var(--space-8);
+    flex-wrap: wrap; /* con texto ampliado los enlaces bajan de fila en vez de
+      salirse de la pantalla */
+    gap: var(--space-3) var(--space-8);
   }
 }
 
@@ -306,13 +308,15 @@
   }
 }
 
+/* Desde 1024px logo + nav + aviso caben en una fila con el texto a tamaño
+   normal. El aviso ya no fuerza nowrap: con texto ampliado (150-200%) baja a su
+   propia fila en vez de desbordar la página. Auditoría apple-design,
+   2026-10-01. */
 @media (min-width: 1024px) {
-  .site-footer__inner {
-    flex-wrap: nowrap;
-  }
-
   .site-footer__disclaimer {
-    flex-basis: auto;
+    flex: 1 1 12rem;
+    max-width: max-content; /* crece hasta el ancho natural del texto y no más:
+      sin esto el aviso se ensanchaba y su texto se corría a la izquierda */
   }
 }
 
@@ -396,6 +400,13 @@
   }
 }
 
+/* Sin min-width:0 una columna de grid no baja de la palabra más larga que
+   contiene y, con texto ampliado, ensancha toda la página (Home 362px a 320px
+   con texto al 200%; Finca 353px). Auditoría apple-design, 2026-10-01. */
+.split > * {
+  min-width: 0;
+}
+
 /* product-grid — grid de Product Card, Home "Cafés de Temporada" y Tienda.
    Nota de fidelidad: el hi-fi de Figma usa un offset vertical alterno
    (efecto "escalonado") entre tarjetas para dar ritmo visual al wireframe;
@@ -420,17 +431,22 @@
   }
 }
 
-/* steps-grid — timeline de Proceso (Finca): fila única desktop, 2×2 mobile */
+/* steps-grid — "Encuentra tu sabor" (Home): fila única desktop, 2×2 mobile.
+   Las columnas se calculan con auto-fit: a tamaño normal salen 2 (mobile) o 4
+   (desde 768px), igual que antes; con texto ampliado el icono y la etiqueta
+   ya no caben en 4 (ni en 2) columnas, así que el grid baja a 2 (o 1) en vez
+   de desbordar (880px a 768px con texto al 200%). Auditoría apple-design,
+   2026-10-01. */
 .steps-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, max(7rem, 40%)), 1fr));
   gap: var(--space-8) var(--space-6);
   justify-items: center;
 }
 
 @media (min-width: 768px) {
   .steps-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, max(7rem, 18%)), 1fr));
   }
 }
 

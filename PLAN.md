@@ -1203,3 +1203,33 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
 - Commit: pendiente de aprobación
 - Siguiente paso: Fase 6.12 (texto ampliado).
 
+### [2026-10-01 07:57] Fase 6.12 — Desbordes con texto ampliado (FIN-A1, pie, Home)
+- Agente: polish (referencia a la entrada de Fase 6.6)
+- Prompt (resumen fiel del pedido de Nicolle): continuar con el texto ampliado (los desbordes que
+  quedaron abiertos en la Fase 6.8) y aplicar lo aprobado de antemano.
+- Qué hizo la IA: `css/base.css`: `overflow-wrap: break-word` en h1–h4 y `p` (FIN-A1).
+  `css/layout.css`: `.split > * { min-width: 0 }`; el pie, desde 768px, con `flex-wrap` y
+  `row-gap` en `.site-footer__nav-list`; desde 1024px el aviso con `flex: 1 1 12rem` y
+  `max-width: max-content` en vez de `flex-wrap: nowrap` y `flex-basis: auto`; `.steps-grid`
+  ("Encuentra tu sabor") con `repeat(auto-fit, minmax(min(100%, max(7rem, 40%)), 1fr))` en móvil y
+  `max(7rem, 18%)` desde 768px, para que baje de 4 a 2 (o a 1) columnas con texto ampliado.
+- Decisiones de Nicolle / cambios manuales: pidió seguir con los desbordes de texto ampliado
+  registrados en 6.8.
+- Problemas encontrados y corrección: (1) la primera versión del pie con `flex: 1 1 12rem` sin tope
+  ensanchaba el aviso y corría su texto a la izquierda a 1280 y 1440px (8 celdas distintas); se
+  corrigió con `max-width: max-content`. (2) A 320px con texto al 200% las palabras largas se
+  parten por la mitad ("conqui/stó", "tempora/da", "suscripci/ón", "Huehuetenan/go,"): es el
+  último recurso y evita desbordar, pero no es bonito. (3) A 1280px con solo el texto al 200% el
+  nombre de producto se parte ("Bourbo/n") en la cuadrícula de 4 columnas; TIE-S1 (saltos de
+  tamaño de la cuadrícula) sigue abierto. (4) Al 250–300% en móvil el wordmark sigue siendo más
+  ancho que la pantalla (ver 6.8).
+- Verificación (medido en Chromium): matriz de 9 anchos × 3 tamaños de texto (100/150/200%) × 4
+  páginas: 0 celdas con desborde horizontal o solape de cabecera (antes, 18 de 108). A tamaño
+  normal, 60 capturas (10 anchos × 4 páginas, menú abierto y cerrado) más 20 a 1100, 1200, 1366,
+  1600 y 1920px, idénticas píxel a píxel a las de antes de esta fase. Capturas de Home y Finca a
+  320px, de "Encuentra tu sabor" a 768px y del pie a 768 y 1280px al 200% revisadas. NO verificado:
+  Dynamic Type/Safari de iOS ni zoom de solo texto de Firefox reales, lector de pantalla.
+- Commit: pendiente de aprobación
+- Siguiente paso: aprobación de los 4 commits; decidir los grupos que siguen sin aplicar
+  (Jerarquía: COF-H1, resto de COF-H2, FIN-H2; Espaciado: TIE-S1, COF-S1, TIE-S2, FIN-S2, ALL-S1;
+  Accesibilidad: FIN-A2, TIE-A1) y escribir la documentación de la Fase 6.
