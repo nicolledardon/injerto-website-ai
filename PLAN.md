@@ -1178,3 +1178,28 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
 - Commit: pendiente de aprobación
 - Siguiente paso: Fase 6.11 (CTAs).
 
+### [2026-10-01 07:57] Fase 6.11 — CTAs a Tienda y a Coffee Shops (FIN-H1, parte de COF-H2, TIE-H1)
+- Agente: polish (referencia a la entrada de Fase 6.6)
+- Prompt (resumen fiel del pedido de Nicolle): aplicar lo que Nicolle aprobó de antemano en la
+  Fase 6.6: enlaces a Tienda en Finca y Coffee Shops, y TIE-H1 (Tienda sin salida).
+- Qué hizo la IA: `finca.html`: botón primario "Comprar café" → `tienda.html` tras el Proceso, en
+  la misma sección. `coffee-shops.html`: `ul.shop-list` y un botón primario "Pedir a domicilio" →
+  `tienda.html` dentro de `div.stack.stack--lg` (columna derecha desde 1024px). `tienda.html`: el
+  contenedor de los paneles pasa a `.stack.stack--xl` y se añade el botón primario "Encuentra una
+  sucursal" → `coffee-shops.html` bajo las cuadrículas, visible en las dos tabs.
+- Decisiones de Nicolle / cambios manuales: aprobó de antemano los enlaces a Tienda (CONFLICTO CON
+  DECISIÓN BLOQUEADA de estructura de secciones, aprobado por ella). Para TIE-H1 la IA descartó
+  convertir las 8 tarjetas en enlaces (no hay páginas de producto y 8 enlaces al mismo destino
+  confunden) y Nicolle eligió un solo CTA. Los textos de los botones los propuso la IA.
+- Problemas encontrados y corrección: TIE-H1 se resuelve con un CTA, no con tarjetas enlazadas.
+  COF-H2 queda abierto salvo el enlace a Tienda (teléfonos con `tel:`, direcciones con enlace a
+  mapa y el horario en 13px siguen sin tocar). FIN-H1 queda cerrado.
+- Verificación (medido en Chromium): los dos destinos responden 200; con Tab se llega a cada
+  botón y muestra el anillo de foco ink de 2px (`:focus-visible`); las tabs de Tienda siguen
+  funcionando (clic en Accesorios y flecha izquierda), con el CTA visible y de 44px o más; 0
+  errores de consola en las 4 páginas. Comparación píxel a píxel: cambian Tienda, Finca y Coffee
+  Shops (45 de 60 celdas) y Home queda idéntica. Capturas de Finca, Coffee Shops y Tienda
+  revisadas. NO verificado: lector de pantalla, táctil real.
+- Commit: pendiente de aprobación
+- Siguiente paso: Fase 6.12 (texto ampliado).
+
