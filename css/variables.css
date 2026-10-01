@@ -103,10 +103,13 @@
      como rebote. Secuencia en escritorio: cada paso espera a que el
      conector anterior termine de dibujarse, por eso --duration-draw =
      --duration-stagger (la mitad de un ciclo paso + conector). Todas estas
-     duraciones se redefinen bajo prefers-reduced-motion en base.css. */
+     duraciones se redefinen bajo prefers-reduced-motion en base.css.
+     Auditoría apple-design, 2026-09-30 (FIN-M1): stagger y draw bajan de 350ms
+     a 120ms; con 350ms el cuarto paso tardaba ~2.3s en verse y el último pulso
+     terminaba a ~3.4s. */
   --duration-bounce: 600ms;
-  --duration-stagger: 350ms;
-  --duration-draw: 350ms;
+  --duration-stagger: 120ms;
+  --duration-draw: 120ms;
   --duration-pulse: 700ms;
   --easing-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 

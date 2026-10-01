@@ -1079,3 +1079,27 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
 - Commit: pendiente de aprobación
 - Siguiente paso: Fase 6.7 (movimiento de Finca). Después, los grupos aprobados de antemano cuando
   Nicolle los active, y ALL-A1, que sigue abierto.
+
+### [2026-10-01 07:04] Fase 6.7 — Lote 1 (movimiento) de Finca: entrada del Proceso y círculo numerado
+- Agente: polish (referencia a la entrada de Fase 6.6)
+- Prompt (resumen fiel del pedido de Nicolle): aplicar FIN-M1 y FIN-M2 del grupo "Tipografía +
+  Movimiento" que Nicolle eligió aplicar primero.
+- Qué hizo la IA: (FIN-M1) en `variables.css`, `--duration-stagger` y `--duration-draw` bajan de
+  350ms a 120ms; solo se acorta la secuencia de entrada, la repetición al volver a entrar se
+  mantiene porque Nicolle no aprobó "reproducir una sola vez". (FIN-M2) en `components.css` se
+  quitan la transición del círculo `.proceso-step__number` y sus estados `:hover` (escala 1.12) y
+  `:active` (escala 0.94): el paso no es clicable (cursor auto, sin tabindex) y el escalado
+  sugería un botón que no existe.
+- Decisiones de Nicolle / cambios manuales: aprobó acortar la entrada (FIN-M1) y quitar el
+  escalado (FIN-M2); rechazó que el Proceso se reproduzca una sola vez.
+- Problemas encontrados y corrección: la entrada 6.5 deja fuera "el hallazgo de movimiento de
+  Finca (M2)" y no he podido confirmar que sea el mismo hallazgo que FIN-M1/FIN-M2; esta entrada
+  documenta solo lo medido ahora.
+- Verificación (medido en Chromium): el paso 4 queda totalmente visible a 1.04s (antes 2.40s) y la
+  última animación termina a 2.02s (antes 3.40s); transformaciones de hover y pulsación del
+  círculo: ninguna. Con `prefers-reduced-motion: reduce` la secuencia sigue siendo inmediata
+  (los tokens se redefinen en `base.css`). NO verificado: Safari/Firefox ni táctil real.
+- Commit: pendiente de aprobación
+- Siguiente paso: aprobación de los 2 commits del lote 1; decidir los grupos restantes y, después,
+  `agents/polish-agent.md` y la sección "Polish pass (apple-design skill)" del README, que siguen
+  sin escribirse.

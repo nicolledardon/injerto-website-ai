@@ -226,21 +226,11 @@
   font-family: var(--font-display);
   font-weight: var(--fw-bold);
   font-size: var(--fs-h3);
-  transition: transform var(--duration-base) var(--easing-bounce);
 }
 
-/* Vida al interactuar: el círculo "salta" al pasar el puntero (solo en
-   dispositivos con hover real, regla 9 de responsive-detail) y se encoge un
-   poco al pulsar, lo que también da respuesta táctil en móvil. */
-@media (hover: hover) {
-  .proceso-step:hover .proceso-step__number {
-    transform: scale(1.12);
-  }
-}
-
-.proceso-step:active .proceso-step__number {
-  transform: scale(0.94);
-}
+/* Sin estados hover/active en el círculo: el paso no es clicable (cursor auto,
+   sin tabindex), así que escalarlo al pasar el puntero o al pulsar sugería un
+   botón que no existe. Auditoría apple-design, 2026-09-30 (FIN-M2). */
 
 .proceso-step__label {
   min-width: 0;
