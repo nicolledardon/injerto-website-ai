@@ -251,7 +251,9 @@
 @media (min-width: 768px) {
   .site-footer__inner {
     flex-direction: row;
-    align-items: flex-start;
+    align-items: center; /* antes flex-start: logo, nav y aviso quedaban a alturas
+      distintas (hasta ~12px de diferencia a 1440px). Auditoría apple-design,
+      2026-10-01 (ALL-S1) */
     justify-content: space-between;
     padding-inline: var(--space-10); /* 40px */
   }
@@ -364,15 +366,14 @@
   }
 }
 
-/* Variante compacta — bandas de título, no secciones de contenido completo */
-.section--tight {
-  padding-block: var(--space-8); /* 32px */
-}
-
-@media (min-width: 1024px) {
-  .section--tight {
-    padding-block: var(--space-10); /* 40px */
-  }
+/* Sección que continúa a la anterior sobre el mismo fondo: sin padding
+   superior (el inferior de la sección previa ya da el aire) y con el padding
+   inferior completo de .section. Sustituye a .section--tight, que dejaba
+   "Nuestra historia" a 32-40px del borde de la banda siguiente y a 80-136px de
+   la sección anterior. Va después de las reglas de .section para ganar en
+   todos los anchos. Auditoría apple-design, 2026-10-01 (FIN-S2). */
+.section--flush-top {
+  padding-top: 0;
 }
 
 /* Variante con fondo terciario (Procesos, Subscription teaser) */
@@ -419,15 +420,31 @@
   gap: var(--space-6);
 }
 
-@media (min-width: 768px) {
+/* 2 columnas desde 480px y 4 desde 1024px (antes: 2 desde 768px y 4 desde
+   1280px). Con las columnas anteriores había anchos en los que una tarjeta
+   medía 719px (a 767px, 1 columna) o 564px (a 1279px, 2 columnas), con una
+   imagen de 6:5 más grande que la pantalla; ahora, a tamaño de texto normal,
+   la tarjeta mide entre 204px (480px de ancho) y 460px (1023px) y nunca hay
+   una sola columna por encima de 479px (regla 13 de responsive-detail).
+   Las columnas se calculan con auto-fill y un mínimo en rem (igual que
+   .steps-grid): a texto normal salen 2 (480-1023px) o 4 (desde 1024px), y con
+   el texto ampliado baja el número de columnas en vez de partir palabras
+   ("Bourbo/n" a 480px y a 1024px con el texto al 200%). 40% impide que haya 3
+   columnas entre 480 y 1023px; desde 1024px el mínimo es un cuarto del ancho
+   (menos el gap) y nunca menos de 12rem. Afecta también a la cuadrícula "Cafés
+   de temporada" de Home. Auditoría apple-design, 2026-10-01 (TIE-S1). */
+@media (min-width: 480px) {
   .product-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, max(12rem, 40%)), 1fr));
   }
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 1024px) {
   .product-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(max(12rem, calc((100% - 3 * var(--space-6)) / 4 - 1px)), 1fr)
+    );
   }
 }
 

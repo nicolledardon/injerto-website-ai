@@ -1259,3 +1259,49 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
   pantalla real (VoiceOver/NVDA), que `role="list"` sobre un `div` se anuncie igual en todos.
 - Commit: pendiente de aprobación
 - Siguiente paso: Fase 6.14 (espaciado) y 6.15 (jerarquía).
+
+### [2026-10-01 19:38] Fase 6.14 — Espaciado de Tienda, Home, Coffee Shops, Finca y pie (TIE-S1, COF-S1, TIE-S2, FIN-S2, ALL-S1)
+- Agente: polish (referencia a la entrada de Fase 6.6)
+- Prompt (resumen fiel del pedido de Nicolle): hacer los tres grupos que seguían sin aplicar
+  (este es el de espaciado).
+- Qué hizo la IA: TIE-S1, `css/layout.css`: `.product-grid` pasa de 1 → 2 (768px) → 4 (1280px)
+  columnas a 1 → 2 (480px) → 4 (1024px), con `repeat(auto-fill, minmax(…))` y un mínimo en rem
+  (`min(100%, max(12rem, 40%))` entre 480 y 1023px; un cuarto del ancho menos el gap, y nunca
+  menos de 12rem, desde 1024px), igual que `.steps-grid`. A tamaño normal: la tarjeta de 719×696px
+  a 767px pasa a 348×386 y la de 564×566px a 1279px pasa a 270×322; a 1280px o más no cambia. Afecta también a "Cafés de temporada" de
+  Home. COF-S1, `css/components.css`: el punto de color de cada sucursal se centra con la primera
+  línea del nombre (`margin-top` calculado; antes quedaba 7px por encima) y la última fila de la
+  lista pierde su línea y su padding inferior. TIE-S2: la tab lleva siempre un borde de 3px
+  (transparente en reposo, gold en hover, ink si está seleccionada); antes pasaba de 1px a 3px (2px
+  en hover) y el texto de la tab seleccionada se movía 1px; la altura de la tablist no cambia.
+  `css/variables.css`: se actualiza el comentario de `--size-hairline-thin`, que ya no se usa.
+  FIN-S2, `css/layout.css` y `finca.html`: `.section--tight` (solo la usaba "Nuestra historia")
+  se sustituye por `.section--flush-top` (sin padding superior, padding inferior completo de
+  `.section`): la historia queda a 96px del hero (antes 136px a 1440px) y el borde de la banda
+  tintada queda a 96px del texto de la historia (antes 40px) y a 96px del título del Proceso.
+  ALL-S1, `css/layout.css`: el pie, desde 768px, con `align-items: center` (logo, nav y aviso
+  tenían los centros hasta 11,6px desordenados a 1440px; ahora los tres están en el mismo y).
+- Decisiones de Nicolle / cambios manuales: eligió los tres grupos y aprobó aplicar todo lo
+  propuesto.
+- Problemas encontrados y corrección: (1) mi primera versión de TIE-S1 usaba columnas fijas
+  (2 desde 480px, 4 desde 1024px) y la comprobación de palabras partidas mostró que con el texto
+  al 200% los nombres de producto se partían ("Bourbo/n", "Espresso") a 480px y a 1024px, algo
+  que antes no pasaba; se cambió a `auto-fill` con mínimo en rem y esos casos desaparecen (y el que
+  ya existía a 1280px al 200% también). (2) Contrapartida: con el texto ampliado hay anchos con 3
+  columnas, es decir tres tarjetas y una en la fila de abajo (por ejemplo 1024px y 1280px al 125%,
+  1279px y 1440px al 150%, 1920px al 150–175%), porque con 4 tarjetas no se puede pasar de 4 a 2 columnas con un
+  único mínimo; las tarjetas siguen siendo del mismo ancho. A 1 columna baja antes (480px al
+  125%). (3) El cambio de TIE-S1 también modifica Home, en esos mismos anchos (480–767px y 1024–1279px).
+  (4) Sigue abierto, ya existía: con el texto al 150–200% los pies del Proceso (Finca, desde
+  1024px) parten palabras, y "conquistó" en el título de Home a 1024px al 200%.
+- Verificación (medido en Chromium): matriz de 9 anchos × 3 tamaños de texto (100/150/200%) × 4
+  páginas: 0 celdas con desborde o solape de cabecera de 108. Palabras partidas con 100/150/200% a
+  11 anchos × 4 páginas: 14 celdas antes, 13 ahora, ninguna nueva. Tabla de columnas por ancho ×
+  tamaño de texto medida (ver el problema 2). A tamaño normal, la posición vertical del texto de
+  las dos tabs coincide (269,8px; antes 269,8 y 270,8) y el punto coincide con el nombre (576px
+  y 576px a 375px; antes 569 y 576). Comparación píxel a píxel de 60 capturas: solo cambian las
+  páginas y anchos esperados (Home por debajo de 480px no cambia). NO verificado: Safari ni
+  Firefox, texto ampliado real de iOS (Dynamic Type), `auto-fill` con más de 4 tarjetas
+  (todas las cuadrículas actuales tienen exactamente 4).
+- Commit: pendiente de aprobación
+- Siguiente paso: Fase 6.15 (jerarquía).

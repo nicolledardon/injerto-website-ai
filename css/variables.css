@@ -121,7 +121,7 @@
   --size-icon-md: 1.75rem;    /* 28px — icono del lockup del logo */
   --size-tap-target: 2.75rem; /* 44px — mínimo de área táctil (WCAG 2.5.5 / Apple HIG) */
   --size-dot-lg: 4.5rem;      /* 72px — círculo numerado de Proceso Step */
-  --size-hairline-thin: 1px;  /* grosor base de subrayado (tab en reposo, mantiene la altura reservada) */
+  --size-hairline-thin: 1px;  /* grosor de hairline fino (ya sin uso en las tabs: ahora llevan siempre --size-underline-selected) */
   --size-hairline-thick: 2px; /* grosor de la línea conectora de Proceso (accent-gold) */
   --size-underline-selected: 3px; /* grosor del subrayado de la tab seleccionada */
   --size-icon-lg: 4rem;       /* 64px — icono circular de "Encuentra tu sabor" (Home) */

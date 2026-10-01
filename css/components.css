@@ -386,18 +386,22 @@
     alcanzar el area tactil minima de 44px de ancho (regla 7 de
     responsive-detail) en tabs con etiquetas cortas como "Café" */
   border: none;
-  border-bottom: var(--size-hairline-thin) solid transparent;
+  border-bottom: var(--size-underline-selected) solid transparent; /* siempre 3px:
+    transparente en reposo, gold al pasar el puntero, ink si está seleccionada.
+    Antes el borde pasaba de 1px a 3px (y a 2px en hover) y el texto de la tab
+    seleccionada se movía 1px respecto a las demás. La altura de la tablist no
+    cambia (ya la fijaba la tab seleccionada). Auditoría apple-design,
+    2026-10-01 (TIE-S2). */
   font-family: var(--font-body);
   font-weight: var(--fw-medium);
   font-size: var(--fs-body-sm);
   color: var(--color-ink);
-  transition: border-color var(--transition-fast), border-width var(--transition-fast);
+  transition: border-color var(--transition-fast);
 }
 
 @media (hover: hover) {
   .tab:hover {
     border-bottom-color: var(--color-accent-gold);
-    border-bottom-width: var(--size-hairline-thick);
   }
 }
 
@@ -407,7 +411,6 @@
 .tab[aria-selected='true'] {
   font-weight: var(--fw-bold);
   border-bottom-color: var(--color-ink);
-  border-bottom-width: var(--size-underline-selected);
 }
 
 .tabpanel[hidden] {
@@ -657,10 +660,19 @@
   border-bottom: var(--stroke-hairline);
 }
 
+.shop-list__row:last-child {
+  padding-bottom: 0; /* la lista termina en la última dirección: el hueco hasta el
+    botón lo da el stack, no una línea de cierre + 24px extra (COF-S1) */
+  border-bottom: none;
+}
+
 .shop-list__chip {
   flex-shrink: 0;
   width: var(--size-dot-sm);
   height: var(--size-dot-sm);
+  margin-top: calc((var(--fs-h4) * var(--lh-normal) - var(--size-dot-sm)) / 2); /* centra el
+    punto con la primera línea del nombre (h4): antes quedaba ~7px por encima.
+    Auditoría apple-design, 2026-10-01 (COF-S1) */
   border-radius: var(--radius-full);
 }
 
