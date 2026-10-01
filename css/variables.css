@@ -98,6 +98,15 @@
   --transition-fast: var(--duration-fast) var(--easing-standard);
   --transition-base: var(--duration-base) var(--easing-standard);
 
+  /* Zoom de la foto de producto al pasar el cursor (Product Card). Duración y
+     easing separados, como el resto; --duration-zoom se redefine bajo
+     prefers-reduced-motion en base.css. --easing-out frena al final y no se
+     pasa del destino (a diferencia de --easing-bounce). Con 1.2 la foto crece
+     un 20% y, ampliada, sigue lejos del borde del bloque de color. */
+  --duration-zoom: 300ms;
+  --easing-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --scale-product-hover: 1.2;
+
   /* Animación de la timeline Proceso (Finca). --easing-bounce tiene un valor
      y > 1 (1.56): la curva SE PASA de su destino y vuelve, que se percibe
      como rebote. Secuencia en escritorio: cada paso espera a que el
@@ -127,6 +136,14 @@
   --size-icon-lg: 4rem;       /* 64px — icono circular de "Encuentra tu sabor" (Home) */
   --size-dot-sm: 0.75rem;      /* 12px — chip de color en la lista de Coffee Shops */
   --size-pin-lg: 1.5rem;       /* 24px — pin decorativo del mapa placeholder (Coffee Shops) */
+  --size-product-image: 48%;   /* ancho de la foto de producto (accesorios) = 48% del bloque de color. En el
+    Product Card de Figma (240x200) la silueta oscura mide 64x96 (26,7% x 48% del bloque). Las fotos traen
+    margen propio (el producto ocupa ~63-83% del alto de la foto), así que con 48% de ancho gorra, taza,
+    hervidor y V60 ocupan un área parecida a la de la silueta */
+  --size-product-image-bag: 64%; /* ancho de la foto de las bolsas de café. Con 48% (el tamaño de la silueta
+    de Figma: bolsa de 96px de alto en un bloque de 240x200) las bolsas se veían pequeñas; con 64% la bolsa
+    mide ~64% del alto del bloque (antes ~48%) y, ampliada x1,2 al pasar el cursor, ~77%, sin tocar el
+    borde. Cambio aprobado por Nicolle: se aparta a propósito del tamaño de la silueta de Figma */
 
   /* ---- Accesibilidad ---- */
   /* Anillo de foco en ink (antes terracotta: 2.32:1 sobre surface y 1.97:1 sobre

@@ -1390,3 +1390,103 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
 - Commit: pendiente de aprobación (un commit de documentación)
 - Siguiente paso: Nicolle revisa los archivos y aprueba el commit de documentación; hace
   `git push` de los commits de la Fase 6; queda pendiente el README completo del Docs Agent.
+
+### [2026-10-01 22:31] Fase 6.17 — Fotos de producto en las tarjetas y zoom al pasar el cursor
+- Agente: frontend
+- Prompt (resumen fiel del pedido de Nicolle): "En la PEC 6 quiero añadir las imágenes de los
+  productos y accesorios que puse en la carpeta assets, centradas en el bloque de color y con el
+  tamaño de la forma oscura con sombra de los wireframes de Figma, y que al pasar el cursor por
+  el contenedor/producto la imagen del producto (no todo el contenedor) se agrande. Primero
+  propón cómo lo harías y, con mi aprobación, añade el código y explícame cómo comprobar que
+  funciona."
+- Qué hizo la IA: midió el Product Card de Figma (308:2000): la silueta oscura mide 64x96 y va
+  centrada en un bloque de 240x200 (26,7% x 48%), el mismo 6:5 que `.product-card__image`.
+  Comparó tres tratamientos de las fotos sobre los bloques de color (foto tal cual,
+  `mix-blend-mode: multiply` y recorte transparente). Generó 8 recortes WebP transparentes de
+  600x600 en `assets/img/productos/` (cafe-bourbon, cafe-espresso-blend, cafe-special-blend,
+  cafe-pacamara, accesorio-gorra, accesorio-taza, accesorio-v60, accesorio-hervidor): fondo casi
+  blanco conectado al borde pasa a transparente, se elimina el texto de URL impreso en las
+  fotos y los bordes no llevan halo blanco; las fotos originales no se tocaron. Editó
+  `tienda.html` (8 tarjetas) e `index.html` (4 tarjetas de "Cafés de temporada"): un
+  `<img class="product-card__img">` dentro del bloque de color, con alt en español, width y
+  height 600, `decoding="async"` y `loading="lazy"` en el panel Accesorios y en Home. En
+  `css/components.css`: `.product-card__image` pasa a grid centrado con `overflow: hidden`;
+  nueva `.product-card__img` (ancho `var(--size-product-image)`, aspect-ratio 1/1, transición
+  de transform); el zoom va en `:hover` dentro de `@media (hover: hover)` y en `:focus-within`.
+  Añadió 4 tokens a `css/variables.css` (`--duration-zoom` 300ms, `--easing-out`,
+  `--scale-product-hover` 1.2, `--size-product-image` 48%) y `--duration-zoom: 0.01ms` en el
+  bloque de `prefers-reduced-motion` de `css/base.css`. Sin JavaScript, sin `!important`, sin
+  dependencias.
+- Decisiones de Nicolle / cambios manuales: eligió recortes transparentes, "mejor ajuste +
+  renombrar el resto" para las fotos que no coinciden con ninguna tarjeta, e incluir las 4
+  tarjetas de Home. No dio todavía nombres ni precios para las 3 tarjetas renombradas: la IA
+  usó el nombre que se lee en la foto (Special Blend, Pacamara) y "Taza El Injerto" (a juego
+  con "Gorra El Injerto"), y DEJÓ LOS PRECIOS SIN CAMBIAR (Q329.00, Q26.00 y Q99.00 eran de
+  Geisha G1, Cold Brew y Filtros Hario V60): hay que corregirlos antes del commit. "Hario V60
+  Suiren" recibió el dripper V60 por suposición de la IA.
+- Problemas encontrados y corrección: (1) las 8 fotos son opacas con fondo casi blanco, no
+  recortadas: sobre los bloques saturados se veían cuadrados blancos y con `multiply` las
+  etiquetas de las bolsas se ensuciaban; corregido con recortes transparentes. (2) Seis de los
+  ocho nombres de tarjeta no coincidían con la foto en orden de archivo (p. ej. la bolsa
+  PACAMARA en "Espresso Blend"); corregido con el mapeo por mejor ajuste y el renombrado de
+  tres tarjetas. (3) Un `git status` de la IA dejó un `.git/index.lock` vacío que el entorno no
+  podía borrar y que habría hecho fallar el siguiente `git add` o `git commit`; Nicolle dio
+  permiso de borrado, se eliminó solo ese archivo y desde entonces solo se usó git en modo de
+  solo lectura (`--no-optional-locks`). (4) La primera prueba del foco con teclado leyó el
+  transform antes de que acabara la transición de 300ms y dio un falso negativo; repetida con
+  espera. (5) Observación anterior a este cambio, no causada por él: el anillo de foco de las
+  tarjetas de Home, dibujado hacia dentro, toca la primera letra del nombre y del precio porque
+  la tarjeta no tiene padding lateral. No se ha tocado.
+- Verificación: Chromium con Playwright sobre una copia de prueba (las fuentes de Google no
+  cargan en ese entorno, así que el texto usa la fuente de reserva). Tienda Café y Home (4
+  tarjetas cada una) a 375, 768 y 1440px, y Accesorios (4 tarjetas) a 1440px: la foto mide el
+  48,0% del ancho del bloque y queda centrada (desviación de 0,1px como máximo); al pasar el
+  cursor escala x1,2 (medido 1,199) y queda dentro del bloque; ni la tarjeta ni sus vecinas
+  cambian de posición o de tamaño; `scrollWidth` = `innerWidth` en Tienda y Home a los tres
+  anchos. Cambio de pestaña a Accesorios correcto y las 4 imágenes cargan a 600px. Muestras de
+  transform cada ~70ms tras el hover: 1 → 1,144 → 1,192 → 1,199. Con `prefers-reduced-motion`:
+  duración 1e-05s y escala instantánea. Emulación táctil: `(hover: hover)` es falso y no hay
+  zoom. Teclado en Home: foco en "Bourbon" → x1,2 a los 500ms; al pasar al siguiente enlace la
+  anterior vuelve a `none`. `!important`: 0 en los 4 CSS. Tamaño: en un bloque de 240x200 la
+  bolsa mide 50x96px (silueta de Figma 64x96: misma altura, más estrecha). NO verificado: las
+  fuentes reales (Fraunces, Work Sans), Safari, Firefox, un dispositivo táctil real ni un
+  lector de pantalla.
+- Commit: pendiente de aprobación (propuestos 2: los recortes de `assets/img/productos/`; y
+  HTML + CSS + tokens, este último solo cuando estén confirmados nombres y precios)
+- Siguiente paso: Nicolle comprueba el resultado en su navegador, confirma nombres y precios de
+  las tres tarjetas renombradas, decide qué hacer con las 8 fotos originales de `assets/img/`
+  (sin seguimiento en git) y aprueba los commits; después, `git push`.
+
+### [2026-10-01 22:40] Fase 6.18 — Bolsas de café más grandes, fotos originales al repo y commits aprobados
+- Agente: frontend
+- Prompt (resumen fiel del pedido de Nicolle): "Prefiero commitear también las fotos originales.
+  Haz las bolsas más grandes. Cuando eso esté hecho, está aprobado."
+- Qué hizo la IA: añadió el token `--size-product-image-bag: 64%` a `css/variables.css` y la
+  modificadora `.product-card__img--bag` a `css/components.css`; la clase se aplicó a las 8 fotos
+  de café (4 en Tienda y 4 en Home). Los accesorios siguen en `--size-product-image` (48%). Se
+  reescribió el comentario de `--size-product-image`, que hablaba de las bolsas. Después hizo los
+  tres commits aprobados (ver abajo).
+- Decisiones de Nicolle / cambios manuales: commitear también las 8 fotos originales de
+  `assets/img/` tal como están, con sus nombres de archivo (`product1.webp` a `product4.webp`,
+  `accesorio1.webp`, `accesorio2.webp`, `accesorios3.webp`, `accessorio4.webp`); bolsas más
+  grandes (el valor del 64% lo propuso la IA); aprobó los commits. Sigue sin dar los precios de
+  las tres tarjetas renombradas (6.17).
+- Problemas encontrados y corrección: (1) con 64% la bolsa se aparta a propósito del tamaño de la
+  silueta de Figma (en un bloque de 240x200 pasa de 50x96px a 67x127px: 64% del alto del bloque
+  en reposo y 76-77% ampliada); este cambio sustituye a la cifra de la bolsa de la entrada 6.17.
+  (2) Los precios de Special Blend (Q329.00), Pacamara (Q26.00) y Taza El Injerto (Q99.00) siguen
+  siendo los de las tarjetas anteriores y se han commiteado así porque Nicolle aprobó los
+  commits; hace falta un commit posterior que los corrija antes del `git push`.
+- Verificación: Chromium con Playwright sobre una copia de prueba (sin las fuentes de Google).
+  Tienda Café y Home a 375, 768 y 1440px: la foto de la bolsa mide el 64,0% del ancho del bloque,
+  centrada (desviación de 0,1px como máximo), escala x1,2 al pasar el cursor, queda dentro del
+  bloque, no hay cambios de layout y `scrollWidth` = `innerWidth`. Accesorios a 1440px: 48,0%,
+  mismas pruebas superadas. Bolsa en un bloque de 240x200: 67x127px en reposo y 80x153px
+  ampliada; en 282x235: 79x150px y 94x180px. `prefers-reduced-motion`: duración 1e-05s y escala
+  instantánea. `!important`: 0 en los 4 CSS. NO verificado: las fuentes reales, Safari, Firefox,
+  un dispositivo táctil real ni un lector de pantalla.
+- Commit: aprobado por Nicolle; 3 commits: (1) fotos originales, (2) recortes de
+  `assets/img/productos/`, (3) HTML + CSS + tokens + PLAN. Los hashes se registran en la
+  siguiente entrada (`PLAN.md` solo se añade y un commit no puede contener su propio hash).
+- Siguiente paso: Nicolle comprueba el resultado en su navegador y da los precios correctos de
+  las tres tarjetas; la IA los corrige en un commit aparte; después, `git push` desde su Terminal.

@@ -104,10 +104,10 @@
 }
 
 /* ---- Product Card ---- */
-/* Home "Cafés de temporada" y Tienda (café/merch). El bloque de imagen es
-   un color plano (placeholder de producto real, ver design.md) — no una
-   <img>, así que no requiere alt text; el color se fija con una clase
-   modificadora, nunca inline. */
+/* Home "Cafés de temporada" y Tienda (café/merch). El bloque de imagen es un
+   color plano (clase modificadora, nunca inline) con una foto de producto
+   recortada (WebP con fondo transparente, en assets/img/productos/) centrada.
+   La foto lleva su propio alt; el color del bloque es solo decoración. */
 .product-card {
   position: relative; /* ancla el ::after del enlace estirado (.product-card__link) */
   border-radius: var(--radius-md);
@@ -116,8 +116,11 @@
 }
 
 .product-card__image {
+  display: grid;
+  place-items: center; /* la foto va en el centro del bloque, donde Figma dibuja la silueta */
   aspect-ratio: 6 / 5;
   width: 100%;
+  overflow: hidden; /* la foto ampliada al pasar el cursor no puede salirse del bloque */
 }
 
 .product-card__image--cherry {
@@ -130,6 +133,38 @@
 
 .product-card__image--terracotta {
   background-color: var(--color-block-terracotta);
+}
+
+/* Foto del producto. Su ancho es un % del bloque (--size-product-image; las bolsas
+   de café usan --size-product-image-bag), así que escala con la tarjeta en todos los breakpoints y el bloque conserva su 6:5
+   (sin saltos de layout). Al pasar el cursor SOLO se amplía la foto
+   (transform: scale, no toca el layout): ni el bloque ni la tarjeta cambian de
+   tamaño. El zoom va dentro de (hover: hover) (regla 9 de responsive-detail);
+   con el teclado, :focus-within lo activa en las tarjetas de Home (llevan
+   enlace). Bajo prefers-reduced-motion --duration-zoom es ~0 (base.css): el
+   cambio es instantáneo, sin movimiento. */
+.product-card__img {
+  width: var(--size-product-image);
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  transition: transform var(--duration-zoom) var(--easing-out);
+}
+
+/* Bolsas de café: más grandes que gorra, taza, hervidor y V60 (las bolsas son
+   estrechas y con el 48% de la silueta de Figma se veían pequeñas). */
+.product-card__img--bag {
+  width: var(--size-product-image-bag);
+}
+
+@media (hover: hover) {
+  .product-card:hover .product-card__img {
+    transform: scale(var(--scale-product-hover));
+  }
+}
+
+.product-card:focus-within .product-card__img {
+  transform: scale(var(--scale-product-hover));
 }
 
 .product-card__body {
