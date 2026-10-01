@@ -170,13 +170,14 @@
   overflow-wrap: anywhere;
 }
 
-/* Página actual: negrita + subrayado terracotta de 3px, el mismo lenguaje que
-   la tab seleccionada de Tienda (nunca solo color). aria-current ya estaba en
-   el HTML de las 4 páginas; faltaba el estilo visual. */
+/* Página actual: negrita + subrayado ink de 3px, el mismo lenguaje que la tab
+   seleccionada de Tienda (nunca solo color). aria-current ya estaba en el HTML
+   de las 4 páginas; faltaba el estilo visual. El subrayado era terracotta
+   (2.32:1) y pasa a ink (16.41:1). Auditoría apple-design, 2026-10-01 (ALL-A2). */
 .site-header__nav-list a[aria-current='page'] {
   font-weight: var(--fw-bold);
   text-decoration: underline;
-  text-decoration-color: var(--color-block-terracotta);
+  text-decoration-color: var(--color-ink);
   text-decoration-thickness: var(--size-underline-selected);
   text-underline-offset: 0.4em;
 }

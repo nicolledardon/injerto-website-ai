@@ -1137,3 +1137,25 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
 - Commit: pendiente de aprobación
 - Siguiente paso: aprobación del commit; después, decidir sobre los desbordes abiertos (pie, Home,
   FIN-A1) y los grupos aprobados de antemano.
+
+### [2026-10-01 07:57] Fase 6.9 — ALL-A2: subrayado en ink de la tab seleccionada y de la página actual
+- Agente: polish (referencia a la entrada de Fase 6.6)
+- Prompt (resumen fiel del pedido de Nicolle): aplicar lo que Nicolle aprobó de antemano en la
+  Fase 6.6; este es ALL-A2 ("ink underline instead of terracotta").
+- Qué hizo la IA: en `css/components.css`, `.tab[aria-selected='true']` pasa de
+  `border-bottom-color: var(--color-block-terracotta)` a `var(--color-ink)`. En `css/layout.css`,
+  `.site-header__nav-list a[aria-current='page']` pasa a `text-decoration-color: var(--color-ink)`.
+  Comentarios actualizados en ambos sitios.
+- Decisiones de Nicolle / cambios manuales: aprobó apartarse del Figma, donde el subrayado es
+  terracotta. Contraste del subrayado sobre surface: 16.41:1 (antes 2.32:1, por debajo del 3:1 de
+  un elemento gráfico). Se mantienen la negrita y el grosor de 3px: el estado nunca depende solo
+  del color. El hover de la tab sigue en gold.
+- Problemas encontrados y corrección: ninguno en este grupo.
+- Verificación (medido en Chromium): comparación píxel a píxel contra la versión anterior en 10
+  anchos × 4 páginas (menú abierto y cerrado por debajo de 768px): cambian 45 de 60 celdas, las
+  que muestran la nav de la página actual o las tabs de Tienda; el resto, idénticas. Captura de
+  Tienda a 1440px revisada (tab y nav subrayadas en ink). NO verificado: que en esas 45 celdas
+  cambie solo el subrayado (revisado a ojo en Tienda), Safari/Firefox, modo de alto contraste.
+- Commit: pendiente de aprobación
+- Siguiente paso: Fase 6.10 (FIN-S1).
+

@@ -399,9 +399,12 @@
   }
 }
 
+/* Subrayado en ink (16.41:1 sobre surface): el terracotta daba 2.32:1, por
+   debajo del 3:1 que pide un elemento gráfico. Aprobado por Nicolle: se aparta
+   a propósito del Figma. Auditoría apple-design, 2026-10-01 (ALL-A2). */
 .tab[aria-selected='true'] {
   font-weight: var(--fw-bold);
-  border-bottom-color: var(--color-block-terracotta);
+  border-bottom-color: var(--color-ink);
   border-bottom-width: var(--size-underline-selected);
 }
 
