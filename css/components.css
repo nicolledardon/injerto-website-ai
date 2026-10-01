@@ -381,6 +381,8 @@
    y peso de fuente distinto (bold vs medium) — skills/accessibility regla 7. */
 .tablist {
   display: flex;
+  flex-wrap: wrap; /* con texto ampliado al 200% las tabs pasan a otra fila en vez de
+    partir la palabra ("Accesorios") dentro de la tab */
   gap: var(--space-4); /* 16px */
 }
 

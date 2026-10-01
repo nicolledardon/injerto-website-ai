@@ -136,11 +136,15 @@ h3,
    detectado en la auditoria de la Fase 4 (regla 6 de responsive-detail). */
 /* Cuerpo a 16px en todos los anchos (regla 6 de responsive-detail: cuerpo >= 16px).
    Antes era 15px por debajo de 768px. Auditoría apple-design, 2026-09-29. */
+/* text-wrap: pretty evita que la última línea de un párrafo quede con una sola
+   palabra ("casa." sola en la intro de Tienda). Mejora progresiva: un navegador
+   sin soporte lo ignora. Auditoría apple-design, 2026-09-30 (ALL-T1). */
 p {
   color: var(--color-text-secondary);
   font-size: var(--fs-body);
   line-height: var(--lh-relaxed);
   max-width: 65ch;
+  text-wrap: pretty;
 }
 
 small,

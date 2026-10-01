@@ -1038,3 +1038,44 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
 - Siguiente paso: aprobación de los 5 commits y, si Nicolle lo pide, la documentación de la Fase 6
   (`agents/polish-agent.md`, `skills/apple-design`, sección "Polish pass" del README), que no se
   ha tocado.
+
+### [2026-10-01 07:04] Fase 6.6 — Auditoría apple-design de Tienda, Finca y Coffee Shops + lote 1 (tipografía y contenido)
+- Agente: polish (referencia a la entrada de Fase 6.1), con la skill apple-design (en web solo se
+  aplican principios y fundamentos de la HIG). Solo lectura durante la auditoría.
+- Prompt (resumen fiel del pedido de Nicolle): auditar el resto de páginas (Tienda, Finca, Coffee
+  Shops) en una sola pasada con los mismos 4 ejes que el Home (espaciado, jerarquía, tipografía,
+  movimiento), y después escribir la documentación. La documentación sigue en espera por decisión
+  de Nicolle.
+- Qué hizo la IA: auditó con Chromium/Playwright a 375, 768, 1024 y 1440px y midió cada hallazgo.
+  20 hallazgos (1 Crítico, 4 Altos, 6 Medios, 9 Bajos): ALL-A1, ALL-A2, ALL-S1, ALL-T1, TIE-S1,
+  TIE-S2, TIE-H1, TIE-C1, TIE-A1, FIN-S1, FIN-S2, FIN-H1, FIN-H2, FIN-M1, FIN-M2, FIN-A1, FIN-A2,
+  COF-S1, COF-H1, COF-H2. Con "CONFLICTO CON DECISIÓN BLOQUEADA": COF-H1 (color de los puntos y
+  del pin: dirección de bloques saturados), FIN-H1 y el enlace a Tienda de COF-H2 (añaden un CTA:
+  estructura de secciones) y TIE-H1 (alcance). FIN-S1 revierte una decisión de Nicolle del
+  2026-09-29 y ALL-A2 se aparta del Figma. Aplicado en este lote: ALL-T1 (`text-wrap: pretty` en
+  `p`, base.css), TIE-C1 (tab "Merch" → "Accesorios" en tienda.html, ids y aria sin cambios) y
+  `flex-wrap: wrap` en `.tablist` (components.css).
+- Decisiones de Nicolle / cambios manuales: eligió aplicar primero el grupo "Tipografía +
+  Movimiento" (ALL-T1, FIN-M1, FIN-M2) y aprobó TIE-C1. Aprobadas de antemano pero SIN aplicar
+  (esperan a su grupo): enlaces a Tienda en Finca y Coffee Shops, tarjetas de Tienda como enlaces
+  (TIE-H1), FIN-S1 (Proceso vertical hasta 1024px) y ALL-A2 (subrayado en ink). No aprobado:
+  "reproducir Proceso una sola vez" (FIN-M1). No seleccionados: los grupos de Accesibilidad,
+  Espaciado y Jerarquía. Nicolle aprobó los 5 commits del Home (14686c1 contraste y foco, 981830f
+  jerarquía, 37f99d3 espaciado, 36a0363 tipografía, 34b2558 hamburguesa a X); las entradas 6.1–6.5
+  siguen diciendo "pendiente de aprobación" porque PLAN.md es solo-añadir.
+- Problemas encontrados y corrección: (1) el informe inicial omitió las etiquetas "CONFLICTO CON
+  DECISIÓN BLOQUEADA" que exige el brief; se corrigió en un mensaje aparte. (2) Con texto al 200%
+  la tab "Accesorios" partía la palabra (tab de 91px a 139px de alto a 375px); se corrigió con
+  `flex-wrap: wrap`. (3) ALL-A1 (Crítico) sigue SIN corregir: con texto al 200% el logo se parte y
+  se solapa con el botón del menú a 375px, y a 320px el botón se queda en ~12px. Ya existía antes
+  de esta pasada y afecta a todo el sitio, Home incluido; la comprobación de Home al 200% solo
+  buscaba scroll horizontal y no lo detectó. En Home también existen ALL-S1, ALL-A2 y TIE-S1.
+  (4) "Accesorios" se aparta del nombre "Merch" del Figma.
+- Verificación (medido en Chromium): 40 cargas de página sin scroll horizontal; palabras sueltas
+  corregidas en los párrafos medidos, quedan 3 últimas líneas cortas (dos leyendas de Proceso y la
+  línea del teléfono de Z13 a 375px); tamaños de tab con y sin texto ampliado. NO verificado:
+  Safari/iOS, Firefox, lector de pantalla, comparación píxel a píxel con Figma, táctil real.
+  `text-wrap: pretty` solo lo aplica Chromium 117+; el resto lo ignora sin romper nada.
+- Commit: pendiente de aprobación
+- Siguiente paso: Fase 6.7 (movimiento de Finca). Después, los grupos aprobados de antemano cuando
+  Nicolle los active, y ALL-A1, que sigue abierto.
