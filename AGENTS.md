@@ -13,8 +13,11 @@ realmente han trabajado en el proyecto (ver cada `agents/<nombre>.md` para el de
 | Interaction Agent | JavaScript (tabs, hamburguesa) | 3 | HTML/CSS ya maquetados | `js/main.js` | `agents/interaction-agent.md` |
 | Responsive QA Agent | Auditoría responsive de detalle | 4 | Sitio ya codificado | Tabla pass/fail, correcciones | `agents/responsive-qa-agent.md` |
 | Docs Agent | README y cierre de documentación | 5 | `PLAN.md`, capturas, resultados de QA | `README.md`, `AGENTS.md` y skills finales | `agents/docs-agent.md` |
+| Polish Agent | Auditoría de diseño de detalle (skill `apple-design`) y correcciones aprobadas | 6 | Sitio ya auditado en Fase 4, `design.md`, decisiones bloqueadas | Hallazgos con ID y severidad, correcciones por grupos, entradas 6.1–6.16 de `PLAN.md` | `agents/polish-agent.md` |
 
-Nota: `agents/polish-agent.md` se añadirá solo si se ejecuta la Fase 6.
+Nota: el Polish Agent actuó en la Fase 6 (ver `PLAN.md`, entradas 6.1 a 6.16). El diagrama muestra
+el traspaso del trabajo, no el número de fase: el Polish Agent parte del sitio ya auditado en la
+Fase 4 y el Docs Agent documenta el resultado.
 
 ## Diagrama de traspaso
 
@@ -23,5 +26,6 @@ flowchart LR
     A[Design Agent] -->|Figma hi-fi aprobado| B[Frontend Agent]
     B -->|HTML/CSS maquetado| C[Interaction Agent]
     C -->|Sitio funcional| D[Responsive QA Agent]
-    D -->|Sitio auditado| E[Docs Agent]
+    D -->|Sitio auditado| F[Polish Agent]
+    F -->|Sitio pulido| E[Docs Agent]
 ```

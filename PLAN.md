@@ -1341,3 +1341,52 @@ explicando el proceso con IA · comparación con el proyecto manual · enlace a 
 - Siguiente paso: aprobación de los 3 commits; escribir la documentación de la Fase 6
   (`agents/polish-agent.md`, sección del README "Polish pass (apple-design skill)" y la entrada
   final del PLAN con los hashes de todos los commits de la Fase 6).
+
+### [2026-10-01 19:51] Fase 6.16 — Documentación de la pasada de pulido (agente, README, AGENTS) y hashes de la Fase 6
+- Agente: polish (documenta su propia pasada; referencia a la entrada de Fase 6.6)
+- Prompt (resumen fiel del pedido de Nicolle): escribir en una sola pasada los documentos que
+  estaban en espera (`agents/polish-agent.md`, la sección del README "Polish pass (apple-design
+  skill)" y la entrada de cierre del PLAN) y actualizar el documento de auditoría del Project.
+- Qué hizo la IA: creó `agents/polish-agent.md` (mismo formato que los demás agentes); añadió
+  la sección "Polish pass (apple-design skill)" al README, en inglés, entre "Responsive Audit
+  Results" y "Comparison with the Manual Project (Book Nook)"; actualizó `AGENTS.md` (fila del
+  Polish Agent, la nota y el diagrama de traspaso) y escribió esta entrada. Fuera del repo,
+  reescribió el documento de auditoría del Project (`claude/pec6_polish_audit_tienda_finca_coffee.md`),
+  que seguía diciendo que no se había aplicado nada.
+- Decisiones de Nicolle / cambios manuales: eligió poner la sección del README después de
+  "Responsive Audit Results" y actualizar también `AGENTS.md`, que antes había decidido no tocar.
+- Commits de la Fase 6 (hash, entrada, resumen). Las entradas 6.1 a 6.15 conservan la línea
+  "Commit: pendiente de aprobación" porque `PLAN.md` solo se añade, nunca se reescribe; esta
+  lista es la referencia real:
+  - `14686c1` (6.1): contraste y foco visible en el Home y el pie
+  - `981830f` (6.2): jerarquía del Home
+  - `37f99d3` (6.3): espaciado del Home
+  - `36a0363` (6.4): tipografía del Home
+  - `34b2558` (6.5): hamburguesa a X con el menú abierto
+  - `9cb03e9` (6.6): palabras sueltas en párrafos y tab "Accesorios" (ALL-T1, TIE-C1)
+  - `3a4dc83` (6.7): entrada del Proceso más corta y sin hover en el círculo (FIN-M1, FIN-M2)
+  - `731d7dd` (6.8): cabecera y botón del menú con texto ampliado (ALL-A1)
+  - `add8c87` (6.9): subrayado en ink de la tab y de la página actual (ALL-A2)
+  - `c03b15b` (6.10): Proceso vertical hasta 1024px (FIN-S1)
+  - `5444e96` (6.11): enlaces a Tienda y a Coffee Shops (FIN-H1, parte de COF-H2, TIE-H1)
+  - `b8612cb` (6.12): desbordes con texto ampliado (FIN-A1, pie, Home)
+  - `89133d7` (6.13): accesibilidad de Finca y Tienda (FIN-A2, TIE-A1)
+  - `065bea2` (6.14): espaciado (TIE-S1, COF-S1, TIE-S2, FIN-S2, ALL-S1)
+  - `84b8ffa` (6.15): jerarquía de Coffee Shops y Finca (COF-H1, COF-H2, FIN-H2)
+- Qué quedó aplicado solo en parte de las 20 (Tienda, Finca, Coffee Shops): FIN-M1 (se acortó la
+  secuencia; "reproducir una sola vez" no se aprobó y la repetición se mantiene); TIE-H1 (las
+  tarjetas de Tienda siguen sin enlace y se resolvió con un CTA); COF-H1 (solo el tamaño del
+  mapa; los colores de puntos y pin no se tocaron); COF-H2 (teléfono con `tel:` y horario
+  aparte, pero sin enlaces a mapas); ALL-A1 y FIN-A1 (resueltos hasta el texto al 200%; ver los
+  límites de 6.8 y 6.12).
+- Problemas encontrados y corrección: (1) la 6.1 dice que `agents/polish-agent.md` todavía no
+  existe en el repo; ahora existe. (2) `AGENTS.md` decía que el agente se añadiría solo si se
+  ejecutaba la Fase 6; se corrigió. (3) El README sigue con el aviso "Section headings only for
+  now" y el resto de secciones vacías: el Docs Agent (Fase 5) todavía no ha escrito el README
+  completo, y esta sección es la única con contenido; el aviso no se ha tocado.
+- Verificación: los hashes y mensajes se copiaron de `git log` y cada hash se emparejó con su
+  entrada por el título. NO verificado: que el README renderice bien en GitHub (el diagrama
+  Mermaid de `AGENTS.md` tampoco se ha visto renderizado).
+- Commit: pendiente de aprobación (un commit de documentación)
+- Siguiente paso: Nicolle revisa los archivos y aprueba el commit de documentación; hace
+  `git push` de los commits de la Fase 6; queda pendiente el README completo del Docs Agent.
